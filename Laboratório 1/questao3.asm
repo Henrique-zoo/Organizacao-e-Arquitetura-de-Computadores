@@ -28,25 +28,25 @@ mais: 		.string "+"
 	ecall
 loop:   li       a7, 2
 	flw      fa0, 0(s0)
-        ecall                   # print(x[n])
+        ecall			# print(x[n])
         li       a7, 11
         lb       a0, tab
-        ecall                   # print("\t")
+        ecall			# print("\t")
         li       a7, 2
         flw      fa0, 0(s1)
-        ecall                   # print(Re{z})
+        ecall			# print(Re{z})
         flw      fa0, 0(s2)
         fcvt.s.w ft0, zero
         fge.s    t1, fa0, ft0
         beqz     t1, negativo
         li       a7, 11
         lb       a0, mais
-        ecall                   # print("+")
+        ecall			# print("+")
 negativo:	li       a7, 2
-        ecall                   # print(Im{z})
+        ecall			# print(Im{z})
         li       a7, 4
         la       a0, i
-        ecall                   # print("i\n")
+        ecall			# print("i\n")
         addi     s0, s0, 4
         addi     s1, s1, 4
         addi     s2, s2, 4
@@ -67,7 +67,7 @@ DFT:    addi     sp, sp, -44
         sw       s1, 12(sp)
         sw       s2, 8(sp)
         sw       s3, 4(sp)
-        sw       ra, 0(sp)      # Empilhando
+        sw       ra, 0(sp)	# Empilhando
         flw      fs0, DOIS_PI, t0
         fcvt.s.w ft0, a3
         fdiv.s   fs0, fs0, ft0
@@ -80,18 +80,18 @@ for1:   fcvt.s.w fs1, s0
         li       s1, 0
 for2:   flw      fs2, 0(s2)
         fcvt.s.w fs3, s1
-        fmul.s   fs3, fs3, fs1  # n*k
-        fmul.s   fa0, fs3, fs0  # n*k*(-2pi/N)
+        fmul.s   fs3, fs3, fs1	# n*k
+        fmul.s   fa0, fs3, fs0	# n*k*(-2pi/N)
         la       t0, DOIS_PI
         flw      ft6, 0(t0)
-        fdiv.s   ft7, fa0, ft6  # ft7 = fa0 / (2π)
-        fcvt.w.s t6, ft7        # t6 = floor(fa0 / (2π))
+        fdiv.s   ft7, fa0, ft6	# ft7 = fa0 / (2π)
+        fcvt.w.s t6, ft7	# t6 = floor(fa0 / (2π))
         fcvt.s.w ft7, t6
-        fmul.s   ft7, ft7, ft6  # ft7 = t6 * (2π)
-        fsub.s   fa0, fa0, ft7  # fa0 = fa0 - t6*(2π)
+        fmul.s   ft7, ft7, ft6	# ft7 = t6 * (2π)
+        fsub.s   fa0, fa0, ft7	# fa0 = fa0 - t6*(2π)
         jal      SINCOS
-        fmul.s   fa0, fa0, fs2  # x[n]*cos(n*k*(-2pi/N))
-        fmul.s   fa1, fa1, fs2  # x[n]*sen(n*k*(-2pi/N))
+        fmul.s   fa0, fa0, fs2	# x[n]*cos(n*k*(-2pi/N))
+        fmul.s   fa1, fa1, fs2	# x[n]*sen(n*k*(-2pi/N))
         fadd.s   fs4, fs4, fa0
         fadd.s   fs5, fs5, fa1
         addi     s1, s1, 1
@@ -114,7 +114,7 @@ for2:   flw      fs2, 0(s2)
         lw       s2, 8(sp)
         lw       s3, 4(sp)
         lw       ra, 0(sp)
-        addi     sp, sp, 44     # Desempilhando
+        addi     sp, sp, 44	# Desempilhando
         ret
           
 SINCOS: addi	sp, sp, -4
@@ -122,12 +122,12 @@ SINCOS: addi	sp, sp, -4
         jal	norm
         li	t1, -1
         fmv.s	ft0, fa0
-        fmv.s   ft3, fa0        # Constante = angulo de argumento para multiplicar por ft0 a cada iteração (x)^(2n)
-        li      t0, 1	        # Índice da iteração
-        li      t1, 17	        # Total de iterações
-        li      t2, 1	        # (-1)^n (começa com -1^0 = 1)
-        li      t3, 1	        # Fatorial (começa com 0! = 1)
-        li      t4, -1	        # Constante -1 para multiplicar por t2 a cada iteração
+        fmv.s   ft3, fa0	# Constante = angulo de argumento para multiplicar por ft0 a cada iteração (x)^(2n)
+        li      t0, 1		# Índice da iteração
+        li      t1, 17		# Total de iterações
+        li      t2, 1		# (-1)^n (começa com -1^0 = 1)
+        li      t3, 1		# Fatorial (começa com 0! = 1)
+        li      t4, -1		# Constante -1 para multiplicar por t2 a cada iteração
         fcvt.s.w fa0, t0	# O primeiro termo da série de cosseno é 1
         fcvt.s.w fa1, zero	# A série de seno é inicializada em 0 (seu primeiro termo será calculado no loop)
 rep:    fcvt.s.w ft1, t2
