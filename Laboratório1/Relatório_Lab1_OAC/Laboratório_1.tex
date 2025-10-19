@@ -1,0 +1,547 @@
+\documentclass[a4paper,12pt]{article}
+\usepackage{float}
+%\usepackage[table]{xcolor} % Para colorir as linhas da tabela
+%\usepackage{array} % Para melhorar a formatação de tabelas
+\usepackage[brazil]{babel}
+\usepackage{cite}
+\usepackage[utf8]{inputenc}
+\usepackage{amsmath}
+\usepackage{amssymb}
+\usepackage{multicol}
+\usepackage{graphicx}
+%\usepackage{animate}
+%\usepackage{tabularx}
+\usepackage[font=footnotesize, labelfont=bf, listformat=empty]{caption}
+\usepackage{geometry}
+\usepackage{listings}
+\usepackage{lastpage}
+%\usepackage{subcaption}
+\usepackage[skins,xparse,breakable]{tcolorbox}
+%\usepackage{longtable}
+\usepackage{minted}
+\usepackage{titlesec}
+\usepackage{fancyhdr}
+\usepackage{setspace}
+\usepackage{booktabs}
+\usepackage{enumitem}
+\usepackage[colorlinks=true, allcolors=black]{hyperref}
+\usepackage{gnuplot-lua-tikz}
+
+
+%\usetikzlibrary{arrows,shapes,automata,positioning,calc}
+% Configurações de margens e espaçamento
+\geometry{a4paper, left=2.5cm, right=2.5cm, top=2.5cm, bottom=2cm}
+\onehalfspacing
+
+% Configurações de títulos
+\titleformat{\section}{\normalfont\Large\bfseries}{\thesection}{1em}{}
+\titleformat{\subsection}{\normalfont\large\bfseries}{\thesubsection}{1em}{}
+\titleformat{\subsubsection}
+  {\normalfont\large}
+  {\textbf{\thesubsubsection}}
+  {0.25em}{}
+
+\setcounter{tocdepth}{3}
+\newcommand{\cod}[1]{\texttt{#1}}
+
+\renewcommand{\listingscaption}{Código}
+\newenvironment{code}{\captionsetup{type=listing}}{}
+
+% Configurações de cores
+\definecolor{LightSeaGreen}{rgb}{0.1255, 0.6980, 0.6667}
+\definecolor{whitesmoke}{rgb}{0.96, 0.96, 0.96}
+\definecolor{cinza}{RGB}{160, 160, 160}
+\definecolor{cinza_claro}{RGB}{240, 240, 240} % Cinza claro
+
+\newtcolorbox{codebox}[1]{
+    title=#1,
+    fonttitle=\small\bfseries,
+    colback=blue!2.5!white,
+    colframe=blue!62!white,
+    arc=2pt,
+    boxrule=0.8pt,
+    left=4pt,
+    right=4pt,
+    top=4pt,
+    bottom=4pt,
+    breakable,
+    enhanced jigsaw
+}
+% Configurações do minted para VHDL
+\setminted[asm]{
+    fontsize=\scriptsize,
+    style=manni,
+    linenos=true,
+    breaklines=true,
+    mathescape=true,
+    bgcolor=cinza_claro,
+    breakanywhere=true,
+}
+
+\setminted[fortran]{
+    fontsize=\scriptsize,
+    style=emacs,
+    linenos=true,
+    breaklines=true,
+    mathescape=true,
+    bgcolor=cinza_claro,
+    breakanywhere=true,
+}
+
+\newcommand{\hex}[1]{\textcolor{green!50!black}{#1}}
+
+% Configurações de cabeçalho e rodapé
+\pagestyle{fancy}
+\fancyhf{}
+\fancyhead[L]{\footnotesize{Relatório do Laboratório 1}}
+\fancyhead[R]{\footnotesize{2025/2 - Turma 02}}
+\fancyfoot[R]{\footnotesize{Página \hspace{0.05cm} \thepage \hspace{0.05cm} de \pageref{LastPage}}}
+\fancyfoot[L]{\footnotesize{Organização e Arquitetura de Computadores - CIC0099}}
+
+% Adiciona uma linha preta acima do rodapé
+\renewcommand{\footrulewidth}{0.4pt} % Espessura da linha
+\renewcommand{\footrule}{\vbox to 0pt{\hrule width \textwidth height \footrulewidth \vss}} % Desenha a linha
+
+% Novo Comando para chamar a capa
+\newcommand{\capa}{
+    \begin{titlepage}
+        \begin{multicols}{2}
+            \begin{flushleft}
+                \includegraphics[width=0.45\linewidth]{Recursos/Imagens/UnB_logo.png}
+            \end{flushleft}
+            \columnbreak
+            \begin{flushright}
+                Universidade de Brasília \\
+                Instituto de Exatas \\
+                Departamento de Ciência da Computação
+            \end{flushright}
+        \end{multicols}
+        \begin{center}
+        \vspace{-20pt}
+        \rule{\textwidth}{0.4pt}
+        \end{center}
+        \vspace{0.6cm}
+        \begin{center}
+            {\Huge \textbf{Relatório do Laboratório 1}} \\[0.5em]
+            {\Huge \textbf{Assembly RISC-V}} \\ [0.5em]
+            {\large CIC0099 - Organização e Arquitetura de Computadores} \\[0.25em]
+            {\large Turma 02 - Prof. Dr. Ricardo Pezzuol Jacobi} \\
+            \vfill
+            {\Large \textbf{Grupo B4}} \\
+            \begin{table}[H]
+                \centering
+                \begin{tabular}{l r}
+                    Henrique Morcelles Salum & 232003008 \\
+                    Athos Calixto Muniz & 211068261 \\
+                    Gabriela Fernanda Rodrigues Costa & 180120859 \\
+                    Cauê Araújo Euzebio & 211028195 \\
+                    Lucas Silva Nóbrega & 180035096 \\
+                \end{tabular}
+                \label{tab:placeholder}
+            \end{table}
+        \end{center}
+    \end{titlepage}
+}
+
+\begin{document}
+
+\capa
+
+% Sumário
+\newpage
+\tableofcontents
+\newpage
+
+\section{Introdução}
+O laboratório 1 de OAC é separado em três grandes experimentos - esses, por sua vez, subdivididos em diversas tarefas - e visa familiarizar o aluno ao Assembly RISC-V e ao \textit{RISC-V Assembler and Runtime Simulator} (RARS). Notadamente, o primeiro experimento concentra-se no RARS; os outros dois, no RISC-V.
+
+Mais detalhadamente, no primeiro experimento, analisa-se o desempenho de um código de ordenação fornecido; o segundo experimento requer o uso de um compilador cruzado de C para RISC-V, com o objetivo de gerar e corrigir códigos em Assembly; o terceiro experimento propõe o desenvolvimento de um algoritmo para a transformada discreta de Fourier em RISC-V.
+
+\section{Métodos e Análise}
+
+\subsection{Primeiro Experimento}
+É fornecido o programa, em Assembly, \cod{sort.s}, de ordenamento de um vetor. Considere um processador RISC-V com frequência de clock 50MHz e CPI=1 e os vetores de entrada de $n$ elementos $V_0\left[n\right] = \{1, \ 2, \ \dots, \ n\}$, já ordenado, e $V_1\left[n\right] = \{n, \ n-1, \ \dots, \ 1 \}$, inversamente ordenado.
+
+\subsubsection{Tarefa I}
+\begin{tcolorbox}[title=Enunciado, colback=blue!5!white, colframe=blue!75!black]
+Para o procedimento \cod{sort}, escreva as equações dos tempos de execução, $t_0[n]$ e $t_1[n]$, em função de $n$.
+\end{tcolorbox}
+
+Primeiro, devemos lembrar que o tempo de execução pode ser calculado pela seguinte equação:
+\begin{equation}
+    t_{exec} =\frac{I \cdot CPI}{f_{clock}} \label{eq:tempo}
+\end{equation}
+Note que já temos $CPI$ e $f_{clock}$, só resta descobrir $I$ (a quantidade de instruções executadas).
+
+O RARS pode ser utilizado para esse fim: no menu, escolhemos Tools $>$ Instruction Counter, conectamos essa ferramenta ao código, montamos, adicionamos pontos de quebra na chamada do subprocedimento \cod{SORT} e na linha seguinte e executamos o programa. Realizando esse passo a passo para vários vetores ordenados e inversamente ordenados de diferentes tamanhos $n$, observou-se que
+\[
+    I_0[n] = \begin{cases}
+        18, &\text{se } n = 0 \\
+        10n + 13, &\text{se } n \geq 1
+    \end{cases}
+\]
+e
+\[
+    I_1[n] = 9n^2 - 4n + 18, \text{ se } n \geq 0
+\]
+De acordo com a Equação \eqref{eq:tempo}, temos que
+\begin{equation}
+    t_0[n] = \begin{cases}
+        0,36, &\text{se } n = 0 \\
+        0,2n + 0,26, &\text{se } n \geq 1
+    \end{cases}
+    \quad \left[ \mu s\right] \label{eq:t0}
+\end{equation}
+e
+\begin{equation}
+    t_1[n] = 0,18 n^2 - 0,08n + 0,36, \text{ se } n \geq 0 \quad \left[ \mu s\right] \label{eq:t1}
+\end{equation}
+
+\subsubsection{Tarefa II}
+\begin{tcolorbox}[title=Enunciado, colback=blue!5!white, colframe=blue!75!black]
+Para $n = \left\{10,\ 20,\ 30,\ 40,\ 50,\ 60,\ 70,\ 80,\ 90,\ 100 \right\}$, plote (em escala!) as duas curvas, $t_0[n]$ e $t_1[n]$, em um mesmo gráfico $n \times t$.
+\end{tcolorbox}
+
+Utilizando as Equações \eqref{eq:t0} e \eqref{eq:t1}, fizemos o programa a seguir, em Fortran, que calcula $t_0[n]$ e $t_1[n]$ para os $n$ de interesse e escreve esses dados em um arquivo.
+\begin{code}
+    \begin{minted}{fortran}
+program exec_time
+    implicit none
+    integer :: iunit, i
+    
+    open(newunit=iunit,file='oac_t0.dat',status='replace')
+    do i = 1, 10
+        write(iunit, *) i*10, t0(i*10)
+    end do
+    close(iunit)
+    
+    open(newunit=iunit,file='oac_t1.dat',status='replace')
+    do i = 1, 10
+        write(iunit, *) i*10, t1(i*10)
+    end do
+    close(iunit)
+contains
+    double precision function t0(n)
+        integer, intent(in) :: n
+        t0 = 0.26d0 + 0.2d0 * n
+    end function
+    double precision function t1(n)
+        integer, intent(in) :: n
+        t1 = 0.18d0*n*n - 0.08d0*n + 0.36d0
+    end function
+end program exec_time
+    \end{minted}
+    \vspace{-12pt}
+    \caption{Programa em Fortran para calcular $t_0[n]$ e $t_1[n]$ para os argumentos pedidos}
+\end{code}
+\noindent A partir dos dados obtidos, plotamos o gráfico a seguir com gnuplot.
+
+\begin{figure}[H]
+    \centering
+    \include{Recursos/LaTeX/grafico}
+    \vspace{-40pt}
+    \caption{Comparação entre $t_1[n]$ e $t_0[n]$}
+    \vspace{-10pt}
+    \label{fig:placeholder}
+\end{figure}
+
+Perceba que o gráfico de $t_1[n]$ se distancia tanto do de $t_0[n]$ conforme $n$ cresce que o segundo chega a parecer constante em $t = 0$. Esse resultado é coerente, pois $t_1[n]$ é uma função de segundo grau e $t_0[n]$, de primeiro. De fato, no limite, temos
+\[
+\lim_{n\to\infty} \frac{t_0[n]}{t_1[n]} =\lim_{n\to\infty} \frac{0,2n + 0,26}{0,18 n^2 - 0,08n + 0,36} = 0
+\]
+
+\subsection{Segundo Experimento}
+O segundo experimento tem como objetivo compreender a compilação cruzada e a geração de código Assembly a partir de C, com foco em RISC-V. Utilizamos o site Compiler Explorer para compilar os códigos em C com diferentes diretivas.
+
+\subsubsection{Tarefa I}
+% Enunciado da primeira tarefa da 2
+\begin{tcolorbox}[title=Enunciado, colback=blue!5!white, colframe=blue!75!black]
+Dado o programa sortc.c, compile-o com a diretiva -O0 e obtenha o arquivo sortc.s. Indique as modificações necessárias no código Assembly gerado para que possa ser executado corretamente no RARS.
+\end{tcolorbox}
+
+A primeira vista, percebe-se que o compilador não utiliza as diretivas \cod{.data} e \cod{.text}, que são necessárias para a montagem no RARS. Além disso, no simulador, as intruções começam a ser executadas a partir do topo da região \cod{.text}, dessa forma, seria necessário deslocar o procedimento \cod{main} ou chamá-lo no início dessa seção, além de incluir uma \textit{syscall} com \cod{a7=10} para terminar o programa. Ademais, sem incluir a biblioteca padrão do C, funções como \cod{printf} e \cod{putchar} não podem ser utilizadas; seguindo a dica fornecida no roteiro, utilizamos a função \cod{show}, definida no programa \cod{sort.s}.
+
+Com as correções acima, o programa já pode ser montado pelo RARS, porém, ainda há um erro em tempo de execução: \cod{Error in : Instruction load access error}. O erro provavelmente se deve à má utilização do par \cod{lui} + \cod{addi} para acessar a memória, pois sua substituição por \cod{la} resolveu o problema, tornando o programa totalmente funcional.
+
+\subsubsection{Tarefa II}
+% Enunciado da segunda tarefa da 2
+\begin{tcolorbox}[title=Enunciado, colback=blue!5!white, colframe=blue!75!black]
+Compile o programa \cod{sortc\_mod.c} e, com a ajuda do RARS, monte uma tabela comparativa com o número total de instruções executadas pelo programa todo, e o tamanho em bytes dos códigos em linguagem de máquina gerados para cada diretiva de otimização da compilação \{\cod{-O0}, \cod{-O3}, \cod{-Os}\}. Compare ainda com os resultados obtidos no item 1.1) com o programa \cod{sort.s}, que foi implementado diretamente em Assembly. Analise os resultados obtidos usando o mesmo vetor de entrada.  
+\end{tcolorbox}
+
+% Tabela com os resultados das otimizações
+\begin{table}[H]
+\centering
+\label{tab:results}
+\small
+\setlength{\tabcolsep}{3pt}
+\begin{tabular}{@{}ccc@{}}
+    \toprule
+    \textbf{Diretriz} & \textbf{Instruções executadas} & \textbf{Tamanho (bytes)}\\
+    \midrule
+    -O0 & 10.081 & 496\\
+    -Os & 3.905 & 312\\
+    -O3 & 2.181 & 268\\
+    \cod{sort.s} & 3.746 & 296\\
+    \bottomrule
+\end{tabular}
+\caption{Instruções executadas para cada diretiva de compilação}
+\vspace{-10pt}
+\end{table}
+
+% Comentários sobre a tabela 
+Os dados de desempenho para as diferentes diretrizes de compilação fornecem observações interessantes sobre as estratégias de otimização do GCC. Ao comparar os resultados é possível observar relações entre eficiência e tamanho do código. 
+
+A diretiva -O0, que compila sem otimização, é a que gera um código com mais instruções executadas (10.081) e o maior tamanho em bytes (496).
+
+A \textit{flag} -Os, que prioriza a redução do tamanho do código, reduziu o número de instruções (3.905) e o tamanho do código (312 bytes) significativamente em relação à -O0, mas não conseguiu superar em nenhum dos quesitos as otimizações de -O3 ou o código escrito direto em Assembly \cod{sort.s}. 
+
+A \textit{flag} -O3, que representa o nível máximo de otimização, mostrou resultados mais eficientes, executando menos instruções que todas as outras opções (2181) e com o menor tamanho (268 bytes). Esse desempenho é alcançado com técnicas como eliminação de código redundante e reordenação de instruções, e evidencia a eficácia da otimização do compilador em gerar código enxuto.
+
+O código \cod{sort.s}, escrito manualmente em Assembly, apresentou 3746 instruções e um tamanho de 296 bytes, ficando entre -Os e -O3. Este resultado demonstra que programar em Assembly pode ser eficiente, mas, para bater de frente com compiladores modernos e otimizados, é necessário conhecimento e grande esforço.
+
+\subsubsection{Tarefa III}
+% Enunciado da terceira tarefa da 2
+\begin{tcolorbox}[title=Enunciado, colback=blue!5!white, colframe=blue!75!black]
+Pesquise na internet e explique as diferenças entre as otimizações \cod{-O0}, \cod{-O1}, \cod{-O2}, \cod{-O3} e \cod{-Os}.  
+\end{tcolorbox}
+
+% Otimizações
+\begin{itemize}
+    \item -O0 (Sem otimização): Configuração padrão do compilador, quando nenhuma otimização é especificada. Ao compilar com -O0, o código gerado é praticamente uma tradução direta do código fonte para assembly, o que facilita a depuração. A estrutura do código original é preservada, mantendo todas as variáveis e evitando rearranjos ou remoções de código, para que possa ser feito um mapeamento um-para-um;
+    \item -O1: Otimização com o objetivo de reduzir tamanho do código e tempo de execução sem aumentar o tempo de compilação. Entre as otimizações estão a remoção de código que nunca são executados (código morto), e simplificação de expressões;
+    \item -O2: Otimiza mais ainda, incluindo todas as otimizações de -O1 e ativando outras como inline de funções pequenas para eliminar overhead de chamadas e análise de fluxo de dados. Aumenta tanto o tempo de compilação quanto o desempenho do código gerado;
+    \item -O3: Todas as otimizações de -O2 são ativadas, além de outras transformações que maximizam o desempenho. Esta diretriz aplica técnicas como inlining de funções, unrolling de loops, onde o compilador replica sistematicamente o corpo dos loops para reduzir significativamente o overhead de controle e vetorização. Esta abordagem agressiva apresenta entretanto um \textit{trade-off} significativo, o código gerado pode ter um tempo de compilação maior, e um aumento em tamanho que acaba impactando negativamente a utilização da memória cache;
+    \item -Os: Otimização projetada para sistemas embarcados ou com recursos limitados de memória. -Os aplica otimizações de -O2 que não aumentam o tamanho do código e desativa as que tendem a expandir o código. São utilizadas técnicas como eliminação de código não utilizado, seleção de instruções mais curtas e reorganização de código, visando gerar um executável menor.
+\end{itemize}
+
+\newpage
+
+\subsection{Terceiro Experimento}
+O terceiro experimento consiste em implementar, em Assembly RISC-V, a Transformada Discreta de Fourier (DFT), que realiza uma mudança de base entre duas bases ortonormais de dimensão $N$: a base temporal (amostras) composta por $N$ impulsos unitários deslocados $\delta[n-m],\ m \in \{0, \dots, N-1\}$ para a base frequencial composta por $N$ exponenciais complexas $e^{-i\frac{2\pi}{N}kn},\ k \in \{0, \dots, N-1\}$. A DFT é dada pela seguinte fórmula:
+\vspace{-10pt}
+\begin{equation}
+    X[k] = \sum_{n=0}^{N-1} x[n]e^{-i\frac{2\pi}{N}kn}
+    \vspace{-8pt}
+\end{equation}
+em que $x[n]$ é o $n$-ésimo termo do sinal (sequência) $x$ no domínio do tempo, $X[k]$ é $k$-ésimo termo desse sinal no domínio da frequência e $N$ é a largura do sinal.
+
+\subsubsection{Tarefa I}
+
+\begin{tcolorbox}[title=Enunciado, colback=blue!5!white, colframe=blue!75!black]
+Escreva um procedimento que receba um ângulo em radianos $\theta$ (em fa0) e retorne $\cos{\theta}$ (em fa0) e $\sin{\theta}$ (em fa1).
+\end{tcolorbox}
+
+Diferentemente das linguagens de alto nível, não existem funções trigonométricas nativas em Assembly. Consequentemente, é necessário utilizar séries de Taylor, séries polinomiais capazes de aproximar funções mais complicadas. No limite, com um somatório de infinitos termos, essas séries se igualam à função original, pelo menos em algum intervalo. As séries de Maclaurin para o cosseno e o seno são as seguintes:
+\begin{equation*}
+    \cos \theta = \sum_{n=0}^\infty \frac{(-1)^n}{(2n)!} \theta^{2n}  \quad \quad \sin \theta = \sum_{n=0}^\infty \frac{(-1)^n}{(2n+1)!} \theta^{2n+1}
+\end{equation*}
+
+Ingenuamente, poderíamos pensar em implementar o procedimento pedido por meio de dois loops separados, uma função que calcula o fatorial e outra que calcula exponenciais. Essa abordagem, porém, é excessivamente cara. A fim de otimizar o algoritmo é interessante perceber a seguinte relação:
+\begin{align*}
+    e^{i\theta} &= \sum_{n=0}^\infty \frac{(i\theta)^n}{n!} = \frac{(i\theta)^0}{0!} + \frac{(i\theta)^1}{1!} + \frac{(i\theta)^2}{2!} + \frac{(i\theta)^3}{3!} + \frac{(i\theta)^4}{4!} + \frac{(i\theta)^5}{5!} + \dots\\
+    &= 1 + i\theta - \frac{\theta^2}{2!} - i \frac{\theta^3}{3!} + \frac{\theta^4}{4!} + i\frac{\theta^5}{5!} - \dots \\
+    &= \left(1 - \frac{\theta^2}{2!} + \frac{\theta^4}{4!} - \dots \right)
+    + i \left(\theta - \frac{\theta^3}{3!} + \frac{\theta^5}{5!} - \dots \right) \\
+    &= \left(\sum_{n=0}^\infty \frac{(-1)^n}{(2n)!} \theta^{2n}\right)
+    + i \left(\sum_{n=0}^\infty \frac{(-1)^n}{(2n+1)!} \theta^{2n+1}\right) \\
+    &= \cos{\theta} + i\sin{\theta}
+\end{align*}
+Ou seja, além de termos demonstrado a igualdade de Euler, percebemos que se pode utilizar um único loop para calcular simultaneamente seno e cosseno (o loop referente à série da exponencial complexa), basta definir, pela paridade do índice do somatório, em qual registrador vamos acumular o resultado em cada iteração (\cod{fa0} para índices pares e \cod{fa1} para índices ímpares).
+
+Teoricamente, a implementação do algoritmo \cod{SINCOS} conforme descrito acima (pela série de Taylor) seria suficiente. No entanto, na prática, apesar da série de Taylor convergir para qualquer ângulo, a aproximação por um número finito de termos é imprecisa para ângulos grandes e não basta aumentar o número de iterações (de termos da série) pois o cálculo de potências elevadas pode causar \textit{overflow}. Dessa forma, a fim de melhorar as aproximações, modulamos o ângulo de forma que ele fique sempre no intervalo $\left[-\frac{\pi}{2}, \frac{\pi}{2}\right]$. De acordo com a figura a seguir, isso preserva o seno, mas altera o sinal do cosseno; precisamos, portanto, criar uma \textit{flag} para inverter o cosseno.
+
+\begin{figure}[H]
+    \centering
+    \include{Recursos/LaTeX/circ_unit}
+    \caption{Representação gráfica de quatro casos de interesse da normalização realizada}
+\end{figure}
+
+\subsubsection{Tarefa II}
+\begin{tcolorbox}[title=Enunciado, colback=blue!5!white, colframe=blue!75!black]
+Escreva um procedimento em Assembly RISC-V com a seguinte definição 
+\begin{center}
+\vspace{-10pt}
+\begin{minipage}{0.8\textwidth}
+\begin{minted}[style=tango]{c}
+void DFT(float *x, float *X_real, float *X_imag, int N)
+\end{minted}
+\end{minipage}
+\vspace{-10pt}
+\end{center}
+que, dado o endereço do vetor $x[n]$ de floats (em \cod{a0}) de tamanho $N$ na memória, os endereços dos espaços reservados para o vetor complexo $X[k]$ (parte real e parte imaginária) (em \cod{a1} e \cod{a2}) e o número de pontos $N$ (em \cod{a3}), calcule a DFT de $N$ pontos de $x[n]$ e coloque o resultado no espaço alocado para $X_{real}[k]$ e $X_{imag}[k]$.
+\end{tcolorbox}
+
+Tendo em mãos o procedimento da última tarefa, a implementação da DFT torna-se conceitualmente simples. O procedimento consiste em criar um loop que invoca a função \cod{SINCOS} - que retorna as componentes real e imaginária de $e^{-i\frac{2\pi}{N}kn}$ nos registradores \cod{fa0} e \cod{fa1}, respectivamente - multiplicar esses valores por $x[n]$ e armazenar os resultados nas posições de memória correspondentes. A complexidade reside apenas no gerenciamento operacional dos registradores, pois, como temos procedimentos aninhados, é necessário utilizar a \textit{stack}.
+
+\subsubsection{Tarefa III}
+\begin{tcolorbox}[title=Enunciado, colback=blue!5!white, colframe=blue!75!black, breakable=true]
+Escreva um programa \cod{main} que defina no \cod{.data} o vetor $x[n]$, o espaço para o vetor $X[K]$, o valor de $N$ e chame o procedimento DFT.
+\begin{code}
+    \begin{minted}[bgcolor=blue!5!white,linenos=false]{asm}
+.data 
+N:      .word   8  
+x:      .float  1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0 
+X_real: .float  0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0 
+X_imag: .float  0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0 
+.text 
+...
+jal DFT 
+... 
+    \end{minted}
+\end{code}
+A seguir, apresente no console a saída dos N pontos no formato: 
+\begin{minted}[fontsize=\scriptsize]{bash}
+x[n]    X[k] 
+1.0     8.0+0.0i      
+1.0     0.0+0.0i 
+1.0     0.0+0.0i 
+1.0     0.0+0.0i 
+1.0     0.0+0.0i 
+1.0     0.0+0.0i 
+1.0     0.0+0.0i 
+1.0     0.0+0.0i 
+\end{minted}
+\end{tcolorbox}
+
+Essa \cod{main} consiste em uma chamada à função DFT e um loop para exibir \textit{floats} e caracteres no console (além de uma pequena lógica condicional para não exibir o `+' quando a parte imaginária é negativa). O resultado, exibido a seguir, não ficou igual ao do exemplo do enunciado, em que todos os termos de $X[k]$, com excessão do primeiro, são $0.0$, mas acreditamos que isso se deva a dois fatores: à imperfeição da aproximação por polinômios de Taylor e à precisão de máquina. De fato, como os maiores resultados foram da ordem de $10^{-6}$, essas são justificativas razoáveis.
+
+\begin{tcolorbox}[colback=blue!5!white, colframe=blue!75!black, boxrule=0.5pt, arc=2pt, left=4pt, right=4pt, top=4pt, bottom=4pt, width=0.4\textwidth, center]
+\begin{minted}[fontsize=\scriptsize]{bash}
+x[n]	X[k]
+1.0	8.0+0.0i
+1.0	-7.748604E-7+0.0i
+1.0	-6.727769E-7+2.3841858E-7i
+1.0	3.5762787E-7-4.7683716E-7i
+1.0	0.0-7.1525574E-7i
+1.0	-2.7418137E-6-1.1324883E-6i
+1.0	-1.6589261E-6+1.9073486E-6i
+1.0	-2.0861626E-6-1.1920929E-7i
+\end{minted}
+\end{tcolorbox}
+
+\subsubsection{Tarefa IV}
+\begin{tcolorbox}[title=Enunciado, colback=blue!5!white, colframe=blue!75!black]
+Calcule a DFT dos seguintes vetores $x[n]$, com $N=8$
+\begin{minted}[bgcolor=blue!5!white,linenos=false]{asm}
+x1: .float  1.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0 
+x2: .float  1.0, 0.7071, 0.0, -0.7071, -1.0, -0.7071, 0.0, 0.7071 
+x3: .float  0.0, 0.7071. 1.0,  0.7071, 0.0, -0.7071, -1.0, -0.7071 
+x4: .float  1.0, 1.0, 1.0, 1.0, 0.0, 0.0, 0.0, 0.0 
+\end{minted}
+\end{tcolorbox}
+Utilizando o código desenvolvido nas tarefas anteriores, calculamos a DFT de cada um dos sinais. Os resultados estão exibidos a seguir, de acordo com a ordem do enunciado.
+
+\begin{multicols}{2}
+    \begin{codebox}{$x_1$}
+    \begin{minted}[fontsize=\scriptsize]{bash}
+x[n]           X[k]
+1.0	    1.0+0.0i
+0.0	    1.0+0.0i
+0.0	    1.0+0.0i
+0.0	    1.0+0.0i
+0.0	    1.0+0.0i
+0.0	    1.0+0.0i
+0.0	    1.0+0.0i
+0.0	    1.0+0.0i
+    \end{minted}
+    \end{codebox}
+    
+    \begin{codebox}{$x_2$}
+    \begin{minted}[fontsize=\scriptsize]{bash}
+x[n]            X[k]
+1.0             -5.9604645E-8+0.0i
+0.7071          3.999981+3.2782555E-7i
+0.0             9.760695E-7+0.0i
+-0.7071	 1.963973E-5-7.4505806E-7i
+-1.0            0.0-5.057573E-7i
+-0.7071         1.8894672E-5+2.9802322E-8i
+0.0	     -8.34465E-7+0.0i
+0.7071	  3.9999797+2.592802E-6i
+    \end{minted}
+    \end{codebox}
+\columnbreak
+    \begin{codebox}{$x_3$}
+    \begin{minted}[fontsize=\scriptsize]{bash}
+x[n]	    X[k]
+0.0	     -5.9604645E-8+0.0i
+0.7071	  5.9604645E-8+3.9999797i
+1.0	     -6.668487E-7-7.1525574E-7i
+0.7071	  -1.4305115E-6-1.8388033E-5i
+0.0	     0.0+8.429289E-7i
+-0.7071	 9.23872E-7+1.9133091E-5i
+-1.0	    1.4437442E-6-9.536743E-7i
+-0.7071	 3.784895E-6-3.999981i
+    \end{minted}
+    \end{codebox}
+    
+    \begin{codebox}{$x_4$}
+    \begin{minted}[fontsize=\scriptsize]{bash}
+x[n]	    X[k]
+1.0	    4.0+0.0i
+1.0	    0.9999994+2.4142132i
+1.0	    -1.02313E-6-2.3841858E-7i
+1.0	    0.9999994+0.4142136i
+0.0	    0.0+2.3841858E-7i
+0.0	    0.999999-0.4142139i
+0.0	    9.851078E-9+4.7683716E-7i
+0.0	    1.0000013-2.4142137i
+    \end{minted}
+    \end{codebox}
+\end{multicols}
+
+Novamente, percebe-se um pequeno erro nos resultados: alguns números são da ordem de $10^{-7}$, outros, extremamente próximos de 1 ou 4, que eram os valores esperados. Justificamos essas imprecisões da mesma forma que as da questão anterior: erros na aproximação por polinômios e na precisão de máquina.
+
+\subsubsection{Tarefa V}
+\begin{tcolorbox}[title=Enunciado, colback=blue!5!white, colframe=blue!75!black]
+Para os sinais $x[n]$ abaixo
+\begin{enumerate}[label=\alph*), itemsep=0pt]
+    \item $N=8$, $x[n]=\{1.0,\ 1.0,\ 1.0,\ 0.0,\ 0.0,\ 0.0,\ 0.0 ,\ 0.0\} $
+    \item $N=12$,\ $x[n]=\{1.0,\ 1.0,\ 1.0,\ 0.0,\ 0.0,\ 0.0,\ 0.0 ,\ \dots,\ 0.0\}$ 
+    \item $N=16$,\ $x[n]=\{1.0,\ 1.0,\ 1.0,\ 0.0,\ 0.0,\ 0.0,\ 0.0 ,\ \dots,\ 0.0\}$ 
+    \item $N=20$,\ $x[n]=\{1.0,\ 1.0,\ 1.0,\ 0.0,\ 0.0,\ 0.0,\ 0.0 ,\ \dots,\ 0.0\}$ 
+    \item $N=24$,\ $x[n]=\{1.0,\ 1.0,\ 1.0,\ 0.0,\ 0.0,\ 0.0,\ 0.0 ,\ \dots,\ 0.0\}$ 
+    \item $N=28$,\ $x[n]=\{1.0,\ 1.0,\ 1.0,\ 0.0,\ 0.0,\ 0.0,\ 0.0 ,\ \dots,\ 0.0\}$ 
+    \item $N=32$,\ $x[n]=\{1.0,\ 1.0,\ 1.0,\ 0.0,\ 0.0,\ 0.0,\ 0.0 ,\ \dots,\ 0.0\}$ 
+    \item $N=36$,\ $x[n]=\{1.0,\ 1.0,\ 1.0,\ 0.0,\ 0.0,\ 0.0,\ 0.0 ,\ \dots,\ 0.0\}$ 
+    \item $N=40$,\ $x[n]=\{1.0,\ 1.0,\ 1.0,\ 0.0,\ 0.0,\ 0.0,\ 0.0 ,\ \dots,\ 0.0\}$ 
+    \item $N=44$,\ $x[n]=\{1.0,\ 1.0,\ 1.0,\ 0.0,\ 0.0,\ 0.0,\ 0.0 ,\ \dots,\ 0.0\}$
+\end{enumerate}
+onde $\dots$ são todos valores 0.0. Para cada item, meça o tempo de execução do procedimento DFT e calcule a frequência do processador RISC-V Uniciclo simulado pelo RARS. Finalmente, faça um gráfico $t_{exec} \times N$ em escala. Quais conclusões podemos tirar dessa análise?
+\end{tcolorbox}
+Utilizando os registradores de status e controle do RARS, medimos o tempo de execução ($t_{exec}$) e a quantidade de instruções ($I$) do programa para cada caso. A frequência foi calculada pela fórmula
+\[
+f_{clock} = \frac{I \cdot CPI}{t_{exec}} \overset{CPI=1}{=} \frac{I}{t_{exec}}
+\]
+A seguir, os resultados:
+\begin{enumerate}[label=\alph*), itemsep=0pt]
+    \item $N=8 \to t_{exec} = 48ms$, $I = 15.606$, $f = 325kHz$
+    \item $N=12 \to t_{exec} = 84ms$, $I = 34.999$, $f = 416kHz$
+    \item $N=16 \to t_{exec} = 144ms$, $I = 62.137$, $f = 431kHz$
+    \item $N=20 \to t_{exec} = 235ms$, $I = 96.981$, $f = 412kHz$
+    \item $N=24 \to t_{exec} = 343ms$, $I = 139.615$, $f = 407kHz$
+    \item $N=28 \to t_{exec} = 483ms$, $I = 189.955$, $f = 393kHz$
+    \item $N=32 \to t_{exec} = 595ms$, $I = 248.028$, $f = 416kHz$
+    \item $N=36 \to t_{exec} = 769ms$, $I = 313.777$, $f = 408kHz$
+    \item $N=40 \to t_{exec} = 949ms$, $I = 387.373$, $f = 408kHz$
+    \item $N=44 \to t_{exec} = 1153ms$, $I = 468.639$, $f = 406kHz$
+\end{enumerate}
+
+Com esses dados, podemos fazer o gráfico solicitado. Novamente, utilizamos o gnuplot e plotamos o seguinte gráfico:
+
+\begin{figure}[H]
+    \centering
+    \include{Recursos/LaTeX/graf_q3}
+    \vspace{-30pt}
+    \caption{Tempo de execução em função do tamanho da entrada}
+\end{figure}
+
+Note que o gráfico parece representar uma função quadrática. De fato isso é coerente: fazendo a análise assintótica do algoritmo implementado, ele é composto por duas estruturas de repetição aninhadas que dependem do tamanho da entrada ($N$), ou seja, o algoritmo é $\Theta(N^2)$. A chamada a \cod{SINCOS} dentro desses loops pode causar confusão, pois há estrutura de repetição nessa função, mas note: a quantidade de iterações dessa estrutura é fixa, são sempre vinte e uma iterações.
+    
+\section{Conclusão}
+Nesse laboratório, tivemos intenso contato com o RARS e suas ferramentas, desenvolvemos códigos complexos em Assembly e entendemos melhor a compilação de linguagens de alto nível. Além disso, fizemos análises de desempenho e todas tiveram resultados coerentes.
+
+A experiência obtida neste laboratório, bem como os resultados alcançados e a pesquisa realizada, conduzem à reflexão sobre aspectos cruciais da programação, tais como: a necessidade de compiladores eficientes para que a abstração proporcionada por linguagens de alto nível não sejam demasiado caras; o custo associado ao uso de números de ponto flutuante — que exigem mais instruções para operações aparentemente simples; e a importância de conhecer o \textit{hardware} utilizado para compreender adequadamente o tempo de execução e o desempenho de programas.
+
+Todos os códigos desenvolvidos ou gerados (via compilação cruzada) para a realização desse laboratório foram enviados compactados em um arquivo \cod{.zip}. Para acessar o vídeo solicitado, \href{https://www.youtube.com/watch?v=xyz123}{clique aqui}.
+\end{document}
