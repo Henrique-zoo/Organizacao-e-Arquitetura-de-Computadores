@@ -99,5 +99,59 @@ Recursos/LaTeX/*.log
 # If you use LaTeXmk auxiliary dir
 .latexmk/
 
+### Quartus / Intel FPGA (arquivos gerados por Quartus Prime)
+# Diretórios gerados pelo Quartus
+db/
+incremental_db/
+output_files/
+
+# Arquivos de projeto/binários/relatórios gerados
+*.qpf
+*.qsf
+*.qws
+*.qip
+*.qdb
+*.qar
+*.rpt
+*.sof
+*.pof
+*.rbf
+*.sld
+*.sopcinfo
+*.hex
+*.rbf
+
+# ModelSim / simulação
+work/
+modelsim.ini
+*.wlf
+*.vcd
+*.vpd
+
+# Arquivos temporários/editor (repetidos/adequações)
+*.swp
+*.swo
+*~
+*.bak
+
+# Regras específicas para o projeto Laboratorio2 (padrão, mas explícitas)
+Laboratorio2/db/
+Laboratorio2/incremental_db/
+Laboratorio2/output_files/
+Laboratorio2/*.sof
+Laboratorio2/*.pof
+Laboratorio2/*.rbf
+Laboratorio2/*.qdb
+Laboratorio2/*.rpt
+Laboratorio2/*.qws
+Laboratorio2/*.qip
+
+# Notas:
+# - Não ignoramos *.mif globalmente porque alguns .mif (mem init) podem ser parte do projeto.
+# - Ajuste adicional pode ser feito para ignorar subpastas dentro de `Laboratorio2/quartus/` se desejar.
+
+# Manter o arquivo de projeto Quartus do Laboratorio2 versionado (usado para abrir o projeto)
+!Laboratorio2/TopDE.qpf
+
 # Allow people to keep local overrides
 !.gitignore
