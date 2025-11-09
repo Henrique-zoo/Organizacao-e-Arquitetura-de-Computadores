@@ -11,7 +11,7 @@ entity xreg is
 		iCLK, iRST, iWREN:   	in  std_logic;
 		iRS1, iRS2, iRD, iDISP:	in  std_logic_vector(4 downto 0);
 		iDATA:  						in  std_logic_vector(31 downto 0);
-		oREGA, oREGB, oREGD:		out std_logic_vector(31 downto 0);
+		oREGA, oREGB, oREGD:		out std_logic_vector(31 downto 0)
 	);
 end entity xreg;
 

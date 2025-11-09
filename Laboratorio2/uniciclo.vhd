@@ -7,21 +7,21 @@ entity uniciclo is
     port (
         clockCPU, clockMem, reset:  in  std_logic;
         regin:                      in  std_logic_vector(4 downto 0);
-        PC, instr, regout:          out std_logic_vector(31 downto 0);
+        PC, instr, regout:          out std_logic_vector(31 downto 0)
     );
 end uniciclo;
 
 architecture structural of uniciclo is
-    -- Sinais internos
-    signal  PC_i:       std_logic_vector(31 downto 0) := x"00400000";
-    signal  instr_i:    std_logic_vector(31 downto 0) := (others => '0');
-    signal  regout_i:   std_logic_vector(31 downto 0) := (others => '0');
-    signal  ALUOut, MemData, RegA, RegB, imm_i, RegB_ALU, WriteBackData, PC_plus4, PC_plusImm, PC_next:	std_logic_vector(31 downto 0);
-    signal  mem2Reg, memRead, branch, jump, memWrite, ALUSrc, regWrite, zeroALU:        std_logic;
-    signal  ALUOp:      std_logic_vector(1 downto 0);
-    signal  alu_ctrl:   std_logic_vector(3 downto 0);
-	signal	iRS1:			std_logic_vector(4 downto 0);
-    alias   opcode:     std_logic_vector(6 downto 0) is instr_i(6 downto 0);
+	-- Sinais internos
+	signal  	PC_i:       	std_logic_vector(31 downto 0) := x"00400000";
+	signal  	instr_i:    	std_logic_vector(31 downto 0) := (others => '0');
+	signal  	regout_i:   	std_logic_vector(31 downto 0) := (others => '0');
+	signal  	ALUOut, MemData, RegA, RegB, imm_i, RegB_ALU, WriteBackData, PC_plus4, PC_plusImm, PC_next:	std_logic_vector(31 downto 0);
+	signal  	mem2Reg, memRead, branch, jump, memWrite, ALUSrc, regWrite, zeroALU:        std_logic;
+	signal  	ALUOp:      	std_logic_vector(1 downto 0);
+	signal 	alu_ctrl:  		std_logic_vector(3 downto 0);
+	signal	iRS1:				std_logic_vector(4 downto 0);
+	alias   	opcode:     	std_logic_vector(6 downto 0) is instr_i(6 downto 0);
 begin
     PC      <= PC_i;
     instr   <= instr_i;
