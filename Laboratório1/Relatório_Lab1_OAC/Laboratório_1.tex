@@ -153,7 +153,7 @@
 \newpage
 
 \section{Introdução}
-O laboratório 1 de OAC é separado em três grandes experimentos - esses, por sua vez, subdivididos em diversas tarefas - e visa familiarizar o aluno ao Assembly RISC-V e ao \textit{RISC-V Assembler and Runtime Simulator} (RARS). Notadamente, o primeiro experimento concentra-se no RARS; os outros dois, no RISC-V.
+O laboratório 1 de OAC é separado em três grandes experimentos - esses, por sua vez, subdivididos em diversas tarefas - e visa familiarizar o aluno com o Assembly RISC-V e com \textit{RISC-V Assembler and Runtime Simulator} (RARS). Notadamente, o primeiro experimento concentra-se no RARS; os outros dois, no RISC-V.
 
 Mais detalhadamente, no primeiro experimento, analisa-se o desempenho de um código de ordenação fornecido; o segundo experimento requer o uso de um compilador cruzado de C para RISC-V, com o objetivo de gerar e corrigir códigos em Assembly; o terceiro experimento propõe o desenvolvimento de um algoritmo para a transformada discreta de Fourier em RISC-V.
 
@@ -171,7 +171,7 @@ Primeiro, devemos lembrar que o tempo de execução pode ser calculado pela segu
 \begin{equation}
     t_{exec} =\frac{I \cdot CPI}{f_{clock}} \label{eq:tempo}
 \end{equation}
-Note que já temos $CPI$ e $f_{clock}$, só resta descobrir $I$ (a quantidade de instruções executadas).
+Note que já temos $CPI$ e $f_{clock}$; só resta descobrir $I$ (a quantidade de instruções executadas).
 
 O RARS pode ser utilizado para esse fim: no menu, escolhemos Tools $>$ Instruction Counter, conectamos essa ferramenta ao código, montamos, adicionamos pontos de quebra na chamada do subprocedimento \cod{SORT} e na linha seguinte e executamos o programa. Realizando esse passo a passo para vários vetores ordenados e inversamente ordenados de diferentes tamanhos $n$, observou-se que
 \[
@@ -245,7 +245,7 @@ end program exec_time
     \label{fig:placeholder}
 \end{figure}
 
-Perceba que o gráfico de $t_1[n]$ se distancia tanto do de $t_0[n]$ conforme $n$ cresce que o segundo chega a parecer constante em $t = 0$. Esse resultado é coerente, pois $t_1[n]$ é uma função de segundo grau e $t_0[n]$, de primeiro. De fato, no limite, temos
+Observe que o gráfico de $t_1[n]$ se distancia tanto do de $t_0[n]$ conforme $n$ cresce que o segundo chega a parecer constante em $t = 0$. Esse resultado é coerente, pois $t_1[n]$ é uma função de segundo grau e $t_0[n]$, de primeiro. De fato, no limite, temos
 \[
 \lim_{n\to\infty} \frac{t_0[n]}{t_1[n]} =\lim_{n\to\infty} \frac{0,2n + 0,26}{0,18 n^2 - 0,08n + 0,36} = 0
 \]
@@ -259,9 +259,9 @@ O segundo experimento tem como objetivo compreender a compilação cruzada e a g
 Dado o programa sortc.c, compile-o com a diretiva -O0 e obtenha o arquivo sortc.s. Indique as modificações necessárias no código Assembly gerado para que possa ser executado corretamente no RARS.
 \end{tcolorbox}
 
-A primeira vista, percebe-se que o compilador não utiliza as diretivas \cod{.data} e \cod{.text}, que são necessárias para a montagem no RARS. Além disso, no simulador, as intruções começam a ser executadas a partir do topo da região \cod{.text}, dessa forma, seria necessário deslocar o procedimento \cod{main} ou chamá-lo no início dessa seção, além de incluir uma \textit{syscall} com \cod{a7=10} para terminar o programa. Ademais, sem incluir a biblioteca padrão do C, funções como \cod{printf} e \cod{putchar} não podem ser utilizadas; seguindo a dica fornecida no roteiro, utilizamos a função \cod{show}, definida no programa \cod{sort.s}.
+À primeira vista, percebe-se que o compilador não utiliza as diretivas \cod{.data} e \cod{.text}, que são necessárias para a montagem no RARS. Além disso, no simulador, as instruções começam a ser executadas a partir do topo da região \cod{.text}; dessa forma, seria necessário deslocar o procedimento \cod{main} ou chamá-lo no início dessa seção, além de incluir uma \textit{syscall} com \cod{a7=10} para terminar o programa. Ademais, sem incluir a biblioteca padrão do C, funções como \cod{printf} e \cod{putchar} não podem ser utilizadas; seguindo a dica fornecida no roteiro, utilizamos a função \cod{show}, definida no programa \cod{sort.s}.
 
-Com as correções acima, o programa já pode ser montado pelo RARS, porém, ainda há um erro em tempo de execução: \cod{Error in : Instruction load access error}. O erro provavelmente se deve à má utilização do par \cod{lui} + \cod{addi} para acessar a memória, pois sua substituição por \cod{la} resolveu o problema, tornando o programa totalmente funcional.
+Com as correções acima, o programa já pode ser montado pelo RARS; porém, ainda há um erro em tempo de execução: \cod{Error in : Instruction load access error}. O erro provavelmente se deve à má utilização do par \cod{lui} + \cod{addi} para acessar a memória, pois sua substituição por \cod{la} resolveu o problema, tornando o programa totalmente funcional.
 
 \subsubsection{Tarefa II}
 % Enunciado da segunda tarefa da 2
@@ -279,10 +279,10 @@ Compile o programa \cod{sortc\_mod.c} e, com a ajuda do RARS, monte uma tabela c
     \toprule
     \textbf{Diretriz} & \textbf{Instruções executadas} & \textbf{Tamanho (bytes)}\\
     \midrule
-    -O0 & 10.081 & 496\\
-    -Os & 3.905 & 312\\
-    -O3 & 2.181 & 268\\
-    \cod{sort.s} & 3.746 & 296\\
+    -O0 & 10\ 081 & 496\\
+    -Os & 3\ 905 & 312\\
+    -O3 & 2\ 181 & 268\\
+    \cod{sort.s} & 3\ 746 & 296\\
     \bottomrule
 \end{tabular}
 \caption{Instruções executadas para cada diretiva de compilação}
@@ -309,9 +309,9 @@ Pesquise na internet e explique as diferenças entre as otimizações \cod{-O0},
 % Otimizações
 \begin{itemize}
     \item -O0 (Sem otimização): Configuração padrão do compilador, quando nenhuma otimização é especificada. Ao compilar com -O0, o código gerado é praticamente uma tradução direta do código fonte para assembly, o que facilita a depuração. A estrutura do código original é preservada, mantendo todas as variáveis e evitando rearranjos ou remoções de código, para que possa ser feito um mapeamento um-para-um;
-    \item -O1: Otimização com o objetivo de reduzir tamanho do código e tempo de execução sem aumentar o tempo de compilação. Entre as otimizações estão a remoção de código que nunca são executados (código morto), e simplificação de expressões;
+    \item -O1: Otimização com o objetivo de reduzir tamanho do código e tempo de execução sem aumentar o tempo de compilação. Entre as otimizações estão a remoção de código que nunca é executado (código morto) e a simplificação de expressões;
     \item -O2: Otimiza mais ainda, incluindo todas as otimizações de -O1 e ativando outras como inline de funções pequenas para eliminar overhead de chamadas e análise de fluxo de dados. Aumenta tanto o tempo de compilação quanto o desempenho do código gerado;
-    \item -O3: Todas as otimizações de -O2 são ativadas, além de outras transformações que maximizam o desempenho. Esta diretriz aplica técnicas como inlining de funções, unrolling de loops, onde o compilador replica sistematicamente o corpo dos loops para reduzir significativamente o overhead de controle e vetorização. Esta abordagem agressiva apresenta entretanto um \textit{trade-off} significativo, o código gerado pode ter um tempo de compilação maior, e um aumento em tamanho que acaba impactando negativamente a utilização da memória cache;
+    \item -O3: Todas as otimizações de -O2 são ativadas, além de outras transformações que maximizam o desempenho. Esta diretriz aplica técnicas como inlining de funções, unrolling de loops, onde o compilador replica sistematicamente o corpo dos loops para reduzir significativamente o overhead de controle e vetorização. Esta abordagem agressiva apresenta entretanto um \textit{trade-off} significativo: o código gerado pode ter um tempo de compilação maior e um aumento em tamanho que acabe impactando negativamente a utilização da memória cache;
     \item -Os: Otimização projetada para sistemas embarcados ou com recursos limitados de memória. -Os aplica otimizações de -O2 que não aumentam o tamanho do código e desativa as que tendem a expandir o código. São utilizadas técnicas como eliminação de código não utilizado, seleção de instruções mais curtas e reorganização de código, visando gerar um executável menor.
 \end{itemize}
 
@@ -337,7 +337,7 @@ Diferentemente das linguagens de alto nível, não existem funções trigonomét
     \cos \theta = \sum_{n=0}^\infty \frac{(-1)^n}{(2n)!} \theta^{2n}  \quad \quad \sin \theta = \sum_{n=0}^\infty \frac{(-1)^n}{(2n+1)!} \theta^{2n+1}
 \end{equation*}
 
-Ingenuamente, poderíamos pensar em implementar o procedimento pedido por meio de dois loops separados, uma função que calcula o fatorial e outra que calcula exponenciais. Essa abordagem, porém, é excessivamente cara. A fim de otimizar o algoritmo é interessante perceber a seguinte relação:
+Ingenuamente, poderíamos pensar em implementar o procedimento pedido por meio de dois loops separados, uma função que calcula o fatorial e outra que calcula exponenciais. Essa abordagem, porém, é excessivamente cara. A fim de otimizar o algoritmo, é interessante perceber a seguinte relação:
 \begin{align*}
     e^{i\theta} &= \sum_{n=0}^\infty \frac{(i\theta)^n}{n!} = \frac{(i\theta)^0}{0!} + \frac{(i\theta)^1}{1!} + \frac{(i\theta)^2}{2!} + \frac{(i\theta)^3}{3!} + \frac{(i\theta)^4}{4!} + \frac{(i\theta)^5}{5!} + \dots\\
     &= 1 + i\theta - \frac{\theta^2}{2!} - i \frac{\theta^3}{3!} + \frac{\theta^4}{4!} + i\frac{\theta^5}{5!} - \dots \\
@@ -404,7 +404,7 @@ x[n]    X[k]
 \end{minted}
 \end{tcolorbox}
 
-Essa \cod{main} consiste em uma chamada à função DFT e um loop para exibir \textit{floats} e caracteres no console (além de uma pequena lógica condicional para não exibir o `+' quando a parte imaginária é negativa). O resultado, exibido a seguir, não ficou igual ao do exemplo do enunciado, em que todos os termos de $X[k]$, com excessão do primeiro, são $0.0$, mas acreditamos que isso se deva a dois fatores: à imperfeição da aproximação por polinômios de Taylor e à precisão de máquina. De fato, como os maiores resultados foram da ordem de $10^{-6}$, essas são justificativas razoáveis.
+Essa \cod{main} consiste em uma chamada à função DFT e um loop para exibir \textit{floats} e caracteres no console (além de uma pequena lógica condicional para não exibir o `+' quando a parte imaginária é negativa). O resultado, exibido a seguir, não ficou igual ao do exemplo do enunciado, em que todos os termos de $X[k]$, com exceção do primeiro, são $0.0$, mas acreditamos que isso se deva a dois fatores: à imperfeição da aproximação por polinômios de Taylor e à precisão de máquina. De fato, como os maiores resultados foram da ordem de $10^{-6}$, essas são justificativas razoáveis.
 
 \begin{tcolorbox}[colback=blue!5!white, colframe=blue!75!black, boxrule=0.5pt, arc=2pt, left=4pt, right=4pt, top=4pt, bottom=4pt, width=0.4\textwidth, center]
 \begin{minted}[fontsize=\scriptsize]{bash}
@@ -426,7 +426,7 @@ Calcule a DFT dos seguintes vetores $x[n]$, com $N=8$
 \begin{minted}[bgcolor=blue!5!white,linenos=false]{asm}
 x1: .float  1.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0 
 x2: .float  1.0, 0.7071, 0.0, -0.7071, -1.0, -0.7071, 0.0, 0.7071 
-x3: .float  0.0, 0.7071. 1.0,  0.7071, 0.0, -0.7071, -1.0, -0.7071 
+x3: .float  0.0, 0.7071, 1.0,  0.7071, 0.0, -0.7071, -1.0, -0.7071 
 x4: .float  1.0, 1.0, 1.0, 1.0, 0.0, 0.0, 0.0, 0.0 
 \end{minted}
 \end{tcolorbox}
@@ -515,16 +515,16 @@ f_{clock} = \frac{I \cdot CPI}{t_{exec}} \overset{CPI=1}{=} \frac{I}{t_{exec}}
 \]
 A seguir, os resultados:
 \begin{enumerate}[label=\alph*), itemsep=0pt]
-    \item $N=8 \to t_{exec} = 48ms$, $I = 15.606$, $f = 325kHz$
-    \item $N=12 \to t_{exec} = 84ms$, $I = 34.999$, $f = 416kHz$
-    \item $N=16 \to t_{exec} = 144ms$, $I = 62.137$, $f = 431kHz$
-    \item $N=20 \to t_{exec} = 235ms$, $I = 96.981$, $f = 412kHz$
-    \item $N=24 \to t_{exec} = 343ms$, $I = 139.615$, $f = 407kHz$
-    \item $N=28 \to t_{exec} = 483ms$, $I = 189.955$, $f = 393kHz$
-    \item $N=32 \to t_{exec} = 595ms$, $I = 248.028$, $f = 416kHz$
-    \item $N=36 \to t_{exec} = 769ms$, $I = 313.777$, $f = 408kHz$
-    \item $N=40 \to t_{exec} = 949ms$, $I = 387.373$, $f = 408kHz$
-    \item $N=44 \to t_{exec} = 1153ms$, $I = 468.639$, $f = 406kHz$
+    \item $N=8 \to t_{exec} = 48 ms$, $I = 15\ 606$, $f = 325 kHz$
+    \item $N=12 \to t_{exec} = 84 ms$, $I = 34\ 999$, $f = 416 kHz$
+    \item $N=16 \to t_{exec} = 144 ms$, $I = 62\ 137$, $f = 431 kHz$
+    \item $N=20 \to t_{exec} = 235 ms$, $I = 96\ 981$, $f = 412 kHz$
+    \item $N=24 \to t_{exec} = 343 ms$, $I = 139\ 615$, $f = 407 kHz$
+    \item $N=28 \to t_{exec} = 483 ms$, $I = 189\ 955$, $f = 393 kHz$
+    \item $N=32 \to t_{exec} = 595 ms$, $I = 248\ 028$, $f = 416 kHz$
+    \item $N=36 \to t_{exec} = 769 ms$, $I = 313\ 777$, $f = 408 kHz$
+    \item $N=40 \to t_{exec} = 949 ms$, $I = 387\ 373$, $f = 408 kHz$
+    \item $N=44 \to t_{exec} = 1153 ms$, $I = 468\ 639$, $f = 406 kHz$
 \end{enumerate}
 
 Com esses dados, podemos fazer o gráfico solicitado. Novamente, utilizamos o gnuplot e plotamos o seguinte gráfico:
@@ -541,7 +541,7 @@ Note que o gráfico parece representar uma função quadrática. De fato isso é
 \section{Conclusão}
 Nesse laboratório, tivemos intenso contato com o RARS e suas ferramentas, desenvolvemos códigos complexos em Assembly e entendemos melhor a compilação de linguagens de alto nível. Além disso, fizemos análises de desempenho e todas tiveram resultados coerentes.
 
-A experiência obtida neste laboratório, bem como os resultados alcançados e a pesquisa realizada, conduzem à reflexão sobre aspectos cruciais da programação, tais como: a necessidade de compiladores eficientes para que a abstração proporcionada por linguagens de alto nível não sejam demasiado caras; o custo associado ao uso de números de ponto flutuante — que exigem mais instruções para operações aparentemente simples; e a importância de conhecer o \textit{hardware} utilizado para compreender adequadamente o tempo de execução e o desempenho de programas.
+A experiência obtida neste laboratório, bem como os resultados alcançados e a pesquisa realizada, conduzem à reflexão sobre aspectos cruciais da programação, tais como: a necessidade de compiladores eficientes para que a abstração proporcionada por linguagens de alto nível não seja demasiado cara; o custo associado ao uso de números de ponto flutuante — que exigem mais instruções para operações aparentemente simples; e a importância de conhecer o \textit{hardware} utilizado para compreender adequadamente o tempo de execução e o desempenho de programas.
 
 Todos os códigos desenvolvidos ou gerados (via compilação cruzada) para a realização desse laboratório foram enviados compactados em um arquivo \cod{.zip}. Para acessar o vídeo solicitado, \href{https://www.youtube.com/watch?v=0igjcjJHzPU}{clique aqui}.
 \end{document}
