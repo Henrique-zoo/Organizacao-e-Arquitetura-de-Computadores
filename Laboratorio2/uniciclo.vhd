@@ -19,8 +19,8 @@ architecture structural of uniciclo is
 	signal  	ALUOut, MemData, RegA, RegB, imm_i, RegB_ALU, WriteBackData, PC_plus4, PC_plusImm, PC_next:	std_logic_vector(31 downto 0);
 	signal  	mem2Reg, memRead, branch, jump, memWrite, ALUSrc, regWrite, zeroALU:        std_logic;
 	signal  	ALUOp:      	std_logic_vector(1 downto 0);
-	signal 	alu_ctrl:  		std_logic_vector(3 downto 0);
-	signal	iRS1:				std_logic_vector(4 downto 0);
+	signal 	    alu_ctrl:  		std_logic_vector(3 downto 0);
+	signal      iRS1:			std_logic_vector(4 downto 0);
 	alias   	opcode:     	std_logic_vector(6 downto 0) is instr_i(6 downto 0);
 begin
     PC      <= PC_i;
@@ -68,7 +68,7 @@ begin
             iDATA   => WriteBackData,
             oREGA   => RegA,
             oREGB   => RegB,
-            iDISP   => instr_i(4 downto 0),
+            iDISP   => regin,
             oREGD   => regout_i
         );
 

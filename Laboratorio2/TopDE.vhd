@@ -6,8 +6,8 @@ use work.riscv_pkg.all;
 entity TopDE is
     port (
         CLOCK, reset:	in  std_logic;
-        regin:				in  std_logic_vector(4 downto 0);
-		  ClockDIV:		out std_logic;
+        regin:			in  std_logic_vector(4 downto 0);
+		ClockDIV:		out std_logic;
         PC, instr, regout:			out std_logic_vector(31 downto 0);
         state:    		out std_logic_vector(3 downto 0)
     );
