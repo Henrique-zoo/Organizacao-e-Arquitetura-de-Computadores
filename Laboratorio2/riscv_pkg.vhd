@@ -1,0 +1,94 @@
+library IEEE;
+use IEEE.std_logic_1164.all;
+use IEEE.numeric_std.all;
+
+package riscv_pkg is
+    -- Operações da ULA
+    constant ZERO32:    std_logic_vector(31 downto 0) := x"00000000";
+    constant ZERO:      std_logic_vector(31 downto 0) := x"00000000";
+    constant OPAND:     std_logic_vector(3 downto 0)  := x"0";
+    constant OPOR:      std_logic_vector(3 downto 0)  := x"1";
+    constant OPADD:     std_logic_vector(3 downto 0)  := x"2";
+    constant OPSUB:     std_logic_vector(3 downto 0)  := x"6";
+    constant OPSLT:     std_logic_vector(3 downto 0)  := x"7";
+    constant OPNULL:    std_logic_vector(3 downto 0)  := x"F";  -- saída ZERO
+
+    -- OpCodes
+    constant OPC_LOAD:   std_logic_vector(6 downto 0)    :=  "0000011";
+    constant OPC_OPIMM:  std_logic_vector(6 downto 0)    :=  "0010011";
+    constant OPC_STORE:  std_logic_vector(6 downto 0)    :=  "0100011";
+    constant OPC_RTYPE:  std_logic_vector(6 downto 0)    :=  "0110011";
+    constant OPC_BRANCH: std_logic_vector(6 downto 0)    :=  "1100011";
+    constant OPC_JALR:   std_logic_vector(6 downto 0)    :=  "1100111";
+    constant OPC_JAL:    std_logic_vector(6 downto 0)    :=  "1101111";
+    constant OPC_LUI:    std_logic_vector(6 downto 0)    :=  "0110111";
+
+    -- Funct7
+    constant    FUNCT7_ADD  : std_logic_vector(6 downto 0) := "0000000";
+    constant    FUNCT7_SUB  : std_logic_vector(6 downto 0) := "0100000";
+    constant    FUNCT7_SLT  : std_logic_vector(6 downto 0) := "0000000";
+    constant    FUNCT7_OR   : std_logic_vector(6 downto 0) := "0000000";
+    constant    FUNCT7_AND  : std_logic_vector(6 downto 0) := "0000000";
+
+    -- Funct3
+    constant    FUNCT3_LW   : std_logic_vector(2 downto 0) := "010";
+    constant    FUNCT3_SW   : std_logic_vector(2 downto 0) := "010";
+    constant    FUNCT3_ADD  : std_logic_vector(2 downto 0) := "000";
+    constant    FUNCT3_SUB  : std_logic_vector(2 downto 0) := "000";
+    constant    FUNCT3_SLT  : std_logic_vector(2 downto 0) := "010";
+    constant    FUNCT3_OR   : std_logic_vector(2 downto 0) := "110";
+    constant    FUNCT3_AND  : std_logic_vector(2 downto 0) := "111";
+    constant    FUNCT3_BEQ  : std_logic_vector(2 downto 0) := "000";
+    constant    FUNCT3_JALR : std_logic_vector(2 downto 0) := "000";
+
+    constant    FUNCT10_ADD:    std_logic_vector(9 downto 0) := FUNCT7_ADD & FUNCT3_ADD;
+    constant    FUNCT10_SUB:    std_logic_vector(9 downto 0) := FUNCT7_SUB & FUNCT3_SUB;
+    constant    FUNCT10_SLT:    std_logic_vector(9 downto 0) := FUNCT7_SLT & FUNCT3_SLT;
+    constant    FUNCT10_AND:    std_logic_vector(9 downto 0) := FUNCT7_AND & FUNCT3_AND;
+    constant    FUNCT10_OR:     std_logic_vector(9 downto 0) := FUNCT7_OR & FUNCT3_OR;
+
+    -- Endereços
+    constant TEXT_ADDRESS  : std_logic_vector(31 downto 0) := x"0040_0000";
+    constant DATA_ADDRESS  : std_logic_vector(31 downto 0) := x"1001_0000";
+    constant STACK_ADDRESS : std_logic_vector(31 downto 0) := x"1001_03FC";
+
+    -- Número dos registradores
+    constant GP_POS:   natural := 5;
+    constant SP_POS:   natural := 2;
+  
+    -- Componentes
+    -- Declaração do componente ramI
+    component ramI
+        port (
+            address : in  std_logic_vector(9 downto 0);
+            clock   : in  std_logic;
+            data    : in  std_logic_vector(31 downto 0);
+            wren    : in  std_logic := '0';
+            q       : out std_logic_vector(31 downto 0)
+        );
+    end component;
+    
+    -- Declaração do componente ramD
+    component ramD
+        port (
+            address : in  std_logic_vector(9 downto 0);
+            clock   : in  std_logic;
+            data    : in  std_logic_vector(31 downto 0);
+            wren    : in  std_logic;
+            q       : out std_logic_vector(31 downto 0)
+        );
+    end component;
+	 
+    -- Component declaration for Uniciclo
+    component Uniciclo
+        port (
+            clockCPU : in  std_logic;
+            clockMem : in  std_logic;
+            reset    : in  std_logic;
+            PC       : out std_logic_vector(31 downto 0);
+            Instr    : out std_logic_vector(31 downto 0);
+            regin    : in  std_logic_vector(4 downto 0);
+            regout   : out std_logic_vector(31 downto 0)
+        );
+    end component;
+end package riscv_pkg;
