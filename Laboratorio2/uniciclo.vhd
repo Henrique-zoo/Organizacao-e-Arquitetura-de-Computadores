@@ -5,13 +5,9 @@ use work.riscv_pkg.all;
 
 entity uniciclo is
     port (
-        clockCPU:   in  std_logic;
-        clockMem:   in  std_logic;
-        reset:      in  std_logic;
-        PC:         out std_logic_vector(31 downto 0);
-        instr:      out std_logic_vector(31 downto 0);
-        regin:      in  std_logic_vector(4 downto 0);
-        regout:     out std_logic_vector(31 downto 0)
+        clockCPU, clockMem, reset:  in  std_logic;
+        regin:                      in  std_logic_vector(4 downto 0);
+        PC, instr, regout:          out std_logic_vector(31 downto 0);
     );
 end uniciclo;
 
@@ -20,18 +16,18 @@ architecture structural of uniciclo is
     signal  PC_i:       std_logic_vector(31 downto 0) := x"00400000";
     signal  instr_i:    std_logic_vector(31 downto 0) := (others => '0');
     signal  regout_i:   std_logic_vector(31 downto 0) := (others => '0');
-    signal  ALUOut, Leitura2, MemData, RegA, RegB, imm_i, RegB_ALU, WriteBackData, PC_plus4, PC_plusImm, PC_next:	std_logic_vector(31 downto 0);
+    signal  ALUOut, MemData, RegA, RegB, imm_i, RegB_ALU, WriteBackData, PC_plus4, PC_plusImm, PC_next:	std_logic_vector(31 downto 0);
     signal  mem2Reg, memRead, branch, jump, memWrite, ALUSrc, regWrite, zeroALU:        std_logic;
     signal  ALUOp:      std_logic_vector(1 downto 0);
     signal  alu_ctrl:   std_logic_vector(3 downto 0);
-	 signal	iRS1:			std_logic_vector(4 downto 0);
+	signal	iRS1:			std_logic_vector(4 downto 0);
     alias   opcode:     std_logic_vector(6 downto 0) is instr_i(6 downto 0);
 begin
-    -- Atribuições das saídas
-    PC     <= PC_i;
-    instr  <= instr_i;
-    regout <= regout_i;
-    iRS1        <=  "00000" when opcode = OPC_LUI else instr_i(19 downto 15);
+    PC      <= PC_i;
+    instr   <= instr_i;
+    regout  <= regout_i;
+
+    iRS1    <=  "00000" when opcode = OPC_LUI else instr_i(19 downto 15);
     
     -- Instanciação da memória de instruções
     MemI_inst: ramI
@@ -48,7 +44,7 @@ begin
         port map (
             address => ALUOut(11 downto 2),
             clock   => clockMem,
-            data    => Leitura2,
+            data    => RegB,
             wren    => memWrite,
             q       => MemData
         );

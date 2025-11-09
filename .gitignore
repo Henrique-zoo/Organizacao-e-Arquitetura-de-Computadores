@@ -138,6 +138,8 @@ modelsim.ini
 Laboratorio2/db/
 Laboratorio2/incremental_db/
 Laboratorio2/output_files/
+Laboratorio2/quartus/.qsys_edit/
+Laboratorio2/quartus/simulation/
 Laboratorio2/*.sof
 Laboratorio2/*.pof
 Laboratorio2/*.rbf
@@ -145,6 +147,7 @@ Laboratorio2/*.qdb
 Laboratorio2/*.rpt
 Laboratorio2/*.qws
 Laboratorio2/*.qip
+
 
 # Notas:
 # - Não ignoramos *.mif globalmente porque alguns .mif (mem init) podem ser parte do projeto.

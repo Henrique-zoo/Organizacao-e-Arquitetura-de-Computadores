@@ -5,14 +5,10 @@ use work.riscv_pkg.all;
 
 entity TopDE is
     port (
-        CLOCK:      in  std_logic;
-        reset:      in  std_logic;
+        CLOCK, ClockDIV, reset	in  std_logic;
         regin:      in  std_logic_vector(4 downto 0);
-        ClockDIV:   out std_logic;
-        PC:         out std_logic_vector(31 downto 0);
-        instr:      out std_logic_vector(31 downto 0);
-        regout:     out std_logic_vector(31 downto 0);
-        estado:     out std_logic_vector(3 downto 0)
+        PC, instr, regout:			out std_logic_vector(31 downto 0);
+        state:     out std_logic_vector(3 downto 0)
     );
 end entity TopDE;
 
@@ -51,7 +47,7 @@ begin
 --            instr    => instr,
 --            regin    => regin,
 --            regout   => regout,
---				estado	=> estado
+--				state	=> state
 --        );
 		  
 		 

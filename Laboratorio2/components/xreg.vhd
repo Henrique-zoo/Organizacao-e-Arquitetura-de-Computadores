@@ -8,17 +8,10 @@ use work.riscv_pkg.all;
 
 entity xreg is
 	port (
-		iCLK:   in  std_logic;
-		iRST:   in  std_logic;
-		iWREN:  in  std_logic;
-		iRS1:   in  std_logic_vector(4 downto 0);
-		iRS2:   in  std_logic_vector(4 downto 0);
-		iRD:    in  std_logic_vector(4 downto 0);
-		iDATA:  in  std_logic_vector(31 downto 0);
-		oREGA:  out std_logic_vector(31 downto 0);
-		oREGB:  out std_logic_vector(31 downto 0);
-		iDISP:  in  std_logic_vector(4 downto 0);
-		oREGD:  out std_logic_vector(31 downto 0)
+		iCLK, iRST, iWREN:   	in  std_logic;
+		iRS1, iRS2, iRD, iDISP:	in  std_logic_vector(4 downto 0);
+		iDATA:  						in  std_logic_vector(31 downto 0);
+		oREGA, oREGB, oREGD:		out std_logic_vector(31 downto 0);
 	);
 end entity xreg;
 
@@ -26,8 +19,9 @@ architecture rtl of xreg is
 	type banco is array (31 downto 0) of std_logic_vector(31 downto 0);
    signal xreg32:  banco;
 begin
-	oREGA <= ZERO32 when (iRS1="00000") else xreg32(to_integer(unsigned(iRS1)));
-	oREGB <= ZERO32 when (iRS2="00000") else xreg32(to_integer(unsigned(iRS2)));
+	oREGA <= xreg32(to_integer(unsigned(iRS1)));
+	oREGB <= xreg32(to_integer(unsigned(iRS2)));
+	oREGD <= xreg32(to_integer(unsigned(iDISP)));
 
 	process(iCLK)
 	begin
