@@ -32,7 +32,7 @@ begin
                         ALUCtrl   <=  OPOR;
                     when FUNCT10_SLT    =>
                         ALUCtrl   <=  OPSLT;
-                    when others =>
+                    when others         =>
                         ALUCtrl   <=  OPNULL;
                 end case;
         end case;

@@ -1,0 +1,350 @@
+\documentclass[a4paper,12pt]{article}
+\usepackage{float}
+\usepackage[table]{xcolor} % Para colorir as linhas da tabela
+%\usepackage{array} % Para melhorar a formatação de tabelas
+\usepackage[brazil]{babel}
+\usepackage[utf8]{inputenc}
+\usepackage{diagbox}
+\usepackage{amsmath}
+\usepackage{amssymb}
+\usepackage{multicol}
+\usepackage{graphicx}
+%\usepackage{animate}
+%\usepackage{tabularx}
+\usepackage[font=footnotesize, labelfont=bf, listformat=empty]{caption}
+\usepackage{geometry}
+\usepackage{listings}
+\usepackage{fontspec}
+\usepackage{minted}
+\usepackage{lastpage}
+%\usepackage{subcaption}
+\usepackage[skins,xparse,breakable]{tcolorbox}
+%\usepackage{longtable}
+\usepackage{titlesec}
+\usepackage{fancyhdr}
+\usepackage{setspace}
+\usepackage{booktabs}
+\usepackage{enumitem}
+\usepackage{minted}
+\usepackage[colorlinks=true, allcolors=black]{hyperref}
+
+
+%\usetikzlibrary{arrows,shapes,automata,positioning,calc}
+% Configurações de margens e espaçamento
+\geometry{a4paper, left=2.5cm, right=2.5cm, top=2.5cm, bottom=2cm}
+\onehalfspacing
+
+% Configurações de títulos
+\titleformat{\section}{\normalfont\Large\bfseries}{\thesection}{1em}{}
+\titleformat{\subsection}{\normalfont\large\bfseries}{\thesubsection}{1em}{}
+\titleformat{\subsubsection}
+  {\normalfont\large}
+  {\textbf{\thesubsubsection}}
+  {0.25em}{}
+
+\setcounter{tocdepth}{3}
+\newcommand{\cod}[1]{\texttt{#1}}
+
+\renewcommand{\listingscaption}{Código}
+\newenvironment{code}{\captionsetup{type=listing}}{}
+
+% Configurações de cores
+\definecolor{LightSeaGreen}{rgb}{0.1255, 0.6980, 0.6667}
+\definecolor{whitesmoke}{rgb}{0.96, 0.96, 0.96}
+\definecolor{cinza}{RGB}{160, 160, 160}
+\definecolor{cinza_claro}{RGB}{240, 240, 240} % Cinza claro
+
+\newtcolorbox{codebox}[1]{
+    title=#1,
+    fonttitle=\small\bfseries,
+    colback=blue!2.5!white,
+    colframe=blue!62!white,
+    arc=2pt,
+    boxrule=0.8pt,
+    left=4pt,
+    right=4pt,
+    top=4pt,
+    bottom=4pt,
+    breakable,
+    enhanced jigsaw
+}
+
+\setminted[asm]{
+    fontsize=\scriptsize,
+    style=manni,
+    linenos=true,
+    breaklines=true,
+    mathescape=true,
+    bgcolor=cinza_claro,
+    breakanywhere=true,
+}
+
+\newcommand{\hex}[1]{\textcolor{green!50!black}{#1}}
+
+% Configurações de cabeçalho e rodapé
+\pagestyle{fancy}
+\fancyhf{}
+\fancyhead[L]{\footnotesize{Relatório do Laboratório 2}}
+\fancyhead[R]{\footnotesize{2025/2 - Turma 02}}
+\fancyfoot[R]{\footnotesize{Página \hspace{0.05cm} \thepage \hspace{0.05cm} de \pageref{LastPage}}}
+\fancyfoot[L]{\footnotesize{Organização e Arquitetura de Computadores - CIC0099}}
+
+% Adiciona uma linha preta acima do rodapé
+\renewcommand{\footrulewidth}{0.4pt} % Espessura da linha
+\renewcommand{\footrule}{\vbox to 0pt{\hrule width \textwidth height \footrulewidth \vss}} % Desenha a linha
+
+% Novo Comando para chamar a capa
+\newcommand{\capa}{
+    \begin{titlepage}
+        \begin{multicols}{2}
+            \begin{flushleft}
+                \includegraphics[width=0.45\linewidth]{Recursos/Imagens/UnB_logo.png}
+            \end{flushleft}
+            \columnbreak
+            \begin{flushright}
+                Universidade de Brasília \\
+                Instituto de Exatas \\
+                Departamento de Ciência da Computação
+            \end{flushright}
+        \end{multicols}
+        \begin{center}
+        \vspace{-20pt}
+        \rule{\textwidth}{0.4pt}
+        \end{center}
+        \vspace{0.6cm}
+        \begin{center}
+            {\Huge \textbf{Relatório do Laboratório 2}} \\[0.5em]
+            {\Huge \textbf{Processador Uniciclo}} \\ [0.5em]
+            {\large CIC0099 - Organização e Arquitetura de Computadores} \\[0.25em]
+            {\large Turma 02 - Prof. Dr. Ricardo Pezzuol Jacobi} \\
+            \vfill
+            {\Large \textbf{Grupo B4}} \\
+            \begin{table}[H]
+                \centering
+                \begin{tabular}{l r}
+                    Henrique Morcelles Salum & 232003008 \\
+                    Athos Calixto Muniz & 211068261 \\
+                    Gabriela Fernanda Rodrigues Costa & 180120859 \\
+                    Cauê Araújo Euzebio & 211028195 \\
+                    Lucas Silva Nóbrega & 180035096
+                \end{tabular}
+                \label{tab:placeholder}
+            \end{table}
+        \end{center}
+    \end{titlepage}
+}
+
+\begin{document}
+
+\capa
+
+% Sumário
+\newpage
+\tableofcontents
+\newpage
+
+\section{Introdução}
+O presente experimento tem como objetivo introduzir os alunos ao processo de projeto e implementação de sistemas digitais utilizando VHDL como Linguagem de Descrição de Hardware (HDL). A atividade busca promover o treinamento prático em modelagem, análise e síntese de circuitos digitais, utilizando o ambiente de desenvolvimento \textbf{Intel Quartus Prime v24.1} como ferramenta principal.
+
+Como aplicação prática, propõe-se a implementação de um processador Uniciclo compatível com a ISA RV32I reduzida, contendo as instruções:\cod{add}, \cod{sub}, \cod{and}, \cod{or}, \cod{slt}, \cod{lw}, \cod{sw}, \cod{beq}, \cod{jal}, \cod{jalr}, \cod{addi} e \cod{lui}. Serão desenvolvidos os blocos fundamentais do processador, como banco de registradores com três portas de leitura, gerador de imediatos, ULA e unidade de controle.
+
+A implementação será validada por meio de simulação funcional e temporal, com análise de \textit{timing} e frequência máxima de operação, permitindo compreender de forma integrada o funcionamento de uma arquitetura RISC-V.
+
+
+\section{Métodos e Análise}
+
+\subsection{Experimento}
+\begin{tcolorbox}[title=Enunciado, colback=blue!5!white, colframe=blue!75!black]
+Implemente o processador Uniciclo com ISA Reduzida com as instruções: \cod{add}, \cod{sub}, \cod{and}, \cod{or}, \cod{slt}, \cod{lw},
+\cod{sw}, \cod{beq}, \cod{jal}, e ainda as instruções \cod{jalr}, \cod{addi} e \cod{lui}.
+\end{tcolorbox}
+Para realizar o solicitado, é-nos fornecido o esquemático de uma implementação do Uniciclo com ISA reduzida. Nesse esquemático, porém, foi necessário realizar alterações no caminho de dados, que serão devidamente justificadas adiante.
+
+\begin{figure}[H]
+    \centering
+    \include{Recursos/LaTeX/uniciclo}
+    \vspace{-20pt}
+    \caption{Esquemático do Uniciclo com ISA reduzida}
+\end{figure}
+
+\noindent Em que os túneis representam entradas e saídas do módulo de controle do processador, que foi abstraído na figura acima.
+
+\begin{figure}[H]
+    \centering
+    \include{Recursos/LaTeX/control}
+    \caption{Módulo de controle do Uniciclo com ISA reduzida}
+\end{figure}
+
+\subsubsection{Tarefa I}
+\begin{tcolorbox}[title=Enunciado, colback=blue!5!white, colframe=blue!75!black]
+Analise o programa \cod{de1.s} que testa a corretude da implementação de todas as $9 + 3$ instruções e
+teste no RARS. \textit{Dica: O registrador \cod{t0} é usado para visualizar resultados!}
+\end{tcolorbox}
+O programa \cod{de1.s}, que testa a corretude da implementação das instruções do RISC-V no RARS, ou seja, verifica se as instruções são executadas corretamente, foi testado utilizando a execução passo a passo, e os resultados foram visualizados por meio do registrador \cod{t0}, de acordo com o que foi sugerido. Os registradores \cod{t1} e \cod{t2} são os registradores temporários utilizados para as operações e \cod{gp} é o ponteiro para a área de dados, inicializado em \cod{0x100100000}.
+
+O programa testa as instruções \cod{add}, \cod{sub}, \cod{and}, \cod{or}, \cod{slt}, \cod{lw},
+\cod{sw}, \cod{beq}, \cod{jal}, \cod{jalr}, \cod{addi} e \cod{lui}.
+
+\begin{table}[H]
+    \centering
+    \footnotesize
+    \resizebox{\textwidth}{!}{
+    \renewcommand{\arraystretch}{1.3}
+    \setlength{\tabcolsep}{4pt}
+    \begin{tabular}{|c|c|c|c|}
+        \hline
+        \rowcolor{black}
+        \textcolor{white}{\textbf{Instrução}} &
+        \textcolor{white}{\textbf{Código}} &
+        \textcolor{white}{\textbf{Entrada}} &
+        \textcolor{white}{\textbf{Saída}} \\ \hline
+        
+        lui & \cod{lui gp,0x10010} & \cod{gp}, \cod{imm = 0x10010} & \cod{gp = 0x10010000} \\ \hline
+        \rowcolor{gray!20}
+        lw & \cod{lw t1,0(gp)} & \cod{gp = 0x10010000}, \cod{mem[0x10010000] = 0xFFFFFF0F} & \cod{t1 = 0xFFFFFF0F} \\ \hline
+        addi & \cod{addi t2,zero,0x777} & \cod{zero = 0x00000000}, \cod{imm = 0x777} & \cod{t2 = 0x00000777} \\ \hline
+        \rowcolor{gray!20}
+        and & \cod{and t0,t1,t2} & \cod{t1 = 0xFFFFFF0F}, \cod{t2 = 0x00000777} & \cod{t0 = 0x00000707} \\ \hline
+        or & \cod{or t0,t1,t2} & \cod{t1 = 0xFFFFFF0F}, \cod{t2 = 0x00000777} & \cod{t0 = 0xFFFFFF7F} \\ \hline
+        \rowcolor{gray!20}
+        add & \cod{add t0,t2,t1} & \cod{t2 = 0x00000777}, \cod{t1 = 0xFFFFFF0F} & \cod{t0 = 0x00000686} \\ \hline
+        sub & \cod{sub t0,t2,t1} & \cod{t2 = 0x00000777}, \cod{t1 = 0xFFFFFF0F} & \cod{t0 = 0x00000868} \\ \hline
+        \rowcolor{gray!20}
+        slt & \cod{slt t0,t1,t2} & \cod{t1 = 0xFFFFFF0F}, \cod{t2 = 0x00000777} & \cod{t0 = 0x00000001} \\ \hline
+        slt & \cod{slt t0,t2,t1} & \cod{t2 = 0x00000777}, \cod{t1 = 0xFFFFFF0F} & \cod{t0 = 0x00000000} \\ \hline
+        \rowcolor{gray!20}
+        beq & \cod{beq t0,zero,PULA} & \cod{t0 = 0x00000000}, \cod{zero = 0x00000000} & Salta para \cod{PULA} \\ \hline
+        jal & \cod{jal PROC} & \cod{PC atual}, \cod{ra = PC + 4} & Chama \cod{PROC}, \cod{ra = end. retorno} \\ \hline
+        \rowcolor{gray!20}
+        sw & \cod{sw t0,4(gp)} & \cod{t0 = 0x0000007F}, \cod{gp = 0x10010000} & \cod{mem[0x10010004] = 0x0000007F} \\ \hline
+    \end{tabular}
+    }
+    \caption{Código e saídas associadas}
+\end{table}
+
+Uma explicação resumida do código: Inicializa-se o ponteiro de memória carregando o endereço \cod{0x10010000} no registrador \cod{gp}, e carrega-se o valor \cod{0xFFFFFF0F} da memória para \cod{t1} e inicializa-se \cod{t2} com \cod{0x777}. Então, é executado várias operações lógicas e aritméticas com \cod{t1} e \cod{t2}, AND e OR, soma (\cod{add} e \cod{addi}) e subtração (\cod{sub}), comparações (\cod{slt}) que verificam se um valor é menor que o outro, teste desvio condicional e chamada de subrotina.
+
+
+\subsubsection{Tarefa II}
+\begin{tcolorbox}[title=Enunciado, colback=blue!5!white, colframe=blue!75!black]
+Implemente o Banco de Registradores com 3 leituras simultâneas: \cod{rs1}, \cod{rs2} e \cod{disp}.
+
+\centering \footnotesize Stack Pointer (\cod{sp}) inicial: \cod{0x1001\_03FC} \hspace{1cm} Global Pointer (\cod{gp}) inicial: \cod{0x1001\_0000}
+\end{tcolorbox}
+O Banco de Registradores é um componente fundamental e funciona como a memória mais rápida e acessível do processador. O programa com 3 leituras simultâneas, \cod{rs1}, \cod{rs2} e \cod{disp}, já estava quase todo implementado em VHDL (xreg.vhd) - faltava apenas atribuir ao \cod{oREGD} (o \cod{disp} do enunciado) o valor no registrador da posição \cod{iDisp} do banco de registradores.
+
+O banco de registradores é iniciado (e reinciado, quando a entrada \cod{iRST} está habilitada) com todos os registradores zerados, com exceção do \cod{sp} e do \cod{gp}, que têm os valores definidos no enunciado. Esses valores representam, respectivamente, o endereço da pilha de memória e a área de variáveis globais. Essas definições foram feitas no arquivo riscv\_pkg.vhd.
+
+A operação ocorre em dois modos: atualização \textbf{assíncrona} dos registradores de saída \cod{oREGA}, \cod{oREGB} e \cod{oRegD} nos endereços \cod{iRS1}, \cod{iRS2} e \cod{iDISP}, respectivamente; e escrita \textbf{síncrona} no banco de registradores (a não ser que o \textit{reset} esteja habilitado, nesse caso, são escritos os valores do estado inicial nos registradores de forma \textbf{assíncrona}). Quando a CPU precisa guardar o resultado de algum cálculo ou armazenar algum valor da memória, o sinal \cod{iWREN} é ativado e, no endereço do registrador destino \cod{iRD}, é escrito o dado em \cod{iDATA}.
+
+\subsubsection{Tarefa III}
+\begin{tcolorbox}[title=Enunciado, colback=blue!5!white, colframe=blue!75!black]
+Implemente o Gerador de Imediatos. 
+\end{tcolorbox}
+O Gerador de Imediatos, também já quase todo implementado (gen\_imm.vhd), recebe 32 bits da instrução e gera um imediato de 32 bits. Este componente é responsável por extrair e processar os valores imediatos presentes nas instruções, considerando que os campos de imediatos não possuem um padrão uniforme. A implementação consiste em um case, que é sintetizado em um multiplexador, em que dependendo do opcode (o tipo da instrução (I, S, B, U, J)) geramos imediatos com procedimentos distintos.
+
+Inicialmente, é necessário analisar os 7 bits menos significativos da instrução, que são aqueles que correspondem ao campo opcode e vão servir como um seletor para determinar qual o formato de instrução que está sendo processado.
+
+O primeiro caso, é das instruções Tipo-I, que, no nosso projeto, agrupam os opcodes \cod{OPC\_LOAD}, \cod{OPC\_OPIMM}, \cod{OPC\_JALR}. Nesse caso, o imediato tem 12 bits (os bits 31 a 20 da instrução), precisamos apenas extendê-lo para 32 bits.
+
+O segundo caso tratato são as instruções Tipo-S (\textit{store}). Nelas o imediato é dividido em duas partes não contíguas na instrução, os bits 31 a 25 são os mais significativos, e os bits 11 a 7 são os menos significativos, gerando-se assim os 12 bits. O resultado da concatenação é estendido para 32 bits.
+
+O terceito caso consiste nas instruções Tipo-B (\cod{branch}), que possuem uma estrutura mais complexa que as anteriores. Seus campos estão espalhados em quatro posições diferentes na instrução, do mais ao menos significativo: o bit 31, bit 7, bits 30 a 25 e 11 a 8. Eles são concatenados nessa sequência e, então, é adicionado um `0' no bit menos significativo, já que, pela forma como é organizada a memória, as instruções ficam em endereços pares. O resultado dessa sequência de manipulações é um sinal com 13 bits, que precisa ser estendido para 32.
+
+O quarto caso, as instruções Tipo-J (\cod{jal}), é similar ao anterior: os bits estão espalhados e são reordenados, além de ser concatenado à direita o bit `0'. A diferença é que as instruções de Tipo-J dedicam 20 bits ao imediato, de forma que, com a concatenação com 0, já são 21 bits, e o resultado só precisa ser estendido em 11 bits.
+
+O quinto e último caso de interesse (pois, nos restantes, o imediato é um conjunto de \textit{don't cares} que arbitramos como 32 zeros) é o das instruções Tipo-U. Nesse caso, na instrução há 20 bits contíguos reservados ao imediado; basta estender essa sequência para 32 bits e pronto. Esse caso não estava tratada no esqueleto de projeto fornecido.
+
+\subsubsection{Tarefa V}
+\begin{tcolorbox}[title=Enunciado, colback=blue!5!white, colframe=blue!75!black]
+Implemente a ULA mínima necessária (\cod{add}, \cod{sub}, \cod{and}, \cod{or}, \cod{slt}, \cod{zero}).
+\end{tcolorbox}
+A ULA (Unidade Lógica e Aritmética) é um componente fundamental responsável por realizar operações tanto lógicas quanto aritméticas; sendo elas, no caso deste laboratório: adição, subtração, \textit{bitwise AND}, \textit{bitwise OR} e SLT (Set if Less Than). Adicionalmente, ela deve ser capaz de fazer o `OU' entre todos os bits de uma palavra, pois isso é necessário para calcular a saída `zero'.
+
+Na implementação desse módulo, seguimos um estilo híbrido entre estrutural e comportamental: ao mesmo tempo que instanciamos um somador para realizar somas e subtrações, utilizamos abstrações de alto nível, nesse caso, as estruturas \cod{case} e \cod{when ... else}, para implementar o \cod{slt}, \cod{or}, \cod{and} e calcular a saída \cod{zero}.
+
+A ULA implementada recebe como entrada os valores dos dois operandos e um sinal de 4 bits \cod{ALUCtrl}, que indica qual das operações previamente citadas deve ser realizada. Dessa forma, a implementação é dada a partir de um `case' no qual, para cada código recebido pelo sinal ``ALUCtrl'', é realizada uma operação lógica ou aritmética.
+
+Por último, a ULA tem dois sinais de saída: um para o resultado da operação realizada e outro para o sinal \cod{zero}, que é ligado caso o resultado da operação seja `0' - ele é usado especificamente no caso do \cod{branch}, se a subtração dos operandos for `0', o `zero' é ligado o posterior AND desse com sinal com o sinal de controle `branch' faz com que o endereço do salto seja escrito no PC.
+
+
+\subsubsection{Tarefa VI}
+\begin{tcolorbox}[title=Enunciado, colback=blue!5!white, colframe=blue!75!black]
+Implemente o Controlador da ULA e o Bloco Controlador.
+\end{tcolorbox}
+O Bloco Controlador é o verdadeiro ``maestro'' do processador, ou seja, ele é responsável por gerar os sinais de controle necessários para gerenciar todo o caminho de dados e para coordenar quase todos os outros componentes da CPU, entre eles: a memória de dados, o banco de registradores, o controlador da ULA e vários multiplexadores.
+
+Esse módulo recebe como entrada o `opcode' (código de operação), um sinal de 7 bits que determina qual é a operação básica que implementa a instrução. Considerando a ISA reduzida, são possíveis oito `opcodes': um para todas as instruções Tipo-R e mais uma para cada uma das outras instruções (\cod{sw}, \cod{lw}, \cod{addi}, \cod{beq}, \cod{jalr}, \cod{jal} e \cod{lui}).
+
+Além disso, o Bloco de Controle, envia, como saída, os sinais que coordenam os outros componentes do processador: para cada `opcode', o Bloco de Controle determina esses sinais para controlar exatamente como o resto do processador deve agir para que a instrução recebida seja, de fato, executada. Seguem os sinais de saída:
+
+\begin{itemize}
+    \item \cod{mem2Reg} - 1 bit - Indica qual sinal deve estar disponível para ser escrito no banco de registradores. Caso `0': resultado da ULA. Caso `1': saída da memória de dados;
+    \item \cod{memRead} - 1 bit - Determina se há necessidade de leitura na memória de dados. Caso `0': desabilita a leitura. Caso `1': habilita a leitura;
+    \item \cod{branch} - 1 bit - Determina se PC deve receber PC + 4 ou PC + imediato. Caso `0': PC + 4. Caso `1': PC + Imm;
+    \item \cod{jump} - 1 bit - Determina se haverá salto incondicional. Caso `0': desabilita o salto. Caso `1': habilita o salto;
+    \item \cod{ALUOp} - 2 bits - Determina a entrada do Controlador da ULA;
+    \item \cod{memWrite} - 1 bit - Determina se a escrita na memória de dados deve estar habilitada. Caso `0': desabilita. Caso `1': habilita;
+    \item \cod{ALUSrc} - 1 bit - Indica a origem do segundo operando da ULA. Caso `0': sinal com origem no banco de registradores. Caso `1': sinal com origem no gerador de imediatos;
+    \item \cod{regWrite} - 1 bit - Determina se a escrita no banco de registradores deve estar habilitada. Caso `0': desabilita. Caso `1': habilita.
+\end{itemize}
+
+Uma observação importante é que o sinal \cod{jump} não existe no esquemático fornecido no roteiro e tampouco era estritamente necessário para o projeto. Poderíamos ter implementado instruções de salto incondicional forçando os sinais \cod{branch} e \cod{zero} iguais a `1'. Nesse caso, seria necessário criar um \cod{ALUOp} para \cod{jal} e \cod{jalr} que fizesse \cod{zero <= 1}. Essa solução, apesar de economizar um sinal, foi considerada \textit{ad-hoc} e prejudicial ao significado dos sinais de controle.
+
+A implementação do Bloco de Controle relaciona sua entrada com suas saídas de acordo com a tabela a seguir:
+
+\begin{table}[H]
+    \centering
+    \footnotesize
+    \renewcommand{\arraystretch}{1.3}
+    \setlength{\tabcolsep}{6pt}
+    \resizebox{\textwidth}{!}{%
+    \begin{tabular}{|c|c|c|c|c|c|c|c|c|}
+        \hline
+        \rowcolor{black}
+        % ==== Cabeçalho com célula diagonal preta ====
+        \diagbox[linecolor=white, width=2.5cm,height=2\baselineskip]{\textcolor{white}{\textbf{Opcode}}}{\textcolor{white}{\textbf{Saída}}} &
+        \textcolor{white}{\textbf{mem2Reg}} &
+        \textcolor{white}{\textbf{memRead}} &
+        \textcolor{white}{\textbf{branch}} &
+        \textcolor{white}{\textbf{jump}} &
+        \textcolor{white}{\textbf{ALUOp}} &
+        \textcolor{white}{\textbf{memWrite}} &
+        \textcolor{white}{\textbf{ALUSrc}} &
+        \textcolor{white}{\textbf{regWrite}} \\ \hline
+
+        % ==== Linhas da tabela ====
+        \cod{OPC\_RTYPE} & 0 & 0 & 0 & 0 & \cod{10} & 0 & 0 & 1 \\ \hline
+        \rowcolor{gray!20}
+        \cod{OPC\_OPIMM} & 0 & 0 & 0 & 0 & \cod{10} & 0 & 1 & 1 \\ \hline
+        \cod{OPC\_STORE} & X & 0 & 0 & 0 & \cod{00} & 1 & 1 & 0 \\ \hline
+        \rowcolor{gray!20}
+        \cod{OPC\_LOAD} & 1 & 1 & 0 & 0 & \cod{00} & 0 & 1 & 1 \\ \hline
+        \cod{OPC\_BRANCH} & X & 0 & 1 & 0 & \cod{01} & 0 & 0 & 0 \\ \hline
+        \rowcolor{gray!20}
+        \cod{OPC\_JAL} & X & 0 & 0 & 1 & XX & 0 & X & 1 \\ \hline
+        \cod{OPC\_JALR} & 0 & 0 & 0 & 1 & \cod{00} & 0 & 1 & 1 \\ \hline
+        \rowcolor{gray!20}
+        \cod{OPC\_LUI} & 0 & 0 & 0 & 0 & \cod{00} & 0 & 1 & 1 \\ \hline
+    \end{tabular}
+    }
+    \caption{Sinais de controle gerados para cada opcode}
+    \label{tab:opcode_controle}
+\end{table}
+
+Perceba que, até agora, o módulo de controle, chamado no projeto de \cod{general_control}, só recebeu o \cod{opcode}. Então para que servem \cod{funct7} e \cod{funct3}? Na verdade, o módulo de controle não está completo; falta o controle da ULA. Este é responsável por definir qual operação a ULA realizará - note que o ALUOp não é suficiente para isso, dado, por exemplo, que ele é o mesmo para todas as operações Tipo-R, como \cod{add} e \cod{and}, que claramente não realizam a mesma operação na ULA; ele recebe o \cod{ALUOp}, o \cod{funct7} e o \cod{funct3} (na nossa implementação, o \cod{funct10}). Essa separação se deve ao modelo hierárquico do módulo de controle seguido na nosssa implementação.
+
+Em resumo, o controlador da ULA (chamado de \cod{alu_control} no projeto), determina, através do seu sinal de saída \cod{ALUCtrl}, exatamente qual operação lógico-aritmética deve ser executada.
+
+
+Acesso à memória (lw, sw) - “00” - [add]
+Desvio (branch) - “01” - [sub]
+Lógico-aritméticas - “10” - [add, sub, and, or, slt]
+	Então, caso o sinal `ALUOp' seja “00”, o Controlador da ULA determina para a ULA que a operação realizada deverá ser uma soma, da mesma forma que, caso o sinal `ALUOp' seja “01”, será determinada uma subtração e, por último, caso seja “10”, a partir dos sinais `funct7' e `funct3', será determinada a operação a ser realizada.
+
+
+
+
+\section{Conclusão}
+
+\end{document}

@@ -26,7 +26,7 @@ begin
             S    =>  adder_sum
         );
 
-    subt_i  <=  '1' when (iControl = OPSUB) or (iControl = OPSLT) or (iControl = OPC_BRANCH) else '0';
+    subt_i  <=  '1' when iControl = OPSUB else '0';
     zero    <=  '1' when adder_sum = ZERO32 else '0';
 
     out_logic: process(all)

@@ -10,8 +10,8 @@ entity xreg is
 	port (
 		iCLK, iRST, iWREN:   	in  std_logic;
 		iRS1, iRS2, iRD, iDISP:	in  std_logic_vector(4 downto 0);
-		iDATA:  						in  std_logic_vector(31 downto 0);
-		oREGA, oREGB, oREGD:		out std_logic_vector(31 downto 0)
+		iDATA:  		        in  std_logic_vector(31 downto 0);
+		oREGA, oREGB, oREGD:    out std_logic_vector(31 downto 0)
 	);
 end entity xreg;
 
@@ -25,7 +25,7 @@ begin
 
 	process(iCLK)
 	begin
-		if rising_edge(iCLK) then
+		if rising_edge(iCLK, iRST) then
 			if iRST = '1' then 
 				xreg32  <=  (others => (others => '0'));
 				xreg32(SP_POS) <=  STACK_ADDRESS;
