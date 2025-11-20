@@ -23,7 +23,6 @@ begin
             ClockDIV_i <= not ClockDIV_i;
         end if;
     end process;
-    regin    <= x"00000005";
     ClockDIV <= ClockDIV_i;
     
     -- Instantiation of Uniciclo

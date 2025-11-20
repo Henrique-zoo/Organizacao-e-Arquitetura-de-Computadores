@@ -17,15 +17,15 @@ end entity xreg;
 
 architecture rtl of xreg is
 	type banco is array (31 downto 0) of std_logic_vector(31 downto 0);
-   signal xreg32:  banco;
+    signal xreg32:  banco;
 begin
 	oREGA <= xreg32(to_integer(unsigned(iRS1)));
 	oREGB <= xreg32(to_integer(unsigned(iRS2)));
 	oREGD <= xreg32(to_integer(unsigned(iDISP)));
 
-	process(iCLK)
+	process(iCLK, iRST)
 	begin
-		if rising_edge(iCLK, iRST) then
+		if rising_edge(iCLK) then
 			if iRST = '1' then 
 				xreg32  <=  (others => (others => '0'));
 				xreg32(SP_POS) <=  STACK_ADDRESS;
