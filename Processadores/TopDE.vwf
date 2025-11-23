@@ -1,13 +1,13 @@
 /*<simulation_settings>
-<ftestbench_cmd>quartus_eda --gen_testbench --tool=modelsim_oem --format=vhdl --write_settings_files=off TopDE -c TopDE --vector_source="/home/henrique/Documentos/Organizacao-e-Arquitetura-de-Computadores/Laboratorio2/Experimento/TopDE.vwf" --testbench_file="/home/henrique/Documentos/Organizacao-e-Arquitetura-de-Computadores/Laboratorio2/Experimento/quartus/simulation/qsim/../TopDE.vwf.vht"</ftestbench_cmd>
-<ttestbench_cmd>quartus_eda --gen_testbench --tool=modelsim_oem --format=vhdl --write_settings_files=off TopDE -c TopDE --vector_source="/home/henrique/Documentos/Organizacao-e-Arquitetura-de-Computadores/Laboratorio2/Experimento/TopDE.vwf" --testbench_file="/home/henrique/Documentos/Organizacao-e-Arquitetura-de-Computadores/Laboratorio2/Experimento/quartus/simulation/qsim/../TopDE.vwf.vht"</ttestbench_cmd>
-<fnetlist_cmd>quartus_eda --write_settings_files=off --simulation --functional=on --flatten_buses=off --tool=modelsim_oem --format=vhdl --output_directory="/home/henrique/Documentos/Organizacao-e-Arquitetura-de-Computadores/Laboratorio2/Experimento/quartus/simulation/qsim/" TopDE -c TopDE</fnetlist_cmd>
-<tnetlist_cmd>quartus_eda --write_settings_files=off --simulation --functional=off --flatten_buses=off --timescale=1ps --tool=modelsim_oem --format=vhdl --output_directory="/home/henrique/Documentos/Organizacao-e-Arquitetura-de-Computadores/Laboratorio2/Experimento/quartus/simulation/qsim/" TopDE -c TopDE</tnetlist_cmd>
+<ftestbench_cmd>quartus_eda --gen_testbench --tool=modelsim_oem --format=vhdl --write_settings_files=off TopDE -c TopDE --vector_source="C:/Users/henri/Documents/Henrique/Organizacao-e-Arquitetura-de-Computadores/Processadores/TopDE.vwf" --testbench_file="C:/Users/henri/Documents/Henrique/Organizacao-e-Arquitetura-de-Computadores/Processadores/quartus/simulation/qsim/../TopDE.vwf.vht"</ftestbench_cmd>
+<ttestbench_cmd>quartus_eda --gen_testbench --tool=modelsim_oem --format=vhdl --write_settings_files=off TopDE -c TopDE --vector_source="C:/Users/henri/Documents/Henrique/Organizacao-e-Arquitetura-de-Computadores/Processadores/TopDE.vwf" --testbench_file="C:/Users/henri/Documents/Henrique/Organizacao-e-Arquitetura-de-Computadores/Processadores/quartus/simulation/qsim/../TopDE.vwf.vht"</ttestbench_cmd>
+<fnetlist_cmd>quartus_eda --write_settings_files=off --simulation --functional=on --flatten_buses=off --tool=modelsim_oem --format=vhdl --output_directory="C:/Users/henri/Documents/Henrique/Organizacao-e-Arquitetura-de-Computadores/Processadores/quartus/simulation/qsim/" TopDE -c TopDE</fnetlist_cmd>
+<tnetlist_cmd>quartus_eda --write_settings_files=off --simulation --functional=off --flatten_buses=off --timescale=1ps --tool=modelsim_oem --format=vhdl --output_directory="C:/Users/henri/Documents/Henrique/Organizacao-e-Arquitetura-de-Computadores/Processadores/quartus/simulation/qsim/" TopDE -c TopDE</tnetlist_cmd>
 <modelsim_script>onerror {exit -code 1}
 vlib work
 vcom -work work TopDE.vho
 vcom -work work ../TopDE.vwf.vht
-vsim -novopt -c -t 1ps -L cycloneive -L altera -L altera_mf -L 220model -L sgate -L altera_lnsim work.TopDE_vhd_vec_tst
+vsim -c -t 1ps -L cycloneive -L altera -L altera_mf -L 220model -L sgate -L altera_lnsim work.TopDE_vhd_vec_tst
 vcd file -direction TopDE.msim.vcd
 vcd add -internal TopDE_vhd_vec_tst/*
 vcd add -internal TopDE_vhd_vec_tst/i1/*
@@ -25,7 +25,7 @@ quit -f
 vlib work
 vcom -work work TopDE.vho
 vcom -work work ../TopDE.vwf.vht
-vsim -novopt -c -t 1ps -sdfmax TopDE_vhd_vec_tst/i1=TopDE_vhd.sdo -L cycloneive -L altera -L altera_mf -L 220model -L sgate -L altera_lnsim work.TopDE_vhd_vec_tst
+vsim -c -t 1ps -sdfmax TopDE_vhd_vec_tst/i1=TopDE_vhd.sdo -L cycloneive -L altera -L altera_mf -L 220model -L sgate -L altera_lnsim work.TopDE_vhd_vec_tst
 vcd file -direction TopDE.msim.vcd
 vcd add -internal TopDE_vhd_vec_tst/*
 vcd add -internal TopDE_vhd_vec_tst/i1/*

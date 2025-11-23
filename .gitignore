@@ -135,19 +135,26 @@ modelsim.ini
 *.bak
 
 # Regras específicas para o projeto Laboratorio2 (padrão, mas explícitas)
-Laboratorio2/Experimento/db/
-Laboratorio2/Experimento/incremental_db/
-Laboratorio2/Experimento/output_files/
-Laboratorio2/Experimento/quartus/.qsys_edit/
-Laboratorio2/Experimento/quartus/simulation
-Laboratorio2/Experimento/*.sof
-Laboratorio2/Experimento/*.pof
-Laboratorio2/Experimento/*.rbf
-Laboratorio2/Experimento/*.qdb
-Laboratorio2/Experimento/*.rpt
-Laboratorio2/Experimento/*.qws
-Laboratorio2/Experimento/*.qip
-Laboratorio2/Experimento/*.do
+Processadores/db/
+Processadores/incremental_db/
+Processadores/output_files/
+Processadores/quartus/.qsys_edit/
+Processadores/quartus/simulation
+Processadores/*.sof
+Processadores/*.pof
+Processadores/*.rbf
+Processadores/*.qdb
+Processadores/*.rpt
+Processadores/*.qws
+Processadores/*.qip
+Processadores/*.do
+Processadores/quartus/*.done
+Processadores/quartus/*.smsg
+Processadores/quartus/*.summary
+Processadores/quartus/*.jdi
+Processadores/quartus/*.jditmp
+Processadores/quartus/*.pin
+
 
 
 
@@ -156,7 +163,10 @@ Laboratorio2/Experimento/*.do
 # - Ajuste adicional pode ser feito para ignorar subpastas dentro de `Laboratorio2/quartus/` se desejar.
 
 # Manter o arquivo de projeto Quartus do Laboratorio2 versionado (usado para abrir o projeto)
-!Laboratorio2/Experimento/quartus/TopDE.qpf
+!Processadores/quartus/TopDE.qpf
 
 # Allow people to keep local overrides
 !.gitignore
+
+
+*.circ
