@@ -7,7 +7,7 @@ entity TopDE is
     port (
         CLOCK, reset: in  std_logic;
         regin:		  in  std_logic_vector(4 downto 0);
-		ClockDIV:	  out std_logic;
+		  ClockDIV:	  out std_logic;
         PC:			  out std_logic_vector(31 downto 0);
         instr:		  out std_logic_vector(31 downto 0);
         regout:		  out std_logic_vector(31 downto 0);

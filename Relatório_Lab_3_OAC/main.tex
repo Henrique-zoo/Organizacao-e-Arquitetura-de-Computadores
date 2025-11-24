@@ -1,0 +1,515 @@
+\documentclass[a4paper,12pt]{article}
+\usepackage{float}
+\usepackage[table]{xcolor} % Para colorir as linhas da tabela
+%\usepackage{array} % Para melhorar a formatação de tabelas
+\usepackage[brazil]{babel}
+\usepackage[utf8]{inputenc}
+\usepackage{diagbox}
+\usepackage{amsmath}
+\usepackage{amssymb}
+\usepackage{multirow}
+\usepackage{multicol}
+\usepackage{graphicx}
+%\usepackage{animate}
+%\usepackage{tabularx}
+\usepackage[font=footnotesize, labelfont=bf, listformat=empty]{caption}
+\usepackage{geometry}
+\usepackage{listings}
+\usepackage{fontspec}
+\usepackage{minted}
+\usepackage{lastpage}
+%\usepackage{subcaption}
+\usepackage[skins,xparse,breakable]{tcolorbox}
+%\usepackage{longtable}
+\usepackage{titlesec}
+\usepackage{fancyhdr}
+\usepackage{ragged2e}
+\usepackage{setspace}
+\usepackage{booktabs}
+\usepackage{enumitem}
+\usepackage{minted}
+\usepackage[colorlinks=true, allcolors=black]{hyperref}
+\usepackage{tikz}
+
+\usetikzlibrary{karnaugh}
+\usetikzlibrary{positioning,arrows.meta,shapes.multipart,calc}
+
+%\usetikzlibrary{arrows,shapes,automata,positioning,calc}
+% Configurações de margens e espaçamento
+\geometry{a4paper, left=2.5cm, right=2.5cm, top=2.5cm, bottom=2cm}
+\onehalfspacing
+
+% Configurações de títulos
+\titleformat{\section}{\normalfont\Large\bfseries}{\thesection}{1em}{}
+\titleformat{\subsection}{\normalfont\large\bfseries}{\thesubsection}{1em}{}
+\titleformat{\subsubsection}
+  {\normalfont\large}
+  {\textbf{\thesubsubsection}}
+  {0.25em}{}
+
+\setcounter{tocdepth}{3}
+\newcommand{\cod}[1]{\texttt{#1}}
+
+\renewcommand{\listingscaption}{Código}
+\newenvironment{code}{\captionsetup{type=listing}}{}
+
+% Configurações de cores
+\definecolor{LightSeaGreen}{rgb}{0.1255, 0.6980, 0.6667}
+\definecolor{whitesmoke}{rgb}{0.96, 0.96, 0.96}
+\definecolor{cinza}{RGB}{160, 160, 160}
+\definecolor{cinza_claro}{RGB}{240, 240, 240} % Cinza claro
+\definecolor{LogisimKMapColor0}{RGB}{128,0,0}
+\definecolor{LogisimKMapColor1}{RGB}{230,25,75}
+\definecolor{LogisimKMapColor2}{RGB}{250,190,190}
+\definecolor{LogisimKMapColor3}{RGB}{170,110,40}
+\definecolor{LogisimKMapColor4}{RGB}{245,130,48}
+\definecolor{LogisimKMapColor5}{RGB}{255,215,180}
+\definecolor{LogisimKMapColor6}{RGB}{128,128,0}
+\definecolor{LogisimKMapColor7}{RGB}{255,255,25}
+\definecolor{LogisimKMapColor8}{RGB}{210,245,60}
+\definecolor{LogisimKMapColor9}{RGB}{0,0,128}
+\definecolor{LogisimKMapColor10}{RGB}{145,30,180}
+\definecolor{LogisimKMapColor11}{RGB}{60,180,175}
+\definecolor{LogisimKMapColor12}{RGB}{0,130,203}
+\definecolor{LogisimKMapColor13}{RGB}{230,190,255}
+\definecolor{LogisimKMapColor14}{RGB}{170,255,195}
+\definecolor{LogisimKMapColor15}{RGB}{240,50,230}
+
+\newtcolorbox{codebox}[1]{
+    title=#1,
+    fonttitle=\small\bfseries,
+    colback=blue!2.5!white,
+    colframe=blue!62!white,
+    arc=2pt,
+    boxrule=0.8pt,
+    left=4pt,
+    right=4pt,
+    top=4pt,
+    bottom=4pt,
+    breakable,
+    enhanced jigsaw
+}
+
+\setminted[asm]{
+    fontsize=\scriptsize,
+    style=manni,
+    linenos=true,
+    breaklines=true,
+    mathescape=true,
+    bgcolor=cinza_claro,
+    breakanywhere=true,
+}
+
+\newcommand{\hex}[1]{\textcolor{green!50!black}{#1}}
+
+% Configurações de cabeçalho e rodapé
+\pagestyle{fancy}
+\fancyhf{}
+\fancyhead[L]{\footnotesize{Relatório do Laboratório 3}}
+\fancyhead[R]{\footnotesize{2025/2 - Turma 02}}
+\fancyfoot[R]{\footnotesize{Página \hspace{0.05cm} \thepage \hspace{0.05cm} de \pageref{LastPage}}}
+\fancyfoot[L]{\footnotesize{Organização e Arquitetura de Computadores - CIC0099}}
+
+% Adiciona uma linha preta acima do rodapé
+\renewcommand{\footrulewidth}{0.4pt} % Espessura da linha
+\renewcommand{\footrule}{\vbox to 0pt{\hrule width \textwidth height \footrulewidth \vss}} % Desenha a linha
+
+% Novo Comando para chamar a capa
+\newcommand{\capa}{
+    \begin{titlepage}
+        \begin{multicols}{2}
+            \begin{flushleft}
+                \includegraphics[width=0.45\linewidth]{Recursos/Imagens/UnB_logo.png}
+            \end{flushleft}
+            \columnbreak
+            \begin{flushright}
+                Universidade de Brasília \\
+                Instituto de Exatas \\
+                Departamento de Ciência da Computação
+            \end{flushright}
+        \end{multicols}
+        \begin{center}
+        \vspace{-20pt}
+        \rule{\textwidth}{0.4pt}
+        \end{center}
+        \vspace{0.6cm}
+        \begin{center}
+            {\Huge \textbf{Relatório do Laboratório 3}} \\[0.5em]
+            {\Huge \textbf{Processador Multiciclo}} \\ [0.5em]
+            {\large CIC0099 - Organização e Arquitetura de Computadores} \\[0.25em]
+            {\large Turma 02 - Prof. Dr. Ricardo Pezzuol Jacobi} \\
+            \vfill
+            {\Large \textbf{Grupo B4}} \\
+            \begin{table}[H]
+                \centering
+                \begin{tabular}{l r}
+                    Henrique Morcelles Salum & 232003008 \\
+                    Athos Calixto Muniz & 211068261 \\
+                    Gabriela Fernanda Rodrigues Costa & 180120859 \\
+                    Cauê Araújo Euzebio & 211028195 \\
+                    Lucas Silva Nóbrega & 180035096
+                \end{tabular}
+                \label{tab:placeholder}
+            \end{table}
+        \end{center}
+    \end{titlepage}
+}
+
+\begin{document}
+
+\capa
+
+% Sumário
+\newpage
+\tableofcontents
+\newpage
+
+\section{Introdução}
+O presente experimento tem como objetivo introduzir os alunos ao processo de projeto e implementação de sistemas digitais utilizando VHDL como Linguagem de Descrição de Hardware (HDL). A atividade busca promover o treinamento prático em modelagem, análise e síntese de circuitos digitais, utilizando o ambiente de desenvolvimento \textbf{Intel Quartus Prime v24.1} como ferramenta principal.
+
+Como aplicação prática, propõe-se a implementação de um processador Multiciclo compatível com a ISA RV32I reduzida, contendo as instruções:\cod{add}, \cod{sub}, \cod{and}, \cod{or}, \cod{slt}, \cod{lw}, \cod{sw}, \cod{beq}, \cod{jal}, \cod{jalr}, \cod{addi} e \cod{lui}.
+
+A implementação será validada por meio de simulação funcional e temporal, com análise de \textit{timing} e frequência máxima de operação, permitindo compreender, de forma integrada, o funcionamento de uma arquitetura RISC-V.
+
+
+\section{Métodos e Análise}
+
+\subsection{Experimento}
+\begin{tcolorbox}[title=Enunciado, colback=blue!5!white, colframe=blue!75!black]
+Implemente o processador Multiciclo com ISA Reduzida com as instruções: \cod{add}, \cod{sub}, \cod{and}, \cod{or}, \cod{slt}, \cod{lw},
+\cod{sw}, \cod{beq}, \cod{jal}, e ainda as instruções \cod{jalr}, \cod{addi} e \cod{lui}.
+\end{tcolorbox}
+Para realizar o solicitado, é-nos fornecido o esquemático de uma implementação do Multiciclo com ISA reduzida. Nesse esquemático, porém, foi necessário realizar alterações no caminho de dados, que serão devidamente justificadas adiante.
+
+\begin{figure}[H]
+    \centering
+    \include{Recursos/LaTeX/multiciclo}
+    \vspace{-15pt}
+    \caption{Esquemático do Multiciclo com ISA reduzida}
+    \vspace{-5pt}
+\end{figure}
+
+\noindent Em que os túneis representam entradas e saídas do módulo de controle do processador, que foi abstraído na figura acima e será devidamente explicado na seção adequada.
+
+%\begin{figure}[H]
+%    \centering
+%    %\includegraphics{Recursos/Imagens/CONTROL.png}
+%    \caption{Módulo de controle do Multiciclo %com ISA reduzida}
+%\end{figure}
+
+\subsubsection{Tarefa I}
+\begin{tcolorbox}[title=Enunciado, colback=blue!5!white, colframe=blue!75!black]
+
+\end{tcolorbox}
+
+
+\subsubsection{Tarefa II}
+\begin{tcolorbox}[title=Enunciado, colback=blue!5!white, colframe=blue!75!black]
+
+
+\end{tcolorbox}
+
+\subsubsection{Tarefa III}
+\begin{tcolorbox}[title=Enunciado, colback=blue!5!white, colframe=blue!75!black]
+
+Implemente o Bloco Controlador e desenhe a máquina de estados do controle. 
+\end{tcolorbox}
+Como o enunciado adianta, o bloco de controle do multiciclo é implementado via máquina de estado. Particularmente, utilizamos uma máquina de estados finita do tipo Moore (isto é, em que a saída depende exclusivamente do estado atual, não das entradas). Para projetar uma máquina de estados, primeiro precisamos do seu diagrama de estados; o diagrama de estados completo do bloco de controle do multiciclo com ISA reduzida, considerando as doze instruções solicitadas, é mostrado na \autoref{fig:diag_estados}.
+
+\begin{figure}[H]
+    \centering
+    \include{Recursos/LaTeX/diagrama_estados}
+    \vspace{-15pt}
+    \caption{Diagrama de estados do controle}
+    \label{fig:diag_estados}
+\end{figure}
+
+A partir desse diagrama, conseguimos montar as tabelas \hyperref[tab:saidas]{(1)} de saída e \hyperref[tab:tran_estados]{(2)} de transição de estados, a partir das quais é possível inferir as lógicas de saída e de próximo estado, respectivamente.
+
+
+\begin{table}[H]
+    \centering
+    \resizebox{\textwidth}{!}{
+    \begin{tabular}{|c|c|c|c|c|c|c|c|c|c|c|c|c|c|}
+        \hline
+        \rowcolor{black}
+        \textcolor{white}{\textbf{Estado}} & \multicolumn{13}{|c|}{\textcolor{white}{\textbf{Saídas}}} \\ \cline{2-14}
+        
+        \rowcolor{black}
+        \textcolor{white}{\textbf{Atual}} &
+        \textcolor{white}{\textbf{\scriptsize PCsrc}} &
+        \textcolor{white}{\textbf{\scriptsize ALUOp}} &
+        \textcolor{white}{\textbf{\scriptsize ALUsrcA}} &
+        \textcolor{white}{\textbf{\scriptsize ALUsrcB}} &
+        \textcolor{white}{\textbf{\scriptsize PCbackWrite}} &
+        \textcolor{white}{\textbf{\scriptsize RegWrite}} &
+        \textcolor{white}{\textbf{\scriptsize Mem2Reg}} &
+        \textcolor{white}{\textbf{\scriptsize PCwriteCond}} &
+        \textcolor{white}{\textbf{\scriptsize PCWrite}} &
+        \textcolor{white}{\textbf{\scriptsize IorD}} &
+        \textcolor{white}{\textbf{\scriptsize MemWrite}} &
+        \textcolor{white}{\textbf{\scriptsize MemRead}} &
+        \textcolor{white}{\textbf{\scriptsize IRWrite}}
+        \\ \hline
+         
+        0000 & 0 & 00 & 10 & 01 & 1 & 0 & XX & 0 & 1 & 0 & 0 & 1 & 1 \\ \hline
+
+        \rowcolor{gray!20}
+        0001 & X & 00 & 00 & 10 & 0 & 0 & XX & 0 & 0 & X & 0 & 0 & 0 \\ \hline
+        
+        0011 & X & 00 & 01 & 10 & 0 & 0 & XX & 0 & 0 & X & 0 & 0 & 0 \\ \hline
+
+        \rowcolor{gray!20}
+        0010 & X & 10 & 01 & 00 & 0 & 0 & XX & 0 & 0 & X & 0 & 0 & 0 \\ \hline
+
+        1000 & 1 & 01 & 01 & 00 & 0 & 0 & XX & 1 & 0 & X & 0 & 0 & 0 \\ \hline
+
+        \rowcolor{gray!20}
+        0101 & 1 & XX & XX & XX & 0 & 1 & 01 & 0 & 1 & X & 0 & 0 & 0 \\ \hline
+
+        0110 & X & XX & XX & XX & 0 & 0 & XX & 0 & 0 & 1 & 0 & 1 & 0 \\ \hline
+
+        \rowcolor{gray!20}
+        0111 & X & XX & XX & XX & 0 & 0 & XX & 0 & 0 & 1 & 1 & 0 & 0 \\ \hline
+
+        1001 & X & XX & XX & XX & 0 & 1 & 00 & 0 & 0 & X & 0 & 0 & 0 \\ \hline
+
+        \rowcolor{gray!20}
+        1011 & X & XX & XX & XX & 0 & 1 & 10 & 0 & 0 & X & 0 & 0 & 0 \\ \hline
+
+        1101 & 0 & 00 & 10 & 01 & 0 & 1 & 11 & 0 & 0 & X & 0 & 0 & 0 \\ \hline
+    \end{tabular}
+    }
+    \caption{Tabela verdade das saídas do controle}
+    \label{tab:saidas}
+\end{table}
+
+Com base nesta tabela, utilizamos Mapas de Karnaugh para minimizar, na forma de soma de produtos, as expressões para as saídas. Os resultados obtidos estão exibidos a seguir, em que $Q_i$ representa o $i$-ésimo bit do estado atual.
+{\footnotesize
+\begin{align*}
+    &PCsrc =
+        \overline{Q_3}\,Q_2
+        +
+        Q_3\,\overline{Q_2}\,\overline{Q_1}\\
+    &ALUOp_1 =
+        \overline{Q_3}\,Q_1\,\overline{Q_0}, \
+    ALUOp_0 =
+        Q_3\,\overline{Q_2}\,\overline{Q_1}\\
+    &ALUsrcA_1 =
+        Q_2\,\overline{Q_1}\,Q_0
+        +
+        \overline{Q_3}\,\overline{Q_2}\,\overline{Q_1}\,\overline{Q_0}, \
+    ALUsrcA_0 =
+        \overline{Q_3}\,Q_1
+        +
+        Q_3\,\overline{Q_2}\,\overline{Q_1}\\
+    &ALUsrcB_1 =
+        \overline{Q_3}\,Q_0, \
+    ALUsrcB_0 =
+        Q_2\,\overline{Q_1}\,Q_0
+        +
+        \overline{Q_3}\,\overline{Q_2}\,\overline{Q_1}\,\overline{Q_0}\\
+    &PCbackWrite =
+        \overline{Q_3}\,\overline{Q_2}\,\overline{Q_1}\,\overline{Q_0}\\
+    &RegWrite =
+        Q_3\,\overline{Q_2}\,Q_0
+        +
+        Q_2\,\overline{Q_1}\,Q_0\\
+    &Mem2Reg_1 =
+        \overline{Q_2}\,Q_1\,Q_0
+        +
+        Q_3\,Q_2\,\overline{Q_1}\,Q_0, \
+    Mem2Reg_0 =
+        Q_2\,\overline{Q_1}\,Q_0\\
+    &PCWriteCond = 
+    Q_3\,\overline{Q_2}\,\overline{Q_1}\,\overline{Q_0}\\
+    &PCWrite =
+        \overline{Q_3}\,\overline{Q_2}\,\overline{Q_1}\,\overline{Q_0}
+        +
+        \overline{Q_3}\,Q_2\,\overline{Q_1}\,Q_0 \\
+    &IorD =
+        \overline{Q_3}\,Q_1\\
+    &MemWrite =
+        \overline{Q_3}\,Q_2\,Q_1\,Q_0\\
+    &MemRead =
+        \overline{Q_3}\,\overline{Q_2}\,\overline{Q_1}\,\overline{Q_0}
+        +
+        \overline{Q_3}\,Q_2\,Q_1\,\overline{Q_0}\\
+    &IRWrite =
+        \overline{Q_3}\,\overline{Q_2}\,\overline{Q_1}\,\overline{Q_0}
+\end{align*}
+}
+
+\noindent Tendo essas equações, é fácil implementar a lógica de saída. O esquemático a seguir mostra essa implemetação.
+
+\begin{figure}[H]
+    \centering
+    \include{Recursos/LaTeX/outLogic}
+    \vspace{-20pt}
+    \caption{Esquemático da lógica de saída do controle}
+\end{figure}
+
+\begin{table}[H]
+    \centering
+    \resizebox{\textwidth}{!}{
+    \begin{tabular}{|c|c|c|c|c|c|c|c|c|}
+        \hline
+        \rowcolor{black}
+        \textcolor{white}{\textbf{Estado}} & \multicolumn{8}{|c|}{\textcolor{white}{\textbf{Próximo Estado}}} \\ \cline{2-9}
+        \rowcolor{black}
+        \textcolor{white}{\textbf{Atual}} & \textcolor{white}{\textbf{\scriptsize 0000011}} &
+        \textcolor{white}{\textbf{\scriptsize 0100011}} &
+        \textcolor{white}{\textbf{\scriptsize 0010011}} &
+        \textcolor{white}{\textbf{\scriptsize 1100111}} &
+        \textcolor{white}{\textbf{\scriptsize 0110011}} &
+        \textcolor{white}{\textbf{\scriptsize 1100011}} &
+        \textcolor{white}{\textbf{\scriptsize 1101111}} &
+        \textcolor{white}{\textbf{\scriptsize 0110111}} \\ \hline
+         
+        0000 & 0001 & 0001 & 0001 & 0001 & 0001 & 0001 & 0001 & 0001 \\ \hline
+
+        \rowcolor{gray!20}
+        0001 & 0011 & 0011 & 0011 & 0011 & 0010 & 1000 & 0101 & 1101 \\ \hline
+
+        0011 & 0110 & 0111 & 1001 & 0101 & X & X & X & X \\ \hline
+
+        \rowcolor{gray!20}
+        0010 & X & X & X & X & 1001 & X & X & X \\ \hline
+        
+        1000 & X & X & X & X & X & 0000 & X & X \\ \hline
+
+        \rowcolor{gray!20}
+        0101 & X & X & X & 0000 & X & X & 0000 & X \\ \hline
+
+        0110 & 1011 & X & X & X & X & X & X & X \\ \hline
+
+        \rowcolor{gray!20}
+        0111 & X & 0000 & X & X & X & X & X & X \\ \hline
+
+        1001 & X & X & 0000 & X & 0000 & X & X & X \\ \hline
+
+        \rowcolor{gray!20}
+        1011 & X & 0000 & X & X & X & X & X & X \\ \hline
+
+        1101 & X & X & X & X & X & X & X & 0000 \\ \hline
+    \end{tabular}
+    }
+    \caption{Tabela de transição de estados do controle}
+    \label{tab:tran_estados}
+\end{table}
+
+A abordagem para implementar a lógica de próximo estado é um pouco diferente; não minimizaremos equações nem nada do tipo. Na verdade, tendo definido que um registrador de deslocamento será utilizado como elemento de memória, montamos outra tabela a partir da \autoref{tab:tran_estados}; uma em que, ao invés do próximo estado, representamos, em cada célula, a operação que o registrador precisa fazer para chegar àquele estado.
+
+O Registrador de Deslocamento é capaz de fazer quatro operações: \textit{shift left(L)}, \textit{shift left(R)}, \textit{load(D)} e \textit{reset}, em que a variável entre parenteses representa o argumento necessário para aquela operação (L: o bit que entra a esquerda no \textit{shift left}, R: o bit que entra a direita \textit{shift left}, D: o vetor de quatro bits que substitui o estado atual no \textit{load}). O \textit{reset} não foi utilizado nesse projeto, ao invés dele, é utilizado o \textit{load(0000)}.
+
+\begin{figure}[H]
+    \centering
+    \include{Recursos/LaTeX/shiftRegister}
+    \vspace{-35pt}
+    \caption{Lógica interna do Registrador de Deslocamento}
+    \label{fig:shiftRegister}
+\end{figure}
+
+\begin{table}[H]
+    \centering
+    \resizebox{\textwidth}{!}{
+    \begin{tabular}{|c|c|c|c|c|c|c|c|c|}
+        \hline
+        \rowcolor{black}
+        \textcolor{white}{\textbf{Estado}} & \multicolumn{8}{|c|}{\textcolor{white}{\textbf{Próximo Estado}}} \\ \cline{2-9}
+        \rowcolor{black}
+        \textcolor{white}{\textbf{Atual}} & \textcolor{white}{\textbf{\scriptsize 0000011}} &
+        \textcolor{white}{\textbf{\scriptsize 0100011}} &
+        \textcolor{white}{\textbf{\scriptsize 0010011}} &
+        \textcolor{white}{\textbf{\scriptsize 1100111}} &
+        \textcolor{white}{\textbf{\scriptsize 0110011}} &
+        \textcolor{white}{\textbf{\scriptsize 1100011}} &
+        \textcolor{white}{\textbf{\scriptsize 1101111}} &
+        \textcolor{white}{\textbf{\scriptsize 0110111}} \\ \hline
+         
+        0000 & \cod{SL(1)} & \cod{SL(1)} & \cod{SL(1)} & \cod{SL(1)} & \cod{SL(1)} & \cod{SL(1)} & \cod{SL(1)} & \cod{SL(1)} \\ \hline
+
+        \rowcolor{gray!20}
+        0001 & \cod{SL(1)} & \cod{SL(1)} & \cod{SL(1)} & \cod{SL(1)} & \cod{SL(0)} & \cod{SR(1)} & \cod{LOAD(0101)} & \cod{LOAD(1101)} \\ \hline
+
+        0011 & \cod{SL(0)} & \cod{SL(1)} & \cod{SR(1)} & \cod{LOAD(0101)} & X & X & X & X \\ \hline
+
+        \rowcolor{gray!20}
+        0010 & X & X & X & X & \cod{SR(1)} & X & X & X \\ \hline
+        
+        1000 & X & X & X & X & X & \cod{SL(0)} & X & X \\ \hline
+
+        \rowcolor{gray!20}
+        0101 & X & X & X & \cod{LOAD(0000)} & X & X & \cod{LOAD(0000)} & X \\ \hline
+
+        0110 & \cod{SR(1)} & X & X & X & X & X & X & X \\ \hline
+
+        \rowcolor{gray!20}
+        0111 & X & \cod{LOAD(0000)} & X & X & X & X & X & X \\ \hline
+
+        1001 & X & X & \cod{LOAD(0000)} & X & \cod{LOAD(0000)} & X & X & X \\ \hline
+
+        \rowcolor{gray!20}
+        1011 & X & \cod{LOAD(0000)} & X & X & X & X & X & X \\ \hline
+
+        1101 & X & X & X & X & X & X & X & \cod{LOAD(0000)} \\ \hline
+    \end{tabular}
+    }
+    \caption{Tabela de transição de estados do controle}
+    \label{tab:tran_estados_abst}
+\end{table}
+
+\noindent Note que os estados foram escolhidos \textit{a priori} de forma a minimizar os `LOAD's necessários - claro que não há garantia de que essa minimização foi ótima, ela foi feita por inspeção.
+
+Agora, basta utilizar um multiplexador de tamanho adequado para selecionar as entradas corretas para o registrador de deslocamento em cada caso, isto é, os valores de \cod{OP} (\cod{S}, na \autoref{fig:shiftRegister}), \cod{L}, \cod{R} e \cod{D} - o trem de bits que entra nos multiplexadores foi montado nessa ordem.
+
+\subsection{Tarefa IV}
+\begin{tcolorbox}[title=Enunciado, colback=blue!5!white, colframe=blue!75!black]
+
+
+\end{tcolorbox}
+
+
+\subsubsection{Tarefa V}
+\begin{tcolorbox}[title=Enunciado, colback=blue!5!white, colframe=blue!75!black]
+
+
+\end{tcolorbox}
+
+
+\subsubsection{Tarefa VI}
+\begin{tcolorbox}[title=Enunciado, colback=blue!5!white, colframe=blue!75!black]
+
+
+\end{tcolorbox}
+
+
+\subsection{Tarefa VII}
+\begin{tcolorbox}[title=Enunciado, colback=blue!5!white, colframe=blue!75!black]
+
+
+\end{tcolorbox}
+
+\begin{tcolorbox}[title=Enunciado, colback=blue!5!white, colframe=blue!75!black]
+
+
+\end{tcolorbox}
+
+
+\begin{tcolorbox}[title=Enunciado, colback=blue!5!white, colframe=blue!75!black]
+
+
+\end{tcolorbox}
+
+
+\begin{tcolorbox}[title=Enunciado, colback=blue!5!white, colframe=blue!75!black]
+
+\end{tcolorbox}
+
+
+
+\begin{tcolorbox}[title=Enunciado, colback=blue!5!white, colframe=blue!75!black]
+
+
+\end{tcolorbox}
+\end{document}

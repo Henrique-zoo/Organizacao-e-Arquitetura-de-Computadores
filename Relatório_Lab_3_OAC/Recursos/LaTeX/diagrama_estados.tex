@@ -1,0 +1,180 @@
+\resizebox{\textwidth}{!}{
+\definecolor{amarelo_queimado}{HTML}{FFC222}
+\begin{tikzpicture}[
+    % ========== estilos ==========
+    state/.style = {
+        rectangle split,
+        rectangle split parts=2,
+        rectangle split horizontal=false,
+        draw=black,
+        very thick,
+        rounded corners,
+        rectangle split part fill={amarelo_queimado,white},
+        text width=50mm,
+        align=left,
+        inner sep=6pt,
+        font=\footnotesize
+    },
+    bitname/.style = {anchor=west, font=\footnotesize},
+    bitbar/.style = {anchor=west, font=\footnotesize, text=black},
+    arrow/.style = {-{Latex[length=3mm,width=2.5mm]}, semithick}
+]
+
+% ======= Nodes (layout em camadas para evitar cruzamentos) =======
+% Top layer
+
+\node[state] (Fetch) at (0,10) {
+    \centering \normalsize \textbf{Fetch}
+\nodepart{two}
+\parbox{50mm}{\centering
+ALUsrcA = 10, ALUsrcB = 01, ALUOp = 00,
+$\overline{\mathrm{PCsrc}}$, PCbackWrite, PCWrite,
+$\overline{\mathrm{IorD}}$, MemRead, IRWrite}
+};
+
+\node[state] (Decode) at (-3.5,6) {
+    \centering \normalsize \textbf{Decode}
+\nodepart{two}
+\parbox{50mm}{\centering
+ALUsrcA = 00,
+ALUsrcB = 10,
+ALUOp = 00}
+};
+
+\node[state] (WBLui) at (3.5,6) {
+    \centering \normalsize \textbf{WBLui}
+\nodepart{two}
+\parbox{50mm}{\centering
+Mem2Reg = 11, RegWrite}
+};
+
+% Middle layer: left cluster (Imm path), center (WBLui), right cluster (RegOp & BrCheck & Jal)
+\node[state] (ImmSum) at (-10,3) {
+    \centering \normalsize \textbf{ImmSum}
+\nodepart{two}
+\parbox{50mm}{\centering
+ALUsrcA = 01,
+ALUsrcB = 10,
+ALUOp = 00}
+};
+
+\node[state] (RegOp) at (-3.25,3) {
+    \centering \normalsize \textbf{RegOp}
+\nodepart{two}
+\parbox{50mm}{\centering
+ALUsrcA = 01,
+ALUsrcB = 00,
+ALUOp = 10}
+};
+
+\node[state] (BrCheck) at (3.25,3) {
+    \centering \normalsize \textbf{BrCheck}
+\nodepart{two}
+\parbox{50mm}{\centering
+ALUOp = 01, ALUsrcA = 01, ALUsrcB = 00, PCsrc, PCwriteCond}
+};
+
+\node[state] (Jal) at (10,3) {
+    \centering \normalsize \textbf{Jal}
+\nodepart{two}
+\parbox{50mm}{\centering
+Mem2Reg = 01, RegWrite, PCsrc, PCWrite}
+};
+
+% Bottom layer: memory and writeback nodes
+\node[state] (MemRead) at (-10,0) {
+    \centering \normalsize \textbf{MemRead}
+\nodepart{two}
+\parbox{50mm}{\centering
+IorD, MemRead}
+};
+
+\node[state] (MemWrite) at (-3,0) {
+    \centering \normalsize \textbf{MemWrite}
+\nodepart{two}
+\parbox{50mm}{\centering
+IorD, MemWrite}
+};
+
+\node[state] (WB_ALU) at (4.5,0) {
+    \centering \normalsize \textbf{WB\_ALU}
+\nodepart{two}
+\parbox{50mm}{\centering
+Mem2Reg = 00, RegWrite}
+};
+
+\node[state] (WBMem) at (-6.5,-3) {
+    \centering \normalsize \textbf{WBMem}
+\nodepart{two}
+\parbox{50mm}{\centering
+RegWrite, Mem2Reg = 10
+}
+};
+
+% ======= Edges (curvas com out/in para evitar nós) =======
+% Fetch -> Decode
+\draw[arrow] ($(Fetch.south west) + (12mm, 0mm)$) to[out=-120, in=80] node[midway,above,sloped] {\scriptsize 1} (Decode.north);
+
+% Decode -> ImmSum (LW/SW/BRANCH)
+\draw[arrow] ($(Decode.west) + (0mm, -3mm)$) to[out=180,in=90] node[pos=0.4, above, yshift=10pt, sloped] {\scriptsize 0000011, 0100011,} node[pos=0.4, above, sloped]{\scriptsize 0010011, 1100111} (ImmSum.north);
+
+% Decode -> RegOp (R-type)
+\draw[arrow] (Decode.south) -- node[midway, left] {\scriptsize 0110011} (RegOp.north);
+
+% Decode -> BrCheck (BEQ) (route passing to right)
+\draw[arrow] ($(Decode.south east) + (-0.7mm, 0.7mm)$) -- node[pos=0.35, below, sloped] {\scriptsize 1100011} (BrCheck.north west);
+
+% Decode -> Jal
+\draw[arrow] ($(Decode.south east) + (0,5mm)$) to[out=-30,in=145] node[midway, below, sloped] {\scriptsize 1101111} (Jal.north west);
+
+% ImmSum -> MemRead (LW)
+\draw[arrow] (ImmSum.south) to[out=-90,in=90] node[pos=0.3, left] {\scriptsize 0000011} (MemRead.north);
+
+% ImmSum -> MemWrite (SW) (route under center)
+\draw[arrow,rounded corners=6pt,shorten >=1pt,shorten <=1pt] 
+    ($(ImmSum.south east) + (-20mm,0)$)
+    to[out=-90,in=150,looseness=1.2] node[pos=0.6, above, sloped] {\scriptsize 0100011} ($(MemRead.north east)+(2mm, 1mm)$)
+    to[out=-60, in=170, looseness=1.0] (MemWrite.west);
+
+% ImmSum -> WB_ALU (addi)
+\draw[arrow,rounded corners=6pt,shorten >=1pt,shorten <=1pt] 
+    ($(ImmSum.south east) + (-5mm,0)$)
+    to[out=-80,in=170,looseness=1.0] ($(MemRead.north east)+(6mm, 5mm)$)
+    to[out=-5,in=160,looseness=1.0] node[pos=0.3, above, sloped] {\scriptsize 0010011} ($(MemWrite.north east)+(2mm, 2mm)$)
+    -- ($(WB_ALU.west)+(0,3mm)$);
+
+% MemRead -> WBMem -> Fetch
+\draw[arrow] (MemRead.south) to[out=-90,in=90] node[midway, above, sloped] {\scriptsize 1} (WBMem.north);
+\draw[arrow,rounded corners=6pt,shorten >=1pt,shorten <=1pt]
+    (WBMem.west) -- ($(WBMem.west)!0.4!(WBMem.west -| ImmSum.west)$)
+    to[out=170,in=-90,looseness=1.1] ($(ImmSum.west)+(-10mm,0mm)$)
+    to[out=90,in=180,looseness=1.5] node[pos=0, left] {\scriptsize 1} ($(Fetch.west)+(-40mm,0mm)$)
+    -- (Fetch.west);
+
+% MemWrite -> Fetch
+\draw[-,rounded corners=6pt,shorten >=1pt,shorten <=1pt]
+    ($(MemWrite.south east) + (-15mm,0)$)
+    to[out=-30,in=180,looseness=1] ($(WBMem.center -| Jal.south) + (-20mm, 0)$)
+    to[out=0, in=-100, looseness=1.2] ($(Jal.south east) + (9mm,-2mm)$);
+
+% RegOp -> WB_ALU -> Fetch
+\draw[arrow,rounded corners=6pt,shorten >=1pt,shorten <=1pt]
+    ($(RegOp.south east) + (-1mm,1mm)$) -- node[pos=0.3, above, sloped] {\scriptsize 1} (WB_ALU.north west);
+\draw[arrow,rounded corners=6pt,shorten >=1pt,shorten <=1pt]
+    (WB_ALU.east) -- ($(WB_ALU.east)!0.4!(WB_ALU -| Jal)$)
+    to[out=0,in=-90, looseness=1.3] ($(Jal.east)+(10mm,0)$)
+    to[out=90,in=0,looseness=1.5] node[pos=0.2, right] {\scriptsize 1} ($(Fetch.east)+(40mm,0)$)
+    -- (Fetch.east);
+
+% BrCheck -> Fetch
+\draw[-] ($(BrCheck.south east) + (0,5mm)$) to[out=-45,in=175] ($(WB_ALU.east)+(25mm,0)$);
+
+% Jal -> Fetch
+\draw[arrow] (Jal.north) to[out=90,in=0] node[midway, above, sloped] {\scriptsize 1} ($(Fetch.south east) + (0,5mm)$);
+
+% Decode -> WBLui
+\draw[arrow] (Decode.east) -- node[pos=0.4, above, sloped] {\scriptsize 0110111} (WBLui.west);
+\draw[arrow] (WBLui.north) to[out=120,in=-60] node[midway, above, sloped] {\scriptsize 1} ($(Fetch.south east) + (-15mm,0)$);
+
+\end{tikzpicture}
+}

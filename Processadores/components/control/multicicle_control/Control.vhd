@@ -77,8 +77,8 @@ begin
             CLK => clock,
             RST => reset,
             D   => registerIn_in(3 downto 0),
-            L   => registerIn_in(4),
-            R   => registerIn_in(5),
+            R   => registerIn_in(4),
+            L   => registerIn_in(5),
             S   => registerIn_in(7 downto 6),
             Q   => current_state
         );
