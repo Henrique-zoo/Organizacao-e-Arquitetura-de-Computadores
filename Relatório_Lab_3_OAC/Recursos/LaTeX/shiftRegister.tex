@@ -7,10 +7,10 @@
 % It is not recomended to use the scale option of the tikzpicture environment.
 \resizebox{0.5\textwidth}{!}{
 \begin{tikzpicture}[x=1pt,y=-1pt,line cap=rect]
-\def\logisimfontA#1{\fontfamily{cmr}{#1}} % Replaced by logisim, original font was "SansSerif"
-\def\logisimfontB#1{\fontfamily{Ubuntu}{#1}}
-\def\logisimfontC#1{\fontfamily{cmtt}{#1}} % Replaced by logisim, original font was "Monospaced"
-\def\logisimfontD#1{\fontfamily{Arial Rounded MT Bold}{#1}}
+\def\logisimfontA#1{{\fontspec{Arial Rounded MT Bold}#1}} % cmr equivalent
+\def\logisimfontB#1{\fontspec{Arial Rounded MT Bold}#1}
+\def\logisimfontC#1{\fontspec{Arial Rounded MT Bold}#1} % Replaced by logisim, original font was "Monospaced"
+\def\logisimfontD#1{\fontspec{Arial Rounded MT Bold}#1}
 \definecolor{custcol_0_0_0}{RGB}{0, 0, 0}
 \definecolor{custcol_75_75_75}{RGB}{117, 117, 117}
 \definecolor{custcol_ff_ff_ff}{RGB}{255, 255, 255}
@@ -74,9 +74,9 @@
 \draw [line width=2.0pt, custcol_0_0_0 ]  (25.0,58.0) -- (8.0,58.0) ;
 \draw [line width=2.0pt, custcol_0_0_0 ]  (7.0,58.0) -- (7.0,41.0) ;
 \logisimfontA{\fontsize{12pt}{12pt}\selectfont\node[inner sep=0, outer sep=0, custcol_0_0_0, anchor=base west] at  (9.0,55.0)  {x2};}
-\logisimfontA{\fontsize{16pt}{16pt}\fontseries{bx}\selectfont\node[inner sep=0, outer sep=0, custcol_0_0_0, anchor=base west] at  (10.0,32.0)  {S};}
+\logisimfontA{\fontsize{16pt}{16pt}\fontseries{m}\selectfont\node[inner sep=0, outer sep=0, custcol_0_0_0, anchor=base west] at  (10.0,32.0)  {S};}
 \fill [line width=2.0pt, custcol_0_0_0]  (15.0,58.0) ellipse (2.0 and 2.0 );
-\logisimfontB{\fontsize{16pt}{16pt}\fontseries{bx}\selectfont\node[inner sep=0, outer sep=0, custcol_0_0_0, anchor=base west] at  (11.0,87.0)  {S};}
+\logisimfontB{\fontsize{12pt}{12pt}\fontseries{m}\selectfont\node[inner sep=0, outer sep=0, custcol_0_0_0, anchor=base west] at  (11.0,87.0)  {S};}
 \draw [line width=2.0pt, custcol_0_0_0 ]  (7.0,72.0) -- (15.0,68.0) -- (23.0,72.0) -- (23.0,94.0) -- (7.0,94.0) -- cycle;
 \fill [line width=2.0pt, custcol_0_0_0]  (15.0,68.0) ellipse (2.0 and 2.0 );
 \draw [line width=2.0pt, custcol_0_0_0 ]  (47.0,40.0) -- (64.0,40.0) ;
@@ -84,9 +84,9 @@
 \draw [line width=2.0pt, custcol_0_0_0 ]  (65.0,58.0) -- (48.0,58.0) ;
 \draw [line width=2.0pt, custcol_0_0_0 ]  (47.0,58.0) -- (47.0,41.0) ;
 \logisimfontA{\fontsize{12pt}{12pt}\selectfont\node[inner sep=0, outer sep=0, custcol_0_0_0, anchor=base west] at  (49.0,55.0)  {x1};}
-\logisimfontA{\fontsize{16pt}{16pt}\fontseries{bx}\selectfont\node[inner sep=0, outer sep=0, custcol_0_0_0, anchor=base west] at  (39.0,32.0)  {CLK};}
+\logisimfontA{\fontsize{16pt}{16pt}\fontseries{m}\selectfont\node[inner sep=0, outer sep=0, custcol_0_0_0, anchor=base west] at  (39.0,32.0)  {CLK};}
 \fill [line width=2.0pt, custcol_0_0_0]  (55.0,58.0) ellipse (2.0 and 2.0 );
-\logisimfontB{\fontsize{12pt}{12pt}\fontseries{bx}\selectfont\node[inner sep=0, outer sep=0, custcol_0_0_0, anchor=base west] at  (44.0,84.0)  {CLK};}
+\logisimfontB{\fontsize{10pt}{10pt}\fontseries{m}\selectfont\node[inner sep=0, outer sep=0, custcol_0_0_0, anchor=base west] at  (44.0,84.0)  {CLK};}
 \draw [line width=2.0pt, custcol_0_0_0 ]  (41.0,72.0) -- (45.0,72.0) -- (55.0,68.0) -- (65.0,72.0) -- (69.0,72.0) -- (69.0,91.0) -- (41.0,91.0) -- cycle;
 \fill [line width=2.0pt, custcol_0_0_0]  (55.0,68.0) ellipse (2.0 and 2.0 );
 \draw [line width=2.0pt, custcol_0_0_0 ]  (87.0,40.0) -- (104.0,40.0) ;
@@ -94,9 +94,9 @@
 \draw [line width=2.0pt, custcol_0_0_0 ]  (105.0,58.0) -- (88.0,58.0) ;
 \draw [line width=2.0pt, custcol_0_0_0 ]  (87.0,58.0) -- (87.0,41.0) ;
 \logisimfontA{\fontsize{12pt}{12pt}\selectfont\node[inner sep=0, outer sep=0, custcol_0_0_0, anchor=base west] at  (89.0,55.0)  {x1};}
-\logisimfontB{\fontsize{16pt}{16pt}\fontseries{bx}\selectfont\node[inner sep=0, outer sep=0, custcol_0_0_0, anchor=base west] at  (81.0,33.0)  {RST};}
+\logisimfontB{\fontsize{16pt}{16pt}\fontseries{m}\selectfont\node[inner sep=0, outer sep=0, custcol_0_0_0, anchor=base west] at  (81.0,33.0)  {RST};}
 \fill [line width=2.0pt, custcol_0_0_0]  (95.0,58.0) ellipse (2.0 and 2.0 );
-\logisimfontB{\fontsize{12pt}{12pt}\fontseries{bx}\selectfont\node[inner sep=0, outer sep=0, custcol_0_0_0, anchor=base west] at  (85.0,84.0)  {RST};}
+\logisimfontB{\fontsize{10pt}{10pt}\fontseries{m}\selectfont\node[inner sep=0, outer sep=0, custcol_0_0_0, anchor=base west] at  (85.0,84.0)  {RST};}
 \draw [line width=2.0pt, custcol_0_0_0 ]  (81.0,72.0) -- (85.0,72.0) -- (95.0,68.0) -- (105.0,72.0) -- (109.0,72.0) -- (109.0,91.0) -- (81.0,91.0) -- cycle;
 \fill [line width=2.0pt, custcol_0_0_0]  (95.0,68.0) ellipse (2.0 and 2.0 );
 \draw [line width=3.0pt, custcol_0_0_0 ]  (235.0,128.0) -- (145.0,128.0) -- (145.0,108.0) -- (145.0,94.0) ;
@@ -119,32 +119,32 @@
 \draw [line width=2.0pt, custcol_0_0_0 ]  (155.0,58.0) -- (118.0,58.0) ;
 \draw [line width=2.0pt, custcol_0_0_0 ]  (117.0,58.0) -- (117.0,41.0) ;
 \logisimfontA{\fontsize{12pt}{12pt}\selectfont\node[inner sep=0, outer sep=0, custcol_0_0_0, anchor=base west] at  (129.0,55.0)  {x4};}
-\logisimfontB{\fontsize{16pt}{16pt}\fontseries{bx}\selectfont\node[inner sep=0, outer sep=0, custcol_0_0_0, anchor=base west] at  (129.0,33.0)  {D};}
+\logisimfontB{\fontsize{16pt}{16pt}\fontseries{m}\selectfont\node[inner sep=0, outer sep=0, custcol_0_0_0, anchor=base west] at  (129.0,33.0)  {D};}
 \fill [line width=2.0pt, custcol_0_0_0]  (135.0,58.0) ellipse (2.0 and 2.0 );
 \draw [line width=2.0pt, custcol_0_0_0 ]  (157.0,40.0) -- (174.0,40.0) ;
 \draw [line width=2.0pt, custcol_0_0_0 ]  (175.0,40.0) -- (175.0,57.0) ;
 \draw [line width=2.0pt, custcol_0_0_0 ]  (175.0,58.0) -- (158.0,58.0) ;
 \draw [line width=2.0pt, custcol_0_0_0 ]  (157.0,58.0) -- (157.0,41.0) ;
 \logisimfontA{\fontsize{12pt}{12pt}\selectfont\node[inner sep=0, outer sep=0, custcol_0_0_0, anchor=base west] at  (159.0,55.0)  {x1};}
-\logisimfontB{\fontsize{16pt}{16pt}\fontseries{bx}\selectfont\node[inner sep=0, outer sep=0, custcol_0_0_0, anchor=base west] at  (161.0,33.0)  {L};}
+\logisimfontB{\fontsize{16pt}{16pt}\fontseries{m}\selectfont\node[inner sep=0, outer sep=0, custcol_0_0_0, anchor=base west] at  (161.0,33.0)  {L};}
 \fill [line width=2.0pt, custcol_0_0_0]  (165.0,58.0) ellipse (2.0 and 2.0 );
 \draw [line width=2.0pt, custcol_0_0_0 ]  (177.0,40.0) -- (194.0,40.0) ;
 \draw [line width=2.0pt, custcol_0_0_0 ]  (195.0,40.0) -- (195.0,57.0) ;
 \draw [line width=2.0pt, custcol_0_0_0 ]  (195.0,58.0) -- (178.0,58.0) ;
 \draw [line width=2.0pt, custcol_0_0_0 ]  (177.0,58.0) -- (177.0,41.0) ;
 \logisimfontA{\fontsize{12pt}{12pt}\selectfont\node[inner sep=0, outer sep=0, custcol_0_0_0, anchor=base west] at  (179.0,55.0)  {x1};}
-\logisimfontA{\fontsize{16pt}{16pt}\fontseries{bx}\selectfont\node[inner sep=0, outer sep=0, custcol_0_0_0, anchor=base west] at  (180.0,32.0)  {R};}
+\logisimfontA{\fontsize{16pt}{16pt}\fontseries{m}\selectfont\node[inner sep=0, outer sep=0, custcol_0_0_0, anchor=base west] at  (180.0,32.0)  {R};}
 \fill [line width=2.0pt, custcol_0_0_0]  (185.0,58.0) ellipse (2.0 and 2.0 );
-\logisimfontB{\fontsize{16pt}{16pt}\fontseries{bx}\selectfont\node[inner sep=0, outer sep=0, custcol_0_0_0, anchor=base west] at  (251.0,167.0)  {S};}
+\logisimfontB{\fontsize{12pt}{12pt}\fontseries{m}\selectfont\node[inner sep=0, outer sep=0, custcol_0_0_0, anchor=base west] at  (251.0,167.0)  {S};}
 \draw [line width=2.0pt, custcol_0_0_0 ]  (247.0,152.0) -- (255.0,148.0) -- (263.0,152.0) -- (263.0,174.0) -- (247.0,174.0) -- cycle;
 \fill [line width=2.0pt, custcol_0_0_0]  (255.0,148.0) ellipse (2.0 and 2.0 );
-\logisimfontB{\fontsize{16pt}{16pt}\fontseries{bx}\selectfont\node[inner sep=0, outer sep=0, custcol_0_0_0, anchor=base west] at  (251.0,357.0)  {S};}
+\logisimfontB{\fontsize{12pt}{12pt}\fontseries{m}\selectfont\node[inner sep=0, outer sep=0, custcol_0_0_0, anchor=base west] at  (251.0,357.0)  {S};}
 \draw [line width=2.0pt, custcol_0_0_0 ]  (247.0,342.0) -- (255.0,338.0) -- (263.0,342.0) -- (263.0,364.0) -- (247.0,364.0) -- cycle;
 \fill [line width=2.0pt, custcol_0_0_0]  (255.0,338.0) ellipse (2.0 and 2.0 );
-\logisimfontB{\fontsize{16pt}{16pt}\fontseries{bx}\selectfont\node[inner sep=0, outer sep=0, custcol_0_0_0, anchor=base west] at  (251.0,547.0)  {S};}
+\logisimfontB{\fontsize{12pt}{12pt}\fontseries{m}\selectfont\node[inner sep=0, outer sep=0, custcol_0_0_0, anchor=base west] at  (251.0,547.0)  {S};}
 \draw [line width=2.0pt, custcol_0_0_0 ]  (247.0,532.0) -- (255.0,528.0) -- (263.0,532.0) -- (263.0,554.0) -- (247.0,554.0) -- cycle;
 \fill [line width=2.0pt, custcol_0_0_0]  (255.0,528.0) ellipse (2.0 and 2.0 );
-\logisimfontB{\fontsize{16pt}{16pt}\fontseries{bx}\selectfont\node[inner sep=0, outer sep=0, custcol_0_0_0, anchor=base west] at  (251.0,737.0)  {S};}
+\logisimfontB{\fontsize{12pt}{12pt}\fontseries{m}\selectfont\node[inner sep=0, outer sep=0, custcol_0_0_0, anchor=base west] at  (251.0,737.0)  {S};}
 \draw [line width=2.0pt, custcol_0_0_0 ]  (247.0,722.0) -- (255.0,718.0) -- (263.0,722.0) -- (263.0,744.0) -- (247.0,744.0) -- cycle;
 \fill [line width=2.0pt, custcol_0_0_0]  (255.0,718.0) ellipse (2.0 and 2.0 );
 \draw [line width=2.0pt, custcol_0_0_0 ]  (235.0,78.0) -- (235.0,138.0) -- (264.0,123.0) -- (264.0,93.0) -- cycle;
@@ -181,7 +181,7 @@
 \fill [line width=1.0pt, custcol_0_0_0]  (325.0,28.0) ellipse (2.0 and 2.0 );
 \logisimfontC{\fontsize{12pt}{12pt}\selectfont\node[inner sep=0, outer sep=0, custcol_0_0_0, anchor=base west] at  (322.0,415.0)  {0};}
 \fill [line width=1.0pt, custcol_0_0_0]  (325.0,418.0) ellipse (2.0 and 2.0 );
-\logisimfontB{\fontsize{12pt}{12pt}\fontseries{bx}\selectfont\node[inner sep=0, outer sep=0, custcol_0_0_0, anchor=base west] at  (334.0,184.0)  {CLK};}
+\logisimfontB{\fontsize{10pt}{10pt}\fontseries{m}\selectfont\node[inner sep=0, outer sep=0, custcol_0_0_0, anchor=base west] at  (334.0,184.0)  {CLK};}
 \draw [line width=2.0pt, custcol_0_0_0 ]  (331.0,172.0) -- (335.0,172.0) -- (345.0,168.0) -- (355.0,172.0) -- (359.0,172.0) -- (359.0,191.0) -- (331.0,191.0) -- cycle;
 \fill [line width=2.0pt, custcol_0_0_0]  (345.0,168.0) ellipse (2.0 and 2.0 );
 \begin{pgfpicture}
@@ -196,12 +196,12 @@
    \end{pgfmagnify}
 \end{pgfpicture}
 \logisimfontA{\fontsize{12pt}{12pt}\selectfont\node[inner sep=0, outer sep=0, custcol_0_0_0, anchor=base west] at  (619.0,105.0)  {x4};}
-\logisimfontB{\fontsize{16pt}{16pt}\fontseries{bx}\selectfont\node[inner sep=0, outer sep=0, custcol_0_0_0, anchor=base west] at  (647.0,105.0)  {Q};}
+\logisimfontB{\fontsize{16pt}{16pt}\fontseries{m}\selectfont\node[inner sep=0, outer sep=0, custcol_0_0_0, anchor=base west] at  (647.0,105.0)  {Q};}
 \fill [line width=2.0pt, custcol_0_0_0]  (605.0,98.0) ellipse (2.0 and 2.0 );
-\logisimfontB{\fontsize{12pt}{12pt}\fontseries{bx}\selectfont\node[inner sep=0, outer sep=0, custcol_0_0_0, anchor=base west] at  (334.0,754.0)  {CLK};}
+\logisimfontB{\fontsize{10pt}{10pt}\fontseries{m}\selectfont\node[inner sep=0, outer sep=0, custcol_0_0_0, anchor=base west] at  (334.0,754.0)  {CLK};}
 \draw [line width=2.0pt, custcol_0_0_0 ]  (331.0,742.0) -- (335.0,742.0) -- (345.0,738.0) -- (355.0,742.0) -- (359.0,742.0) -- (359.0,761.0) -- (331.0,761.0) -- cycle;
 \fill [line width=2.0pt, custcol_0_0_0]  (345.0,738.0) ellipse (2.0 and 2.0 );
-\logisimfontB{\fontsize{12pt}{12pt}\fontseries{bx}\selectfont\node[inner sep=0, outer sep=0, custcol_0_0_0, anchor=base west] at  (355.0,409.0)  {RST};}
+\logisimfontB{\fontsize{10pt}{10pt}\fontseries{m}\selectfont\node[inner sep=0, outer sep=0, custcol_0_0_0, anchor=base west] at  (355.0,409.0)  {RST};}
 \draw [line width=2.0pt, custcol_0_0_0 ]  (351.0,395.0) -- (379.0,395.0) -- (379.0,415.0) -- (375.0,415.0) -- (365.0,419.0) -- (355.0,415.0) -- (351.0,415.0) -- cycle;
 \fill [line width=2.0pt, custcol_0_0_0]  (365.0,418.0) ellipse (2.0 and 2.0 );
 \draw [line width=2.0pt, custcol_0_0_0 ]  (295.0,438.0) -- (394.0,438.0) ;
@@ -209,10 +209,10 @@
 \draw [line width=2.0pt, custcol_0_0_0 ]  (395.0,538.0) -- (296.0,538.0) ;
 \draw [line width=2.0pt, custcol_0_0_0 ]  (295.0,538.0) -- (295.0,439.0) ;
 \draw [line width=1.0pt, custcol_0_0_0 ]  (345.0,528.0) -- (343.0,538.0) -- (347.0,538.0) -- cycle;
-\logisimfontD{\fontsize{14pt}{14pt}\fontseries{bx}\selectfont\node[inner sep=0, outer sep=0, custcol_0_0_0, anchor=base west] at  (375.0,493.0)  {Q};}
-\logisimfontD{\fontsize{14pt}{14pt}\fontseries{bx}\selectfont\node[inner sep=0, outer sep=0, custcol_75_75_75, anchor=base west] at  (315.0,456.0)  {PR};}
-\logisimfontD{\fontsize{14pt}{14pt}\fontseries{bx}\selectfont\node[inner sep=0, outer sep=0, custcol_75_75_75, anchor=base west] at  (351.0,456.0)  {CLR};}
-\logisimfontD{\fontsize{14pt}{14pt}\fontseries{bx}\selectfont\node[inner sep=0, outer sep=0, custcol_0_0_0, anchor=base west] at  (303.0,493.0)  {D};}
+\logisimfontD{\fontsize{14pt}{14pt}\fontseries{m}\selectfont\node[inner sep=0, outer sep=0, custcol_0_0_0, anchor=base west] at  (375.0,493.0)  {Q};}
+\logisimfontD{\fontsize{14pt}{14pt}\fontseries{m}\selectfont\node[inner sep=0, outer sep=0, custcol_75_75_75, anchor=base west] at  (315.0,456.0)  {PR};}
+\logisimfontD{\fontsize{14pt}{14pt}\fontseries{m}\selectfont\node[inner sep=0, outer sep=0, custcol_75_75_75, anchor=base west] at  (351.0,456.0)  {CLR};}
+\logisimfontD{\fontsize{14pt}{14pt}\fontseries{m}\selectfont\node[inner sep=0, outer sep=0, custcol_0_0_0, anchor=base west] at  (303.0,493.0)  {D};}
 \fill [line width=1.0pt, custcol_0_0_0]  (295.0,488.0) ellipse (2.0 and 2.0 );
 \fill [line width=1.0pt, custcol_0_0_0]  (325.0,438.0) ellipse (2.0 and 2.0 );
 \fill [line width=1.0pt, custcol_0_0_0]  (345.0,538.0) ellipse (2.0 and 2.0 );
@@ -220,7 +220,7 @@
 \fill [line width=1.0pt, custcol_0_0_0]  (395.0,488.0) ellipse (2.0 and 2.0 );
 \logisimfontC{\fontsize{12pt}{12pt}\selectfont\node[inner sep=0, outer sep=0, custcol_0_0_0, anchor=base west] at  (322.0,605.0)  {0};}
 \fill [line width=1.0pt, custcol_0_0_0]  (325.0,608.0) ellipse (2.0 and 2.0 );
-\logisimfontB{\fontsize{12pt}{12pt}\fontseries{bx}\selectfont\node[inner sep=0, outer sep=0, custcol_0_0_0, anchor=base west] at  (334.0,374.0)  {CLK};}
+\logisimfontB{\fontsize{10pt}{10pt}\fontseries{m}\selectfont\node[inner sep=0, outer sep=0, custcol_0_0_0, anchor=base west] at  (334.0,374.0)  {CLK};}
 \draw [line width=2.0pt, custcol_0_0_0 ]  (331.0,362.0) -- (335.0,362.0) -- (345.0,358.0) -- (355.0,362.0) -- (359.0,362.0) -- (359.0,381.0) -- (331.0,381.0) -- cycle;
 \fill [line width=2.0pt, custcol_0_0_0]  (345.0,358.0) ellipse (2.0 and 2.0 );
 \draw [line width=2.0pt, custcol_0_0_0 ]  (295.0,628.0) -- (394.0,628.0) ;
@@ -228,10 +228,10 @@
 \draw [line width=2.0pt, custcol_0_0_0 ]  (395.0,728.0) -- (296.0,728.0) ;
 \draw [line width=2.0pt, custcol_0_0_0 ]  (295.0,728.0) -- (295.0,629.0) ;
 \draw [line width=1.0pt, custcol_0_0_0 ]  (345.0,718.0) -- (343.0,728.0) -- (347.0,728.0) -- cycle;
-\logisimfontD{\fontsize{14pt}{14pt}\fontseries{bx}\selectfont\node[inner sep=0, outer sep=0, custcol_0_0_0, anchor=base west] at  (375.0,683.0)  {Q};}
-\logisimfontD{\fontsize{14pt}{14pt}\fontseries{bx}\selectfont\node[inner sep=0, outer sep=0, custcol_75_75_75, anchor=base west] at  (315.0,646.0)  {PR};}
-\logisimfontD{\fontsize{14pt}{14pt}\fontseries{bx}\selectfont\node[inner sep=0, outer sep=0, custcol_75_75_75, anchor=base west] at  (351.0,646.0)  {CLR};}
-\logisimfontD{\fontsize{14pt}{14pt}\fontseries{bx}\selectfont\node[inner sep=0, outer sep=0, custcol_0_0_0, anchor=base west] at  (303.0,683.0)  {D};}
+\logisimfontD{\fontsize{14pt}{14pt}\fontseries{m}\selectfont\node[inner sep=0, outer sep=0, custcol_0_0_0, anchor=base west] at  (375.0,683.0)  {Q};}
+\logisimfontD{\fontsize{14pt}{14pt}\fontseries{m}\selectfont\node[inner sep=0, outer sep=0, custcol_75_75_75, anchor=base west] at  (315.0,646.0)  {PR};}
+\logisimfontD{\fontsize{14pt}{14pt}\fontseries{m}\selectfont\node[inner sep=0, outer sep=0, custcol_75_75_75, anchor=base west] at  (351.0,646.0)  {CLR};}
+\logisimfontD{\fontsize{14pt}{14pt}\fontseries{m}\selectfont\node[inner sep=0, outer sep=0, custcol_0_0_0, anchor=base west] at  (303.0,683.0)  {D};}
 \fill [line width=1.0pt, custcol_0_0_0]  (295.0,678.0) ellipse (2.0 and 2.0 );
 \fill [line width=1.0pt, custcol_0_0_0]  (325.0,628.0) ellipse (2.0 and 2.0 );
 \fill [line width=1.0pt, custcol_0_0_0]  (345.0,728.0) ellipse (2.0 and 2.0 );
@@ -242,19 +242,19 @@
 \draw [line width=2.0pt, custcol_0_0_0 ]  (395.0,348.0) -- (296.0,348.0) ;
 \draw [line width=2.0pt, custcol_0_0_0 ]  (295.0,348.0) -- (295.0,249.0) ;
 \draw [line width=1.0pt, custcol_0_0_0 ]  (345.0,338.0) -- (343.0,348.0) -- (347.0,348.0) -- cycle;
-\logisimfontD{\fontsize{14pt}{14pt}\fontseries{bx}\selectfont\node[inner sep=0, outer sep=0, custcol_0_0_0, anchor=base west] at  (375.0,303.0)  {Q};}
-\logisimfontD{\fontsize{14pt}{14pt}\fontseries{bx}\selectfont\node[inner sep=0, outer sep=0, custcol_75_75_75, anchor=base west] at  (315.0,266.0)  {PR};}
-\logisimfontD{\fontsize{14pt}{14pt}\fontseries{bx}\selectfont\node[inner sep=0, outer sep=0, custcol_75_75_75, anchor=base west] at  (351.0,266.0)  {CLR};}
-\logisimfontD{\fontsize{14pt}{14pt}\fontseries{bx}\selectfont\node[inner sep=0, outer sep=0, custcol_0_0_0, anchor=base west] at  (303.0,303.0)  {D};}
+\logisimfontD{\fontsize{14pt}{14pt}\fontseries{m}\selectfont\node[inner sep=0, outer sep=0, custcol_0_0_0, anchor=base west] at  (375.0,303.0)  {Q};}
+\logisimfontD{\fontsize{14pt}{14pt}\fontseries{m}\selectfont\node[inner sep=0, outer sep=0, custcol_75_75_75, anchor=base west] at  (315.0,266.0)  {PR};}
+\logisimfontD{\fontsize{14pt}{14pt}\fontseries{m}\selectfont\node[inner sep=0, outer sep=0, custcol_75_75_75, anchor=base west] at  (351.0,266.0)  {CLR};}
+\logisimfontD{\fontsize{14pt}{14pt}\fontseries{m}\selectfont\node[inner sep=0, outer sep=0, custcol_0_0_0, anchor=base west] at  (303.0,303.0)  {D};}
 \fill [line width=1.0pt, custcol_0_0_0]  (295.0,298.0) ellipse (2.0 and 2.0 );
 \fill [line width=1.0pt, custcol_0_0_0]  (325.0,248.0) ellipse (2.0 and 2.0 );
 \fill [line width=1.0pt, custcol_0_0_0]  (345.0,348.0) ellipse (2.0 and 2.0 );
 \fill [line width=1.0pt, custcol_0_0_0]  (365.0,248.0) ellipse (2.0 and 2.0 );
 \fill [line width=1.0pt, custcol_0_0_0]  (395.0,298.0) ellipse (2.0 and 2.0 );
-\logisimfontB{\fontsize{12pt}{12pt}\fontseries{bx}\selectfont\node[inner sep=0, outer sep=0, custcol_0_0_0, anchor=base west] at  (355.0,19.0)  {RST};}
+\logisimfontB{\fontsize{10pt}{10pt}\fontseries{m}\selectfont\node[inner sep=0, outer sep=0, custcol_0_0_0, anchor=base west] at  (355.0,19.0)  {RST};}
 \draw [line width=2.0pt, custcol_0_0_0 ]  (351.0,5.0) -- (379.0,5.0) -- (379.0,25.0) -- (375.0,25.0) -- (365.0,29.0) -- (355.0,25.0) -- (351.0,25.0) -- cycle;
 \fill [line width=2.0pt, custcol_0_0_0]  (365.0,28.0) ellipse (2.0 and 2.0 );
-\logisimfontB{\fontsize{12pt}{12pt}\fontseries{bx}\selectfont\node[inner sep=0, outer sep=0, custcol_0_0_0, anchor=base west] at  (355.0,599.0)  {RST};}
+\logisimfontB{\fontsize{10pt}{10pt}\fontseries{m}\selectfont\node[inner sep=0, outer sep=0, custcol_0_0_0, anchor=base west] at  (355.0,599.0)  {RST};}
 \draw [line width=2.0pt, custcol_0_0_0 ]  (351.0,585.0) -- (379.0,585.0) -- (379.0,605.0) -- (375.0,605.0) -- (365.0,609.0) -- (355.0,605.0) -- (351.0,605.0) -- cycle;
 \fill [line width=2.0pt, custcol_0_0_0]  (365.0,608.0) ellipse (2.0 and 2.0 );
 \draw [line width=2.0pt, custcol_0_0_0 ]  (295.0,58.0) -- (394.0,58.0) ;
@@ -262,10 +262,10 @@
 \draw [line width=2.0pt, custcol_0_0_0 ]  (395.0,158.0) -- (296.0,158.0) ;
 \draw [line width=2.0pt, custcol_0_0_0 ]  (295.0,158.0) -- (295.0,59.0) ;
 \draw [line width=1.0pt, custcol_0_0_0 ]  (345.0,148.0) -- (343.0,158.0) -- (347.0,158.0) -- cycle;
-\logisimfontD{\fontsize{14pt}{14pt}\fontseries{bx}\selectfont\node[inner sep=0, outer sep=0, custcol_0_0_0, anchor=base west] at  (375.0,113.0)  {Q};}
-\logisimfontD{\fontsize{14pt}{14pt}\fontseries{bx}\selectfont\node[inner sep=0, outer sep=0, custcol_75_75_75, anchor=base west] at  (315.0,76.0)  {PR};}
-\logisimfontD{\fontsize{14pt}{14pt}\fontseries{bx}\selectfont\node[inner sep=0, outer sep=0, custcol_75_75_75, anchor=base west] at  (351.0,76.0)  {CLR};}
-\logisimfontD{\fontsize{14pt}{14pt}\fontseries{bx}\selectfont\node[inner sep=0, outer sep=0, custcol_0_0_0, anchor=base west] at  (303.0,113.0)  {D};}
+\logisimfontD{\fontsize{14pt}{14pt}\fontseries{m}\selectfont\node[inner sep=0, outer sep=0, custcol_0_0_0, anchor=base west] at  (375.0,113.0)  {Q};}
+\logisimfontD{\fontsize{14pt}{14pt}\fontseries{m}\selectfont\node[inner sep=0, outer sep=0, custcol_75_75_75, anchor=base west] at  (315.0,76.0)  {PR};}
+\logisimfontD{\fontsize{14pt}{14pt}\fontseries{m}\selectfont\node[inner sep=0, outer sep=0, custcol_75_75_75, anchor=base west] at  (351.0,76.0)  {CLR};}
+\logisimfontD{\fontsize{14pt}{14pt}\fontseries{m}\selectfont\node[inner sep=0, outer sep=0, custcol_0_0_0, anchor=base west] at  (303.0,113.0)  {D};}
 \fill [line width=1.0pt, custcol_0_0_0]  (295.0,108.0) ellipse (2.0 and 2.0 );
 \fill [line width=1.0pt, custcol_0_0_0]  (325.0,58.0) ellipse (2.0 and 2.0 );
 \fill [line width=1.0pt, custcol_0_0_0]  (345.0,158.0) ellipse (2.0 and 2.0 );
@@ -285,10 +285,10 @@
 \fill [line width=5.0pt, custcol_0_0_0]  (565.0,118.0) ellipse (2.0 and 2.0 );
 \fill [line width=5.0pt, custcol_0_0_0]  (565.0,128.0) ellipse (2.0 and 2.0 );
 \fill [line width=5.0pt, custcol_0_0_0]  (565.0,138.0) ellipse (2.0 and 2.0 );
-\logisimfontB{\fontsize{12pt}{12pt}\fontseries{bx}\selectfont\node[inner sep=0, outer sep=0, custcol_0_0_0, anchor=base west] at  (334.0,564.0)  {CLK};}
+\logisimfontB{\fontsize{10pt}{10pt}\fontseries{m}\selectfont\node[inner sep=0, outer sep=0, custcol_0_0_0, anchor=base west] at  (334.0,564.0)  {CLK};}
 \draw [line width=2.0pt, custcol_0_0_0 ]  (331.0,552.0) -- (335.0,552.0) -- (345.0,548.0) -- (355.0,552.0) -- (359.0,552.0) -- (359.0,571.0) -- (331.0,571.0) -- cycle;
 \fill [line width=2.0pt, custcol_0_0_0]  (345.0,548.0) ellipse (2.0 and 2.0 );
-\logisimfontB{\fontsize{12pt}{12pt}\fontseries{bx}\selectfont\node[inner sep=0, outer sep=0, custcol_0_0_0, anchor=base west] at  (355.0,219.0)  {RST};}
+\logisimfontB{\fontsize{10pt}{10pt}\fontseries{m}\selectfont\node[inner sep=0, outer sep=0, custcol_0_0_0, anchor=base west] at  (355.0,219.0)  {RST};}
 \draw [line width=2.0pt, custcol_0_0_0 ]  (351.0,205.0) -- (379.0,205.0) -- (379.0,225.0) -- (375.0,225.0) -- (365.0,229.0) -- (355.0,225.0) -- (351.0,225.0) -- cycle;
 \fill [line width=2.0pt, custcol_0_0_0]  (365.0,228.0) ellipse (2.0 and 2.0 );
 \end{tikzpicture}

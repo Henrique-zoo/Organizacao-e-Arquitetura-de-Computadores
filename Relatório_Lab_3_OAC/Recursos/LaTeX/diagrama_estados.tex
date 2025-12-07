@@ -140,8 +140,16 @@ RegWrite, Mem2Reg = 10
 \draw[arrow,rounded corners=6pt,shorten >=1pt,shorten <=1pt] 
     ($(ImmSum.south east) + (-5mm,0)$)
     to[out=-80,in=170,looseness=1.0] ($(MemRead.north east)+(6mm, 5mm)$)
-    to[out=-5,in=160,looseness=1.0] node[pos=0.3, above, sloped] {\scriptsize 0010011} ($(MemWrite.north east)+(2mm, 2mm)$)
+    to[out=-5,in=170,looseness=1.0] node[pos=0.1, below, sloped] {\scriptsize 0010011} ($(MemWrite.north east)+(2mm, 0.5mm)$)
     -- ($(WB_ALU.west)+(0,3mm)$);
+
+% ImmSum -> Jal
+\draw[arrow,rounded corners=6pt,shorten >=1pt,shorten <=1pt] 
+    ($(ImmSum.east) + (0,-5mm)$)
+    to ($(RegOp.south west)+(-2mm, -3mm)$)
+    to ($(WB_ALU.north west)+(-5mm, 7mm)$)
+    to node[pos=0.7, below, sloped] {\scriptsize 1100111} ($(BrCheck.south east)+(2mm, -2mm)$)
+    -- ($(Jal.south west)+(0,3mm)$);
 
 % MemRead -> WBMem -> Fetch
 \draw[arrow] (MemRead.south) to[out=-90,in=90] node[midway, above, sloped] {\scriptsize 1} (WBMem.north);

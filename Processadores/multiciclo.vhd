@@ -3,7 +3,7 @@ use IEEE.std_logic_1164.all;
 use IEEE.numeric_std.all;
 use work.riscv_pkg.all;
 
-entity multiciclo is
+entity Multiciclo is
     port (
         clockCPU:   in  std_logic;
         clockMem:   in  std_logic;
@@ -12,11 +12,11 @@ entity multiciclo is
         PC:         out std_logic_vector(31 downto 0);
         instr:      out std_logic_vector(31 downto 0);
         regout:     out std_logic_vector(31 downto 0);
-		state:      out std_logic_vector(3 downto 0)
+        state:      out std_logic_vector(3 downto 0)
     );
-end multiciclo;
+end Multiciclo;
 
-architecture structural of multiciclo is
+architecture structural of Multiciclo is
     -- Sinais internos
     signal wIorD:             std_logic_vector(31 downto 0);
     signal PCout:             std_logic_vector(31 downto 0);
@@ -116,19 +116,19 @@ begin
             regOut      => data_register_out
         );
 
-    Register_Bank: entity work.xreg
+    Register_Bank: entity work.Registers
         port map (
-            iCLK    => clockCPU,
-            iRST    => reset,
-            iWREN   => regWrite,
-            iRS1    => instr_i(19 downto 15),
-            iRS2    => instr_i(24 downto 20),
-            iRD     => instr_i(11 downto 7),
-            iDATA   => mux4x1_1_out,
-            oREGA   => RegA,
-            oREGB   => RegB,
-            iDISP   => regin,
-            oREGD   => regout_i
+            clock    	=> clockCPU,
+            reset    	=> reset,
+            write_en		=> regWrite,
+            RS1			=> instr_i(19 downto 15),
+            RS2			=> instr_i(24 downto 20),
+            RD				=> instr_i(11 downto 7),
+				disp_select => regin,
+            data			=> mux4x1_1_out,
+            read_data_A => RegA,
+            read_data_B => RegB,
+            read_disp	=> regout_i
         );
     
     Mux4x1_1: entity work.Mux4x1
@@ -141,7 +141,7 @@ begin
             Y => mux4x1_1_out
         );
 
-    Immediate_Generator: entity work.GenImm
+    Immediate_Generator: entity work.ImmGen
         port map (
             instr => instr_i,
             imm32 => immediate

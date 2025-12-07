@@ -3,14 +3,14 @@ use IEEE.std_logic_1164.all;
 use IEEE.numeric_std.all;
 use work.riscv_pkg.all;
 
-entity GenImm is
+entity ImmGen is
     port (
         instr : in  std_logic_vector(31 downto 0);
         imm32 : out std_logic_vector(31 downto 0)
     );
-end entity GenImm;
+end entity ImmGen;
 
-architecture behavioral of GenImm is
+architecture behavioral of ImmGen is
     alias opcode: std_logic_vector(6 downto 0) is instr(6 downto 0);
 begin
     with opcode select

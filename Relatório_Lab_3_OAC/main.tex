@@ -3,7 +3,6 @@
 \usepackage[table]{xcolor} % Para colorir as linhas da tabela
 %\usepackage{array} % Para melhorar a formatação de tabelas
 \usepackage[brazil]{babel}
-\usepackage[utf8]{inputenc}
 \usepackage{diagbox}
 \usepackage{amsmath}
 \usepackage{amssymb}
@@ -167,7 +166,7 @@
 \section{Introdução}
 O presente experimento tem como objetivo introduzir os alunos ao processo de projeto e implementação de sistemas digitais utilizando VHDL como Linguagem de Descrição de Hardware (HDL). A atividade busca promover o treinamento prático em modelagem, análise e síntese de circuitos digitais, utilizando o ambiente de desenvolvimento \textbf{Intel Quartus Prime v24.1} como ferramenta principal.
 
-Como aplicação prática, propõe-se a implementação de um processador Multiciclo compatível com a ISA RV32I reduzida, contendo as instruções:\cod{add}, \cod{sub}, \cod{and}, \cod{or}, \cod{slt}, \cod{lw}, \cod{sw}, \cod{beq}, \cod{jal}, \cod{jalr}, \cod{addi} e \cod{lui}.
+Como aplicação prática, propõe-se a implementação de um processador Multiciclo compatível com a ISA RV32I reduzida, contendo as instruções:\cod{add}, \cod{sub}, \cod{and}, \cod{or}, \cod{slt}, \cod{lw}, \cod{sw}, \cod{beq}, \cod{jal}, \cod{jalr}, \cod{addi} e \cod{lui}. Essa abordagem permite compreender o funcionamento interno de um processador Multiciclo, ou seja, a unidade de controle, o caminho de dados e o fluxo de instruções aplicados na divisão de instruções em etapas.
 
 A implementação será validada por meio de simulação funcional e temporal, com análise de \textit{timing} e frequência máxima de operação, permitindo compreender, de forma integrada, o funcionamento de uma arquitetura RISC-V.
 
@@ -179,7 +178,6 @@ A implementação será validada por meio de simulação funcional e temporal, c
 Implemente o processador Multiciclo com ISA Reduzida com as instruções: \cod{add}, \cod{sub}, \cod{and}, \cod{or}, \cod{slt}, \cod{lw},
 \cod{sw}, \cod{beq}, \cod{jal}, e ainda as instruções \cod{jalr}, \cod{addi} e \cod{lui}.
 \end{tcolorbox}
-Para realizar o solicitado, é-nos fornecido o esquemático de uma implementação do Multiciclo com ISA reduzida. Nesse esquemático, porém, foi necessário realizar alterações no caminho de dados, que serão devidamente justificadas adiante.
 
 \begin{figure}[H]
     \centering
@@ -188,33 +186,50 @@ Para realizar o solicitado, é-nos fornecido o esquemático de uma implementaç�
     \caption{Esquemático do Multiciclo com ISA reduzida}
     \vspace{-5pt}
 \end{figure}
-
-\noindent Em que os túneis representam entradas e saídas do módulo de controle do processador, que foi abstraído na figura acima e será devidamente explicado na seção adequada.
-
-%\begin{figure}[H]
-%    \centering
-%    %\includegraphics{Recursos/Imagens/CONTROL.png}
-%    \caption{Módulo de controle do Multiciclo %com ISA reduzida}
-%\end{figure}
+Para realizar o solicitado, é-nos fornecido o esquemático de uma implementação do Multiciclo com ISA reduzida. Nesse esquemático, porém, foi necessário realizar alterações no caminho de dados, que serão devidamente justificadas adiante. Em que os túneis representam entradas e saídas do módulo de controle do processador, que foi abstraído na figura acima e será devidamente explicado na seção adequada.
 
 \subsubsection{Tarefa I}
 \begin{tcolorbox}[title=Enunciado, colback=blue!5!white, colframe=blue!75!black]
 
+Na Arquitetura Von Neumann, dados e programas na mesma memória, implica que a memória de código deve ser gravável do mesmo modo que a memória de dados. Logo basta colocar o controle igual das duas memórias, apenas selecionando, pelo endereço, qual dos dois blocos deve ser utilizado. Explique como isso foi feito no seu processador. 
 \end{tcolorbox}
 
+Como utilizamos a mesma memória do Uniciclo, dividida em \cod{ramI}, de instruções e \cod{ramD}, de dados, de fato, ainda há separação entre dados e memória. A estratégia para unificar a memória foi criar uma entidade \cod{unifiedMemory}, que cria uma abstração de Arquitetura Von Neumann para o resto do sistema - o processador só vê um bloco de memória, que tem como entradas um endereço, um dado, o \textit{clock} e duas entradas de controle: \cod{memWrite} e \cod{memRead}.
+
+Dentro dessa unidade, então, verifica-se se o objetivo é acessar instruções ou dados por meio do bit 28 do endereço. Esse mesmo bit é utilizado para, por meio de operações \cod{and} envolvendo ele e os sinais de controle, decidir qual memória de fato é acessada e, via atribuição condicional, decidir se a saída da memória unificada será a da memória de dados ou de instruções. 
 
 \subsubsection{Tarefa II}
 \begin{tcolorbox}[title=Enunciado, colback=blue!5!white, colframe=blue!75!black]
 
-
+O bloco de memória IP utilizado pelo Quartus necessita 2 ciclos de clock para acesso. Explique que alterações podemos fazer no Diagrama de Estados de modo a otimizar esse acesso. 
 \end{tcolorbox}
+
+Para o acesso ao bloco de memória, são necessários dois ciclos de clock. Sabendo que o acesso se refere tanto à leitura quanto à escrita, é possível realizar algumas mudanças no diagrama de estados do Bloco de Controle de forma a otimizar esse acesso.
+
+Anteriormente, no projeto do Processador Uniciclo, a resolução para o dado problema foi dividir o clock em dois: um clock exclusivamente para a memória e um outro clock para o resto da CPU. Seguindo essa ideia, o clock da memória, ao ser configurado para ter uma frequência duas vezes maior que a frequência do processador, foi capaz de suprir a sua necessidade por dois ciclos sem interferir no funcionamento da CPU.
+
+Agora, no projeto do Processador Multiciclo, não é mais necessário dividir o clock em dois. Isso porque iremos otimizar o acesso à memória a partir do Bloco de Controle, especificamente, a partir do seu diagrama de estados. Para realizarmos essa otimização, primeiro, é necessário identificar quais são os estados que realizam o acesso à memória. Como esse acesso é caracterizado tanto pela escrita quanto pela leitura, basta observar quais estados ligam qualquer um dos sinais \cod{memRead} ou \cod{memWrite}. Assim, foram identificados os seguintes estados:
+
+\begin{itemize}
+    \item Fetch: É o estado inicial do diagrama, ou seja, o primeiro a ser executado. Esse estado liga o sinal \cod{readMem} para que a próxima instrução seja lida pelo bloco de memória;
+    \item MemRead: É o estado caracterizado por ser a quarta etapa de uma instrução ``load''. Esse estado liga o sinal \cod{LeMem} para que o bloco de memória leia o dado escolhido para que esse dado seja escrito em um registrador no próximo estado;
+    \item MemWrite: É o estado caracterizado por ser a quarta e última etapa de uma instrução ``store''. Esse estado liga o sinal \cod{memWirte} para que o bloco de memória sobrescreva o dado escolhido.
+\end{itemize}
+
+Identificados os estados, podemos implementar a seguinte otimização: criar novos estados iguais a esses (ou seja, com as mesmas saídas), posicionando estes imediatamente antes daqueles no diagrama de estados. Assim, segue um exemplo: o diagrama de estados terá, como o estado inicial, a ``cópia'' do Fetch (que ativa os mesmos sinais que o Fetch ``original'', incluindo o sinal \cod{memRead}) e, quando chegar a batida do clock, o novo estado será o próprio Fetch ``original''.
+
+Dessa forma, estaremos garantindo que os estados que acessam a memória utilizem dois ciclos, sem, ao contrário do uniciclo, que seja necessário retardar o tempo de clock do CPU para que ele seja corresponde ao de dois clocks de memória. Destarte, poder-se-á utilizar a maior frequência de clock possível.
+
+Apesar dessa ser uma otimização relevante, ela não foi realizada por este grupo, pois, quando percebemos essa possibilidade, o projeto do controle já estava demasiado avançado, de forma que não era viável reiniciá-lo considerando os novos fatos.
+
+\newpage
 
 \subsubsection{Tarefa III}
 \begin{tcolorbox}[title=Enunciado, colback=blue!5!white, colframe=blue!75!black]
 
 Implemente o Bloco Controlador e desenhe a máquina de estados do controle. 
 \end{tcolorbox}
-Como o enunciado adianta, o bloco de controle do multiciclo é implementado via máquina de estado. Particularmente, utilizamos uma máquina de estados finita do tipo Moore (isto é, em que a saída depende exclusivamente do estado atual, não das entradas). Para projetar uma máquina de estados, primeiro precisamos do seu diagrama de estados; o diagrama de estados completo do bloco de controle do multiciclo com ISA reduzida, considerando as doze instruções solicitadas, é mostrado na \autoref{fig:diag_estados}.
+Como o enunciado adianta, o bloco de controle do Multiciclo é implementado via máquina de estado. Particularmente, utilizamos uma máquina de estados finita do tipo Moore (isto é, em que a saída depende exclusivamente do estado atual, não das entradas). Para projetar uma máquina de estados, primeiro precisamos do seu diagrama de estados; o diagrama de estados completo do bloco de controle do Multiciclo com ISA reduzida, considerando as doze instruções solicitadas, é mostrado na \autoref{fig:diag_estados}.
 
 \begin{figure}[H]
     \centering
@@ -285,7 +300,7 @@ A partir desse diagrama, conseguimos montar as tabelas \hyperref[tab:saidas]{(1)
 \end{table}
 
 Com base nesta tabela, utilizamos Mapas de Karnaugh para minimizar, na forma de soma de produtos, as expressões para as saídas. Os resultados obtidos estão exibidos a seguir, em que $Q_i$ representa o $i$-ésimo bit do estado atual.
-{\footnotesize
+{\small
 \begin{align*}
     &PCsrc =
         \overline{Q_3}\,Q_2
@@ -345,9 +360,12 @@ Com base nesta tabela, utilizamos Mapas de Karnaugh para minimizar, na forma de 
 \begin{figure}[H]
     \centering
     \include{Recursos/LaTeX/outLogic}
-    \vspace{-20pt}
+    \vspace{-25pt}
     \caption{Esquemático da lógica de saída do controle}
+    \vspace{-10pt}
 \end{figure}
+
+O circuito acima foi separado, tanto neste relatório (nos esquemáticos) quanto no projeto em VHDL em uma entidade própria, chamada \cod{OutLogic}. Ela será instanciada, assim como a lógica de próximo estado, que será explicada adiante, no bloco de controle como um componente com entrada \cod{currentState} e as saídas representadas acima.
 
 \begin{table}[H]
     \centering
@@ -400,7 +418,7 @@ Com base nesta tabela, utilizamos Mapas de Karnaugh para minimizar, na forma de 
 
 A abordagem para implementar a lógica de próximo estado é um pouco diferente; não minimizaremos equações nem nada do tipo. Na verdade, tendo definido que um registrador de deslocamento será utilizado como elemento de memória, montamos outra tabela a partir da \autoref{tab:tran_estados}; uma em que, ao invés do próximo estado, representamos, em cada célula, a operação que o registrador precisa fazer para chegar àquele estado.
 
-O Registrador de Deslocamento é capaz de fazer quatro operações: \textit{shift left(L)}, \textit{shift left(R)}, \textit{load(D)} e \textit{reset}, em que a variável entre parenteses representa o argumento necessário para aquela operação (L: o bit que entra a esquerda no \textit{shift left}, R: o bit que entra a direita \textit{shift left}, D: o vetor de quatro bits que substitui o estado atual no \textit{load}). O \textit{reset} não foi utilizado nesse projeto, ao invés dele, é utilizado o \textit{load(0000)}.
+O Registrador de Deslocamento é capaz de fazer cinco operações: \textit{shift left(L)}, \textit{shift left(R)}, \textit{load(D)}, \textit{hold} e \textit{reset}, em que a variável entre parenteses representa o argumento necessário para aquela operação (L: o bit que entra a esquerda no \textit{shift left}, R: o bit que entra a direita \textit{shift left}, D: o vetor de quatro bits que substitui o estado atual no \textit{load}). O \textit{hold} e o \textit{reset} não foram utilizados nesse projeto.
 
 \begin{figure}[H]
     \centering
@@ -461,55 +479,85 @@ O Registrador de Deslocamento é capaz de fazer quatro operações: \textit{shif
 
 \noindent Note que os estados foram escolhidos \textit{a priori} de forma a minimizar os `LOAD's necessários - claro que não há garantia de que essa minimização foi ótima, ela foi feita por inspeção.
 
-Agora, basta utilizar um multiplexador de tamanho adequado para selecionar as entradas corretas para o registrador de deslocamento em cada caso, isto é, os valores de \cod{OP} (\cod{S}, na \autoref{fig:shiftRegister}), \cod{L}, \cod{R} e \cod{D} - o trem de bits que entra nos multiplexadores foi montado nessa ordem.
+Agora, basta utilizar um multiplexador de tamanho adequado para selecionar as entradas corretas para o registrador de deslocamento em cada caso, isto é, os valores de \cod{OP} (\cod{S}, na \autoref{fig:shiftRegister}), \cod{L}, \cod{R} e \cod{D} (que dependem, claro, da operação realizada) - o trem de bits que entra nos multiplexadores foi montado nessa ordem. Dessa forma, o circuito a seguir foi montado; chamamos ele de \textit{Next State Logic}, mas, de fato, ele implementa a lógica da entrada do Registrador de Deslocamento, não do próximo estado \textit{per se}.
 
-\subsection{Tarefa IV}
+\begin{figure}[H]
+    \centering
+    \include{Recursos/LaTeX/next_state_logic}
+    \vspace{-30pt}
+    \caption{Lógica do próximo estado}
+\end{figure}
+
+Finalmente, o bloco de controle, internamente, ficou como na \autoref{fig:control}: abstrai-se as lógicas de próximo estado e de saída, que foram explicadas acima, conecta-se às entradas do Registrador de Deslocamento as saídas daquele e à saída, as entradas deste.
+
+\begin{figure}[H]
+    \include{Recursos/LaTeX/control}
+    \vspace{-20pt}
+    \caption{Bloco de Controle do multiciclo}
+    \label{fig:control}
+\end{figure}
+
+\subsubsection{Tarefa IV}
 \begin{tcolorbox}[title=Enunciado, colback=blue!5!white, colframe=blue!75!black]
-
-
+Implemente o Processador Multiciclo completo.
+\begin{enumerate}[label=(\alph*)]
+    \item  Visualize os blocos funcionais com o netlist RTL view.
+    \item Levante os requisitos físicos e temporais do seu processador.
+    \item  Faça a simulação por forma de onda funcional e temporal com o programa \cod{de1.s}, mostrando o funcionamento correto da CPU. 
+    \item  Qual a máxima frequência de clock utilizável na sua CPU? Verifique experimentalmente mudando a frequência de CLOCK e apresentando a simulação temporal por forma de onda. 
+\end{enumerate}
 \end{tcolorbox}
 
+\paragraph{(a)}
+No que tange a visualização com o netlist RTL view, de maneira semelhante ao que foi apresentado no Laboratório 2, inicialmente se destaca o maior nível hierárquico do projeto, o qual consiste de uma entrada CLOCK que, com auxílio de um flip-flop tipo D, permite ser dividido para valores diferentes para a memória e processador. Além das entradas \cod{reset} e \cod{regin}, que descrevem respectivamente a entrada para reiniciar os registradores do sistema e a entrada que descreve os valores utilizados em \cod{t0}.
 
-\subsubsection{Tarefa V}
-\begin{tcolorbox}[title=Enunciado, colback=blue!5!white, colframe=blue!75!black]
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=0.7\textwidth]{Recursos/Imagens/netlist_topDE.jpg}
+    \vspace{-5pt}
+    \caption{Netlist do TopDE}
+    \vspace{-15pt}
+\end{figure}
+
+Além disso, ao visualizar a estrutura interna do processador Multiciclo, é perceptível os diferentes módulos instanciados, sobretudo os bancos de registradores, o bloco controlador, a ULA, os diferentes multiplexadores, entre outros.
+
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=0.85\textwidth]{Recursos/Imagens/netlist_multiciclo.jpg}
+    \vspace{-5pt}
+    \caption{Netlist do Multiciclo}
+\end{figure}
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=0.5\textwidth]{Recursos/Imagens/netlist_controle.jpg}
+    \caption{Netlist do bloco de controle}
+\end{figure}
+
+\paragraph{(b)}
+Para os requisitos físicos, de maneira sucinta, foram utilizados 3291 elementos lógicos, 1253 registradores, 108 pinos, além de 65536 bits de memória. Destacando que, como não foi necessário utilizar multiplexadores mais complexos.
+Já para os requisitos temporais foi avaliado que os slacks de setup e hold são cumpridos, respectivamente possuindo 6,69 ns e 2,715 ns. Já a frequência máxima de operação obtida, utilizando a forma que obtêm essa resposta de maneira mais robusta, foi referente à 302,11 MHz.
+
+\paragraph{(c)}
+As simulações, utilizando o ModelSim, sob a frequência de clock de 50 MHz (20 ns de período):
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=0.95\textwidth]{Recursos/Imagens/waveform_1.jpg}
+    \caption{Forma de onda da simulação funcional}
+\end{figure}
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=0.96\textwidth]{Recursos/Imagens/waveform_2.jpg}
+    \caption{Forma de onda da simulação temporal}
+\end{figure}
+
+\paragraph{(d)}
+Assim como foi obtido anteriormente, a frequência máxima de operação do processador é de 302,11 MHz, verificando-se: 
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=1\textwidth]{Recursos/Imagens/waveform_3.jpg}
+    \caption{Forma de onda da simulação temporal}
+\end{figure}
 
 
-\end{tcolorbox}
-
-
-\subsubsection{Tarefa VI}
-\begin{tcolorbox}[title=Enunciado, colback=blue!5!white, colframe=blue!75!black]
-
-
-\end{tcolorbox}
-
-
-\subsection{Tarefa VII}
-\begin{tcolorbox}[title=Enunciado, colback=blue!5!white, colframe=blue!75!black]
-
-
-\end{tcolorbox}
-
-\begin{tcolorbox}[title=Enunciado, colback=blue!5!white, colframe=blue!75!black]
-
-
-\end{tcolorbox}
-
-
-\begin{tcolorbox}[title=Enunciado, colback=blue!5!white, colframe=blue!75!black]
-
-
-\end{tcolorbox}
-
-
-\begin{tcolorbox}[title=Enunciado, colback=blue!5!white, colframe=blue!75!black]
-
-\end{tcolorbox}
-
-
-
-\begin{tcolorbox}[title=Enunciado, colback=blue!5!white, colframe=blue!75!black]
-
-
-\end{tcolorbox}
+Todos os códigos desenvolvidos para a realização desse laboratório foram enviados compactados em um arquivo \cod{.zip}. Para acessar o vídeo solicitado, \href{https://www.youtube.com/watch?v=x1JfjiayK7M}{clique aqui}.
 \end{document}

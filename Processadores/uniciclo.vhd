@@ -3,15 +3,15 @@ use IEEE.std_logic_1164.all;
 use IEEE.numeric_std.all;
 use work.riscv_pkg.all;
 
-entity uniciclo is
+entity Uniciclo is
     port (
         clockCPU, clockMem, reset:  in  std_logic;
         regin:                      in  std_logic_vector(4 downto 0);
         PC, instr, regout:          out std_logic_vector(31 downto 0)
     );
-end uniciclo;
+end Uniciclo;
 
-architecture structural of uniciclo is
+architecture structural of Uniciclo is
 	-- Sinais internos
 	signal  	PC_i:       	std_logic_vector(31 downto 0) := x"00400000";
 	signal  	instr_i:    	std_logic_vector(31 downto 0) := (others => '0');
@@ -19,8 +19,8 @@ architecture structural of uniciclo is
 	signal  	ALUOut, MemData, RegA, RegB, imm_i, RegB_ALU, WriteBackData, PC_plus4, PC_plusImm, PC_next:	std_logic_vector(31 downto 0);
 	signal  	mem2Reg, memRead, branch, jump, memWrite, ALUSrc, regWrite, zeroALU:    std_logic;
 	signal  	ALUOp:      	std_logic_vector(1 downto 0);
-	signal 	    alu_ctrl:  		std_logic_vector(3 downto 0);
-	signal      iRS1:			std_logic_vector(4 downto 0);
+	signal 	alu_ctrl:  		std_logic_vector(3 downto 0);
+	signal   iRS1:			std_logic_vector(4 downto 0);
 	alias   	opcode:     	std_logic_vector(6 downto 0) is instr_i(6 downto 0);
 begin
     PC      <= PC_i;
@@ -50,26 +50,26 @@ begin
         );
     
     -- Geração do imediato
-    gen_imm: entity work.GenImm(behavioral)
+    gen_imm: entity work.ImmGen
         port map (
             instr => instr_i,
             imm32 => imm_i
         );
 
     -- Banco de registradores
-    reg_bank: entity work.xreg(rtl)
+    reg_bank: entity work.Registers
         port map (
-            iCLK    => clockCPU,
-            iRST    => reset,
-            iWREN   => regWrite,
-            iRS1    => iRS1,
-            iRS2    => instr_i(24 downto 20),
-            iRD     => instr_i(11 downto 7),
-            iDATA   => WriteBackData,
-            oREGA   => RegA,
-            oREGB   => RegB,
-            iDISP   => regin,
-            oREGD   => regout_i
+				clock    	=> clockCPU,
+            reset    	=> reset,
+            write_en		=> regWrite,
+            RS1			=> iRS1,
+            RS2			=> instr_i(24 downto 20),
+            RD				=> instr_i(11 downto 7),
+				disp_select => regin,
+            data			=> WriteBackData,
+            read_data_A => RegA,
+            read_data_B => RegB,
+            read_disp	=> regout_i
         );
 
     -- Unidade de controle principal (decodificação de opcode)

@@ -5,13 +5,14 @@ use work.riscv_pkg.all;
 
 entity TopDE is
     port (
-        CLOCK, reset: in  std_logic;
-        regin:		  in  std_logic_vector(4 downto 0);
-		  ClockDIV:	  out std_logic;
-        PC:			  out std_logic_vector(31 downto 0);
-        instr:		  out std_logic_vector(31 downto 0);
-        regout:		  out std_logic_vector(31 downto 0);
-        state:    	  out std_logic_vector(3 downto 0)
+        CLOCK:      in  std_logic;
+        reset:      in  std_logic;
+        regin:      in  std_logic_vector(4 downto 0);
+        ClockDIV:   out std_logic;
+        PC:         out std_logic_vector(31 downto 0);
+        instr:      out std_logic_vector(31 downto 0);
+        regout:     out std_logic_vector(31 downto 0);
+        state:      out std_logic_vector(3 downto 0)
     );
 end entity TopDE;
 
@@ -40,7 +41,7 @@ begin
     --    );
     
     -- Instantiation of Multiciclo (explicit entity instantiation)
-    MULT1: entity work.multiciclo
+    MULT1: entity work.Multiciclo
         port map (
             clockCPU => ClockDIV_i,
             clockMem => CLOCK,
@@ -49,7 +50,7 @@ begin
             PC       => PC,
             instr    => instr,
             regout   => regout,
-			state	 => state
+            state		=> state
         );
 		  
 		 
