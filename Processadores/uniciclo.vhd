@@ -59,13 +59,13 @@ begin
     -- Banco de registradores
     reg_bank: entity work.Registers
         port map (
-				clock    	=> clockCPU,
+			clock    	=> clockCPU,
             reset    	=> reset,
             write_en		=> regWrite,
             RS1			=> iRS1,
             RS2			=> instr_i(24 downto 20),
             RD				=> instr_i(11 downto 7),
-				disp_select => regin,
+			disp_select => regin,
             data			=> WriteBackData,
             read_data_A => RegA,
             read_data_B => RegB,

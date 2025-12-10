@@ -1,0 +1,209 @@
+\documentclass[a4paper,12pt]{article}
+\usepackage{float}
+\usepackage[table]{xcolor} % Para colorir as linhas da tabela
+%\usepackage{array} % Para melhorar a formatação de tabelas
+\usepackage[brazil]{babel}
+\usepackage{diagbox}
+\usepackage{amsmath}
+\usepackage{amssymb}
+\usepackage{multirow}
+\usepackage{multicol}
+\usepackage{graphicx}
+%\usepackage{animate}
+%\usepackage{tabularx}
+\usepackage[font=footnotesize, labelfont=bf, listformat=empty]{caption}
+\usepackage{geometry}
+\usepackage{listings}
+\usepackage{fontspec}
+\usepackage{minted}
+\usepackage{lastpage}
+%\usepackage{subcaption}
+\usepackage[skins,xparse,breakable]{tcolorbox}
+%\usepackage{longtable}
+\usepackage{titlesec}
+\usepackage{fancyhdr}
+\usepackage{ragged2e}
+\usepackage{setspace}
+\usepackage{booktabs}
+\usepackage{enumitem}
+\usepackage{minted}
+\usepackage[colorlinks=true, allcolors=black]{hyperref}
+\usepackage{tikz}
+
+\usetikzlibrary{karnaugh}
+\usetikzlibrary{positioning,arrows.meta,shapes.multipart,calc}
+
+%\usetikzlibrary{arrows,shapes,automata,positioning,calc}
+% Configurações de margens e espaçamento
+\geometry{a4paper, left=2.5cm, right=2.5cm, top=2.5cm, bottom=2cm}
+\onehalfspacing
+
+% Configurações de títulos
+\titleformat{\section}{\normalfont\Large\bfseries}{\thesection}{1em}{}
+\titleformat{\subsection}{\normalfont\large\bfseries}{\thesubsection}{1em}{}
+\titleformat{\subsubsection}
+  {\normalfont\large}
+  {\textbf{\thesubsubsection}}
+  {0.25em}{}
+
+\setcounter{tocdepth}{3}
+\newcommand{\cod}[1]{\texttt{#1}}
+
+\renewcommand{\listingscaption}{Código}
+\newenvironment{code}{\captionsetup{type=listing}}{}
+
+% Configurações de cores
+\definecolor{LightSeaGreen}{rgb}{0.1255, 0.6980, 0.6667}
+\definecolor{whitesmoke}{rgb}{0.96, 0.96, 0.96}
+\definecolor{cinza}{RGB}{160, 160, 160}
+\definecolor{cinza_claro}{RGB}{240, 240, 240} % Cinza claro
+
+\newtcolorbox{codebox}[1]{
+    title=#1,
+    fonttitle=\small\bfseries,
+    colback=blue!2.5!white,
+    colframe=blue!62!white,
+    arc=2pt,
+    boxrule=0.8pt,
+    left=4pt,
+    right=4pt,
+    top=4pt,
+    bottom=4pt,
+    breakable,
+    enhanced jigsaw
+}
+
+\setminted[asm]{
+    fontsize=\scriptsize,
+    style=manni,
+    linenos=true,
+    breaklines=true,
+    mathescape=true,
+    bgcolor=cinza_claro,
+    breakanywhere=true,
+}
+
+\newcommand{\hex}[1]{\textcolor{green!50!black}{#1}}
+
+% Configurações de cabeçalho e rodapé
+\pagestyle{fancy}
+\fancyhf{}
+\fancyhead[L]{\footnotesize{Relatório do Laboratório 4}}
+\fancyhead[R]{\footnotesize{2025/2 - Turma 02}}
+\fancyfoot[R]{\footnotesize{Página \hspace{0.05cm} \thepage \hspace{0.05cm} de \pageref{LastPage}}}
+\fancyfoot[L]{\footnotesize{Organização e Arquitetura de Computadores - CIC0099}}
+
+% Adiciona uma linha preta acima do rodapé
+\renewcommand{\footrulewidth}{0.4pt} % Espessura da linha
+\renewcommand{\footrule}{\vbox to 0pt{\hrule width \textwidth height \footrulewidth \vss}} % Desenha a linha
+
+% Novo Comando para chamar a capa
+\newcommand{\capa}{
+    \begin{titlepage}
+        \begin{multicols}{2}
+            \begin{flushleft}
+                \includegraphics[width=0.45\linewidth]{Recursos/Imagens/UnB_logo.png}
+            \end{flushleft}
+            \columnbreak
+            \begin{flushright}
+                Universidade de Brasília \\
+                Instituto de Exatas \\
+                Departamento de Ciência da Computação
+            \end{flushright}
+        \end{multicols}
+        \begin{center}
+        \vspace{-20pt}
+        \rule{\textwidth}{0.4pt}
+        \end{center}
+        \vspace{0.6cm}
+        \begin{center}
+            {\Huge \textbf{Relatório do Laboratório 4}} \\[0.5em]
+            {\Huge \textbf{Processador Pipeline}} \\ [0.5em]
+            {\large CIC0099 - Organização e Arquitetura de Computadores} \\[0.25em]
+            {\large Turma 02 - Prof. Dr. Ricardo Pezzuol Jacobi} \\
+            \vfill
+            {\Large \textbf{Grupo B4}} \\
+            \begin{table}[H]
+                \centering
+                \begin{tabular}{l r}
+                    Henrique Morcelles Salum & 232003008 \\
+                    Athos Calixto Muniz & 211068261 \\
+                    Gabriela Fernanda Rodrigues Costa & 180120859 \\
+                    Cauê Araújo Euzebio & 211028195 \\
+                    Lucas Silva Nóbrega & 180035096
+                \end{tabular}
+                \label{tab:placeholder}
+            \end{table}
+        \end{center}
+    \end{titlepage}
+}
+
+\begin{document}
+
+\capa
+
+% Sumário
+\newpage
+\tableofcontents
+\newpage
+
+\section{Introdução}
+O presente experimento tem como objetivo introduzir os alunos ao processo de projeto e implementação de sistemas digitais utilizando VHDL como Linguagem de Descrição de Hardware (HDL). A atividade busca promover o treinamento prático em modelagem, análise e síntese de circuitos digitais, utilizando o ambiente de desenvolvimento \textbf{Intel Quartus Prime v24.1} como ferramenta principal.
+
+Como aplicação prática, propõe-se a implementação de um processador Pipeline compatível com a ISA RV32I reduzida, contendo as instruções:\cod{add}, \cod{sub}, \cod{and}, \cod{or}, \cod{slt}, \cod{lw}, \cod{sw}, \cod{beq}, \cod{jal}, \cod{jalr}, \cod{addi} e \cod{lui}. Essa abordagem permite compreender o funcionamento interno de um processador Pipeline, ou seja, a unidade de controle, o caminho de dados e o fluxo de instruções aplicados na divisão de instruções em etapas.
+
+A implementação será validada por meio de simulação funcional e temporal, com análise de \textit{timing} e frequência máxima de operação, permitindo compreender, de forma integrada, o funcionamento de uma arquitetura RISC-V.
+
+
+\section{Métodos e Análise}
+
+\subsection{Experimento}
+\begin{tcolorbox}[title=Enunciado, colback=blue!5!white, colframe=blue!75!black]
+Implemente o processador Pipeline com ISA Reduzida com as instruções: \cod{add}, \cod{sub}, \cod{and}, \cod{or}, \cod{slt}, \cod{lw},
+\cod{sw}, \cod{beq}, \cod{jal}, e ainda as instruções \cod{jalr}, \cod{addi} e \cod{lui}.
+\end{tcolorbox}
+
+Para realizar o solicitado, é-nos fornecido o esquemático de uma implementação do Pipeline com ISA reduzida. Nesse esquemático, porém, foi necessário realizar alterações no caminho de dados, que serão devidamente justificadas adiante.
+
+\begin{figure}[H]
+    \centering
+    \include{Recursos/LaTeX/pipeline}
+    \vspace{-15pt}
+    \caption{Esquemático do Pipeline com ISA reduzida}
+    \vspace{-5pt}
+\end{figure}
+
+\subsubsection{Tarefa I}
+\begin{tcolorbox}[title=Enunciado, colback=blue!5!white, colframe=blue!75!black]
+
+
+\end{tcolorbox}
+
+
+\subsubsection{Tarefa II}
+\begin{tcolorbox}[title=Enunciado, colback=blue!5!white, colframe=blue!75!black]
+ 
+\end{tcolorbox}
+
+\subsubsection{Tarefa III}
+\begin{tcolorbox}[title=Enunciado, colback=blue!5!white, colframe=blue!75!black]
+
+\end{tcolorbox}
+
+
+\subsubsection{Tarefa IV}
+\begin{tcolorbox}[title=Enunciado, colback=blue!5!white, colframe=blue!75!black]
+Implemente o Processador Pipeline completo.
+\begin{enumerate}[label=(\alph*)]
+    \item  Visualize os blocos funcionais com o netlist RTL view.
+    \item Levante os requisitos físicos e temporais do seu processador.
+    \item  Faça a simulação por forma de onda funcional e temporal com o programa \cod{de1.s}, mostrando o funcionamento correto da CPU. 
+    \item  Qual a máxima frequência de clock utilizável na sua CPU? Verifique experimentalmente mudando a frequência de CLOCK e apresentando a simulação temporal por forma de onda. 
+\end{enumerate}
+
+\end{tcolorbox}
+
+
+
+Todos os códigos desenvolvidos para a realização desse laboratório foram enviados compactados em um arquivo \cod{.zip}. Para acessar o vídeo solicitado, \href{https://www.youtube.com/watch?v=x1JfjiayK7M}{clique aqui}.
+\end{document}
