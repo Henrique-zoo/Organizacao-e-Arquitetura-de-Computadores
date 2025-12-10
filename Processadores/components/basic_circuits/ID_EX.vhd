@@ -15,7 +15,7 @@ entity ID_EX is
         regA_in:    in 	std_logic_vector(31 downto 0);
         regB_in:    in 	std_logic_vector(31 downto 0);
         imm_in:     in 	std_logic_vector(31 downto 0);
-        funct_in:   in 	std_logic_vector(3 downto 0);
+        funct_in:   in 	std_logic_vector(9 downto 0);
         RD_in:      in 	std_logic_vector(4 downto 0);
         WB:         out std_logic_vector(1 downto 0);
         M:          out std_logic_vector(1 downto 0);
@@ -24,7 +24,7 @@ entity ID_EX is
         regA_out:   out std_logic_vector(31 downto 0);
         regB_out:   out std_logic_vector(31 downto 0);
         imm_out:    out std_logic_vector(31 downto 0);
-        funct_out:  out std_logic_vector(3 downto 0);
+        funct_out:  out std_logic_vector(9 downto 0);
         RD_out:     out std_logic_vector(4 downto 0)
     );
 end entity ID_EX;

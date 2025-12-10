@@ -42,7 +42,7 @@ architecture Behavioral of Pipeline is
     
     -- Sinais do estágio EX
     signal WB_EX:           std_logic_vector(1 downto 0);
-    signal M_EX:            std_logic_vector(2 downto 0);
+    signal M_EX:            std_logic_vector(1 downto 0);
     signal ALUsrc_EX:       std_logic;
     signal ALUop_EX:        std_logic_vector(1 downto 0);
     signal regA_EX:         std_logic_vector(31 downto 0);

@@ -170,3 +170,5 @@ Processadores/quartus/*.pin
 
 
 *.circ
+
+*.xdv
