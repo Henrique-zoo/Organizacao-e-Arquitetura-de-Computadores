@@ -7,6 +7,7 @@
 \usepackage{amsmath}
 \usepackage{amssymb}
 \usepackage{multirow}
+\usepackage{pdfpages}
 \usepackage{multicol}
 \usepackage{graphicx}
 %\usepackage{animate}
@@ -148,9 +149,9 @@
 \newpage
 
 \section{Introdução}
-O presente experimento tem como objetivo introduzir os alunos ao processo de projeto e implementação de sistemas digitais utilizando VHDL como Linguagem de Descrição de Hardware (HDL). A atividade busca promover o treinamento prático em modelagem, análise e síntese de circuitos digitais, utilizando o ambiente de desenvolvimento \textbf{Intel Quartus Prime v24.1} como ferramenta principal.
+O presente experimento tem como objetivo introduzir os alunos ao processo de projeto e implementação de sistemas digitais utilizando VHDL como Linguagem de Descrição de Hardware (HDL). O laboratório busca promover o treinamento prático em modelagem, análise e síntese de circuitos digitais, utilizando o ambiente de desenvolvimento \textbf{Intel Quartus Prime v24.1}.
 
-Como aplicação prática, propõe-se a implementação de um processador Pipeline compatível com a ISA RV32I reduzida, contendo as instruções:\cod{add}, \cod{sub}, \cod{and}, \cod{or}, \cod{slt}, \cod{lw}, \cod{sw}, \cod{beq}, \cod{jal}, \cod{jalr}, \cod{addi} e \cod{lui}. Essa abordagem permite compreender o funcionamento interno de um processador Pipeline, ou seja, a unidade de controle, o caminho de dados e o fluxo de instruções aplicados na divisão de instruções em etapas.
+Como aplicação prática, propõe-se a implementação de um processador Pipeline compatível com a ISA RV32I reduzida, contendo as instruções: \cod{add}, \cod{sub}, \cod{and}, \cod{or}, \cod{slt}, \cod{lw}, \cod{sw}, \cod{beq}, \cod{jal}, \cod{jalr}, \cod{addi} e \cod{lui}. Essa abordagem permite compreender o funcionamento interno de um processador Pipeline.
 
 A implementação será validada por meio de simulação funcional e temporal, com análise de \textit{timing} e frequência máxima de operação, permitindo compreender, de forma integrada, o funcionamento de uma arquitetura RISC-V.
 
@@ -159,8 +160,7 @@ A implementação será validada por meio de simulação funcional e temporal, c
 
 \subsection{Experimento}
 \begin{tcolorbox}[title=Enunciado, colback=blue!5!white, colframe=blue!75!black]
-Implemente o processador Pipeline com ISA Reduzida com as instruções: \cod{add}, \cod{sub}, \cod{and}, \cod{or}, \cod{slt}, \cod{lw},
-\cod{sw}, \cod{beq}, \cod{jal}, e ainda as instruções \cod{jalr}, \cod{addi} e \cod{lui}.
+Implemente o processador Pipeline com ISA Reduzida com as instruções: \cod{add}, \cod{sub}, \cod{and}, \cod{or}, \cod{slt}, \cod{lw}, \cod{sw}, \cod{beq}, \cod{jal}, e ainda as instruções \cod{jalr}, \cod{addi} e \cod{lui}.
 \end{tcolorbox}
 
 Para realizar o solicitado, é-nos fornecido o esquemático de uma implementação do Pipeline com ISA reduzida. Nesse esquemático, porém, foi necessário realizar alterações no caminho de dados, que serão devidamente justificadas adiante.
@@ -176,14 +176,39 @@ Para realizar o solicitado, é-nos fornecido o esquemático de uma implementaç�
 \subsubsection{Tarefa I}
 \begin{tcolorbox}[title=Enunciado, colback=blue!5!white, colframe=blue!75!black]
 
+    Ao caminho de dados do seu processador Uniciclo acrescente os registradores de pipeline.
 
 \end{tcolorbox}
+
+Acrescentamos os registradores de pipeline definindo-os separademente como entidades e instanciado-os no Pipeline. Dessa forma, foi possível separar mais claramente o papel de cada entrada e saída desses registradores. Essas entidades foram definidas no diretório \cod{/components/basic\_circuits/} com os nomes \cod{IF\_ID}, \cod{ID\_EX}, \cod{EX\_MEM}, \cod{MEM\_WB}, que indicam a etapa anterior e a próxima, respecivamente.
 
 
 \subsubsection{Tarefa II}
 \begin{tcolorbox}[title=Enunciado, colback=blue!5!white, colframe=blue!75!black]
- 
+    Implemente o Processador Pipeline completo com os registradores de pipeline.
+    \begin{enumerate}[label=(\alph*)]
+        \item Visualize o netlist RTL view.
+        \item Levante os requisitos físicos e temporais do seu processador.
+        \item Faça a simulação por forma de onda funcional e temporal com o programa de1.s, corrigindo todos os hazards no programa apenas com a inserção de bolhas (nop), mostrando o funcionamento correto da CPU. 
+        \item Qual a máxima frequência de clock utilizável na sua CPU? Verifique experimentalmente mudando a frequência CLOCK e apresentando a simulação temporal por forma de onda. 
+    \end{enumerate}
+
 \end{tcolorbox}
+
+\paragraph{(a)} O Quartus não é capaz de organizar o netlist de forma a otimizar o uso de epaço. No nosso caso, ele ficou organizado em uma orientação excessivamente horizontal, o que dificulta a visualização. De qualquer forma, está exibido, a seguir, o resultado obtido (note que é possível ampliar o quanto for necessário sem perder resolução).
+
+\begin{figure}[H]
+    \centering
+    \includegraphics[
+        trim=90mm 10mm 90mm 10mm,
+        clip,
+        angle=270,
+        width=1\textwidth
+    ]{Recursos/PDF/pipeline_rtl_view.pdf}
+    \caption{Netlist RTL view do processador pipeline}
+\end{figure}
+
+\paragraph{(b)}
 
 \subsubsection{Tarefa III}
 \begin{tcolorbox}[title=Enunciado, colback=blue!5!white, colframe=blue!75!black]
