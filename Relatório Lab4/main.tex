@@ -26,11 +26,16 @@
 \usepackage{ragged2e}
 \usepackage{setspace}
 \usepackage{booktabs}
+\usepackage{siunitx}
 \usepackage{enumitem}
 \usepackage{minted}
 \usepackage[colorlinks=true, allcolors=black]{hyperref}
 \usepackage{tikz}
 
+\sisetup{
+    output-decimal-marker = {,},
+    table-number-alignment = center
+}
 \usetikzlibrary{karnaugh}
 \usetikzlibrary{positioning,arrows.meta,shapes.multipart,calc}
 
@@ -180,7 +185,7 @@ Para realizar o solicitado, é-nos fornecido o esquemático de uma implementaç�
 
 \end{tcolorbox}
 
-Acrescentamos os registradores de pipeline definindo-os separademente como entidades e instanciado-os no Pipeline. Dessa forma, foi possível separar mais claramente o papel de cada entrada e saída desses registradores. Essas entidades foram definidas no diretório \cod{/components/basic\_circuits/} com os nomes \cod{IF\_ID}, \cod{ID\_EX}, \cod{EX\_MEM}, \cod{MEM\_WB}, que indicam a etapa anterior e a próxima, respecivamente.
+Acrescentamos os registradores de pipeline definindo-os separademente como entidades e instanciado-os no Pipeline. Dessa forma, foi possível separar mais claramente o papel de cada entrada e saída desses registradores. Essas entidades foram definidas no diretório \cod{/components/basic\_circuits/} com os nomes \cod{IF\_ID}, \cod{ID\_EX}, \cod{EX\_MEM}, \cod{MEM\_WB}, que indicam a etapa anterior e a próxima, respectivamente.
 
 
 \subsubsection{Tarefa II}
@@ -200,7 +205,7 @@ Acrescentamos os registradores de pipeline definindo-os separademente como entid
 \begin{figure}[H]
     \centering
     \includegraphics[
-        trim=90mm 10mm 90mm 10mm,
+        trim=90mm 11mm 90mm 11mm,
         clip,
         angle=270,
         width=1\textwidth
@@ -208,26 +213,127 @@ Acrescentamos os registradores de pipeline definindo-os separademente como entid
     \caption{Netlist RTL view do processador pipeline}
 \end{figure}
 
-\paragraph{(b)}
+\newpage
+
+\paragraph{(b)} Compilando o projeto no Quartus, os requisitos físicos encontrados foram: 3.625 elementos lógicos; 1.349 registradores; 108 pinos; e memória total de 65.536 bits.
+
+Ademais, a partir da análise temporal, encontramos os seguintes requisitos temporais: \textit{slack} de setup de 1,587 ns; \textit{slack} de \textit{hold} de 2,784 ns.
+
+\paragraph{(c)} As simulações em forma de onda com o programa \cod{de1.s}, funcional e temporal, respectivamente, com frequência de 25 MHz são as das imagens a seguir:
+
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=\textwidth]{Recursos/Imagens/waveform_funcional.png}
+    \caption{Forma de onda da simulação funcional}
+\end{figure}
+
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=\textwidth]{Recursos/Imagens/waveform_temporal.png}
+    \caption{Forma de onda da simulação temporal}
+\end{figure}
+
+\paragraph{(d)} A frequência máxima encontrada pelo Quartus foi de 293 MHz (aproximadamente, 3,41 ns de período), mas essa frequência é limitada a 250 MHz devido ao período mínimo que o dispositivo físico aguenta. Simulando o processador com o código \cod{de1.s} e o período de clock de 4 ns, a forma de onda encontrada foi a da figura a seguir.
+
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=\textwidth]{Recursos/Imagens/waveform_max_clock.png}
+    \caption{Forma de onda da simulação com frequência máxima}
+\end{figure}
+
+Aparentemente, a frequência máxima calculada pelo Quartus, de fato, é realizável - pelo menos em simulação. Apesar de não ser possível visualizar com exatidão os valores do PC e da instrução, o valor do \cod{regout} é coerente, apontando o correto funcionamento do processador sob essa frequência.
 
 \subsubsection{Tarefa III}
 \begin{tcolorbox}[title=Enunciado, colback=blue!5!white, colframe=blue!75!black]
-
+    Compare os requerimentos físicos e temporais dos seus 3 processadores (Uniciclo, Multiciclo e Pipeline). Comente. 
 \end{tcolorbox}
+
+Para realizar uma comparação mais precisa dos requerimentos físicos e temporais dos 3 processadores feitos nos projetos, será apresentada uma tabela comparativa a seguir:
+
+\begin{table}[h!]
+\centering
+\resizebox{\textwidth}{!}{
+\begin{tabular}{|c|c|c|c|c|c|c|c|}
+\hline
+\diagbox[width=4cm]{Processadores}{Requisitos} 
+    & Elementos lógicos 
+    & Registradores 
+    & Pinos 
+    & Bits de memória 
+    & Setup (ns) 
+    & Hold (ns) 
+    & Frequência \\
+\hline
+Uniciclo 
+    & \num{2642} 
+    & \num{1025} 
+    & \num{108} 
+    & \num{65536} 
+    & \num{5.982}
+    & \num{4.293}
+    & 71,34 MHz \\
+\hline
+Multiciclo 
+    & \num{3291} 
+    & \num{1253} 
+    & \num{108} 
+    & \num{65536} 
+    & \num{6.690}
+    & \num{2.715}
+    & 302,11 MHz \\
+\hline
+Pipeline 
+    & \num{2661} 
+    & \num{1285} 
+    & \num{108} 
+    & \num{65536} 
+    & \num{1.587}
+    & \num{2.784}
+    & 293,01 MHz \\
+\hline
+\end{tabular}
+}
+\end{table}
+
+Ao analisar cada requerimento, primeiramente, é possível notar que a quantidade de elementos lógicos é praticamente igual entre os processadores uniciclo e pipeline, enquanto é maior no processador multiciclo. Isso se deve ao fato de que o pipeline, fundamentalmente, é bem parecido com o uniciclo, já que a ideia inicial do pipeline é dividir o uniciclo em etapas que operam concomitantemente. Além disso, o multiciclo utiliza mais elementos lógicos pois seu bloco de controle é mais complexo, possuindo mais sinais de saídas que os outros processadores e, também, em sua estrutura, estão presentes mais multiplexadores.
+
+A quantidade de registradores é praticamente igual entre os processadores multiciclo e pipeline, enquanto é menor no processador uniciclo. Dessa forma, o pipeline utiliza mais registradores devido aos registradores de pipeline, que são fundamentais e únicos nos processos dessa CPU. O multiciclo, por sua vez, utiliza mais registradores devido ao seu bloco de controle, que funciona como uma máquina de estados finita e, também, devido à implementação de alguns registradores adicionais como: \cod{PCBack}, saídas \cod{A} e \cod{B} do banco de registradores e \cod{ALUOut}.
+
+A quantidade de pinos e de bits de memória utilizados é idêntica nos 3 processadores. Isso acontece pelo fato de que eles rodam o mesmo programa, ou seja, a nível de software, realizam as mesmas operações.
+
+Por último, também é extremamente importante tecer comentários sobre a frequência dos processadores. Seguindo esse prisma, é fácil observar que as frequências do multiciclo e do pipeline são bem maiores que a frequência do uniciclo. Isso faz perfeito sentido, já que tanto o multiciclo quanto o pipeline dividem as instruções em etapas menores, fazendo com que o tempo de clock seja baseado na etapa mais lenta, ao contrário do tempo de clock do uniciclo, que é baseado na instrução mais lenta. Assim, fica evidente o motivo de todos os processadores modernos serem baseados em pipeline, pois o pipeline consegue ter uma frequência bem alta ao dividir as instruções em pequenas etapas e, além disso, o pipeline também consegue ter uma CPI bem baixa, pois ele processa mais de uma instrução de cada vez, sem esperar que uma instrução termine antes de começar a próxima.
+
 
 
 \subsubsection{Tarefa IV}
 \begin{tcolorbox}[title=Enunciado, colback=blue!5!white, colframe=blue!75!black]
-Implemente o Processador Pipeline completo.
-\begin{enumerate}[label=(\alph*)]
-    \item  Visualize os blocos funcionais com o netlist RTL view.
-    \item Levante os requisitos físicos e temporais do seu processador.
-    \item  Faça a simulação por forma de onda funcional e temporal com o programa \cod{de1.s}, mostrando o funcionamento correto da CPU. 
-    \item  Qual a máxima frequência de clock utilizável na sua CPU? Verifique experimentalmente mudando a frequência de CLOCK e apresentando a simulação temporal por forma de onda. 
-\end{enumerate}
-
+    Qual o melhor tempo que cada processador executa o programa \cod{de1.s}? Qual a explicação? 
 \end{tcolorbox}
 
+A fim de calcular o melhor tempo que cada processador utiliza para executar o programa \cod{de1.s}, é de praxe lembrar a equação característica que define o tempo de execução de cada programa, em que $\mathrm{I}$ se refere a quantidade de instruções, CPI se refere à quantidade média de ciclos para a execução de uma instrução e $\mathrm{T}_{\mathrm{clock}}$ é o período (nesse caso o máximo possível) para a execução do processador:
+\begin{equation*}
+    \mathrm{t}_{\mathrm{exec}} = \mathrm{I} \times \mathrm{CPI} \times \mathrm{T}_{\mathrm{clock}}
+\end{equation*}
+
+No caso do uniciclo, considerando que o programa, de acordo com o contador de instruções do próprio \textit{Rars}, executa 17 instruções, que o CPI dele é sempre 1 e que o período, de acordo com a frequência max (71,34 MHz), é de cerca de 14,017 ns. Obtendo, assim, 238,289 ns de tempo de execução.
+
+Já para o caso do multiciclo a quantidade de instruções permanece e a frequência utilizada também é a máxima (302,11 MHz, o então 3,31 ns), contudo, o CPI utilizado é o médio, para tal devemos considerar os tipos de instruções e a quantidade de ciclos que cada uma demora para executar, assim como disponibilizado pela tabela com os dados fornecidos:
+
+\begin{table}[H]
+    \centering
+\begin{tabular}{c|c|c|c}
+Tipo de Instruções & Quantidade de Instruções & \% relativa & Ciclos necessários \\ \hline
+Tipo R             & 6                        & 35          & 4                  \\
+Tipo I             & 7                        & 41          & 5                  \\
+Tipo S             & 1                        & 5           & 4                  \\
+Tipo B             & 1                        & 5           & 3                  \\
+Tipo J             & 2                        & 11          & 3                  
+\end{tabular}
+\end{table}
+
+Dessa forma, obtêm-se um CPI de 4,13 instruções/clock. Sendo assim, o resultado do tempo de execução total é de cerca de 232,395 ns.
+
+Por fim, no caso do pipeline, pela inserção de \cod{nop} como forma de evitar os hazards, a quantidade de instruções N foi alterada, obtendo 33 instruções ao todo, o CPI utilizado também é 1 e a frequência utilizada é a máxima (293,01 MHz,ou 3,41 ns de período). Assim, obtendo 112,53 ns de execução.
 
 
 Todos os códigos desenvolvidos para a realização desse laboratório foram enviados compactados em um arquivo \cod{.zip}. Para acessar o vídeo solicitado, \href{https://www.youtube.com/watch?v=x1JfjiayK7M}{clique aqui}.

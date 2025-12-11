@@ -72,8 +72,8 @@ architecture Behavioral of Pipeline is
     signal WriteBackData:   std_logic_vector(31 downto 0);
 begin
 	
-	 PC <= PC_ID;
-	 instr <= instr_ID;
+	PC <= PC_IF;
+	instr <= instr_IF;
     PC_select <= (equal and branch_ID) or jump_ID;
 
     Mux2x1_1: entity work.Mux2x1

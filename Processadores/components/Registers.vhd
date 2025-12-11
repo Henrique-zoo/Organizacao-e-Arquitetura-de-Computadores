@@ -8,17 +8,17 @@ use work.riscv_pkg.all;
 
 entity Registers is
 	port (
-		clock:		 	in  std_logic;
-		reset:		 	in  std_logic;
-		write_en:    	in  std_logic;
-		RS1:			 	in  std_logic_vector(4 downto 0);
-		RS2:			 	in  std_logic_vector(4 downto 0);
-		RD:			 	in  std_logic_vector(4 downto 0);
-		disp_select: 	in  std_logic_vector(4 downto 0);
-		data:			 	in  std_logic_vector(31 downto 0);
-		read_data_A: 	out std_logic_vector(31 downto 0);
-		read_data_B: 	out std_logic_vector(31 downto 0);
-		read_disp:   	out std_logic_vector(31 downto 0)
+		clock:          in  std_logic;
+		reset:          in  std_logic;
+		write_en:       in  std_logic;
+		RS1:            in  std_logic_vector(4 downto 0);
+		RS2:            in  std_logic_vector(4 downto 0);
+		RD:             in  std_logic_vector(4 downto 0);
+		disp_select:    in  std_logic_vector(4 downto 0);
+		data:           in  std_logic_vector(31 downto 0);
+		read_data_A:    out std_logic_vector(31 downto 0);
+		read_data_B:    out std_logic_vector(31 downto 0);
+		read_disp:      out std_logic_vector(31 downto 0)
 	);
 end entity Registers;
 
@@ -32,12 +32,12 @@ begin
 
 	process(clock, reset)
 	begin
-		if rising_edge(clock) then
-			if reset = '1' then 
-				Registers32  <=  (others => (others => '0'));
-				Registers32(SP_POS) <=  STACK_ADDRESS;
-				Registers32(GP_POS) <=  DATA_ADDRESS;
-			elsif write_en = '1' and RD /= "00000" then
+		if reset = '1' then
+			Registers32  <=  (others => (others => '0'));
+			Registers32(SP_POS) <=  STACK_ADDRESS;
+			Registers32(GP_POS) <=  DATA_ADDRESS;
+		elsif rising_edge(clock) then
+			if write_en = '1' and RD /= "00000" then
 				Registers32(to_integer(unsigned(RD))) <= data;
 			end if;
 		end if;

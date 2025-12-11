@@ -40,7 +40,7 @@ begin
                 oResult <= adder_sum;
             when OPSLT  =>
                 if signed(iA) < signed(iB) then
-                    oResult <= std_logic_vector(to_signed(1,32));
+                    oResult <= x"0000_0001";
                 else
                     oResult <= ZERO32;
                 end if;

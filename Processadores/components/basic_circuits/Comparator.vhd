@@ -10,7 +10,7 @@ entity Comparator is
     );
 end entity Comparator;
 
-architecture behavioral of comparator is
+architecture behavioral of Comparator is
 begin
     equal <= '1' when A = B else '0';
 end architecture behavioral;

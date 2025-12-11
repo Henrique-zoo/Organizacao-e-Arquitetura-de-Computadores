@@ -4,8 +4,8 @@ use IEEE.numeric_std.all;
 
 entity EX_MEM is
     port (
-		  clk:			   in	 std_logic;
-		  rst:			   in	 std_logic;
+        clk:            in	 std_logic;
+		rst:            in	 std_logic;
         WB_in:          in	 std_logic_vector(1 downto 0);
         M:              in  std_logic_vector(1 downto 0);
         ALUOut_in:      in  std_logic_vector(31 downto 0);
