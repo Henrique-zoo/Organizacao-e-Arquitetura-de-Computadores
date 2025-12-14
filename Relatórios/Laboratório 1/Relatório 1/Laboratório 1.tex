@@ -33,6 +33,7 @@
 \geometry{a4paper, left=2.5cm, right=2.5cm, top=2.5cm, bottom=2cm}
 \onehalfspacing
 
+
 % Configurações de títulos
 \titleformat{\section}{\normalfont\Large\bfseries}{\thesection}{1em}{}
 \titleformat{\subsection}{\normalfont\large\bfseries}{\thesubsection}{1em}{}
@@ -52,6 +53,7 @@
 \definecolor{whitesmoke}{rgb}{0.96, 0.96, 0.96}
 \definecolor{cinza}{RGB}{160, 160, 160}
 \definecolor{cinza_claro}{RGB}{240, 240, 240} % Cinza claro
+\definecolor{azul_link}{HTML}{1a73e8}
 
 \newtcolorbox{codebox}[1]{
     title=#1,
@@ -79,7 +81,7 @@
 }
 
 \setminted[fortran]{
-    fontsize=\scriptsize,
+    fontsize=\footnotesize,
     style=emacs,
     linenos=true,
     breaklines=true,
@@ -160,7 +162,7 @@ Mais detalhadamente, no primeiro experimento, analisa-se o desempenho de um cód
 \section{Métodos e Análise}
 
 \subsection{Primeiro Experimento}
-É fornecido o programa, em Assembly, \cod{sort.s}, de ordenamento de um vetor. Considere um processador RISC-V com frequência de clock 50MHz e CPI=1 e os vetores de entrada de $n$ elementos $V_0\left[n\right] = \{1, \ 2, \ \dots, \ n\}$, já ordenado, e $V_1\left[n\right] = \{n, \ n-1, \ \dots, \ 1 \}$, inversamente ordenado.
+É fornecido o programa, em Assembly, \cod{sort.s}, de ordenamento de um vetor. Considere um processador RISC-V com frequência de clock 50 MHz e $\mathrm{CPI} = 1$ e os vetores de entrada $\mathrm{V}_0\left[n\right] = \{1, \ 2, \ \dots, \ n\}$, diretamente ordenado, e $\mathrm{V}_1\left[n\right] = \{n, \ n-1, \ \dots, \ 1 \}$, inversamente ordenado; ambos de tamanho $n$.
 
 \subsubsection{Tarefa I}
 \begin{tcolorbox}[title=Enunciado, colback=blue!5!white, colframe=blue!75!black]
@@ -169,11 +171,9 @@ Para o procedimento \cod{sort}, escreva as equações dos tempos de execução, 
 
 Primeiro, devemos lembrar que o tempo de execução pode ser calculado pela seguinte equação:
 \begin{equation}
-    t_{exec} =\frac{I \cdot CPI}{f_{clock}} \label{eq:tempo}
+    t_{\mathrm{exec}} =\frac{\mathrm{I} \times \mathrm{CPI}}{f_{\mathrm{clock}}} \label{eq:tempo}
 \end{equation}
-Note que já temos $CPI$ e $f_{clock}$; só resta descobrir $I$ (a quantidade de instruções executadas).
-
-O RARS pode ser utilizado para esse fim: no menu, escolhemos Tools $>$ Instruction Counter, conectamos essa ferramenta ao código, montamos, adicionamos pontos de quebra na chamada do subprocedimento \cod{SORT} e na linha seguinte e executamos o programa. Realizando esse passo a passo para vários vetores ordenados e inversamente ordenados de diferentes tamanhos $n$, observou-se que
+Note que já temos $\mathrm{CPI}$ e $f_{\mathrm{clock}}$, só resta descobrir $\mathrm{I}$ (a quantidade de instruções executadas) e o RARS pode ser utilizado para esse fim: no menu, escolhemos \cod{Tools $>$ Instruction Counter}, conectamos essa ferramenta ao código, montamos, adicionamos pontos de quebra na chamada do subprocedimento \cod{SORT} e na linha seguinte e executamos o programa. Realizando esse passo a passo para vários vetores ordenados e inversamente ordenados de diferentes tamanhos $n$, observou-se que
 \[
     I_0[n] = \begin{cases}
         18, &\text{se } n = 0 \\
@@ -266,7 +266,7 @@ Com as correções acima, o programa já pode ser montado pelo RARS; porém, ain
 \subsubsection{Tarefa II}
 % Enunciado da segunda tarefa da 2
 \begin{tcolorbox}[title=Enunciado, colback=blue!5!white, colframe=blue!75!black]
-Compile o programa \cod{sortc\_mod.c} e, com a ajuda do RARS, monte uma tabela comparativa com o número total de instruções executadas pelo programa todo, e o tamanho em bytes dos códigos em linguagem de máquina gerados para cada diretiva de otimização da compilação \{\cod{-O0}, \cod{-O3}, \cod{-Os}\}. Compare ainda com os resultados obtidos no item 1.1) com o programa \cod{sort.s}, que foi implementado diretamente em Assembly. Analise os resultados obtidos usando o mesmo vetor de entrada.  
+Compile o programa \cod{sortc\_mod.c} e, com a ajuda do RARS, monte uma tabela comparativa com o número total de instruções executadas pelo programa todo, e o tamanho em bytes dos códigos em linguagem de máquina gerados para cada diretiva de otimização da compilação \{-O0, -O3, -Os\}. Compare ainda com os resultados obtidos no item 1.1) com o programa \cod{sort.s}, que foi implementado diretamente em Assembly. Analise os resultados obtidos usando o mesmo vetor de entrada.  
 \end{tcolorbox}
 
 % Tabela com os resultados das otimizações
@@ -329,7 +329,7 @@ em que $x[n]$ é o $n$-ésimo termo do sinal (sequência) $x$ no domínio do tem
 \subsubsection{Tarefa I}
 
 \begin{tcolorbox}[title=Enunciado, colback=blue!5!white, colframe=blue!75!black]
-Escreva um procedimento que receba um ângulo em radianos $\theta$ (em fa0) e retorne $\cos{\theta}$ (em fa0) e $\sin{\theta}$ (em fa1).
+Escreva um procedimento que receba um ângulo em radianos $\theta$ (em \cod{fa0}) e retorne $\cos{\theta}$ (em \cod{fa0}) e $\sin{\theta}$ (em \cod{fa1}).
 \end{tcolorbox}
 
 Diferentemente das linguagens de alto nível, não existem funções trigonométricas nativas em Assembly. Consequentemente, é necessário utilizar séries de Taylor, séries polinomiais capazes de aproximar funções mais complicadas. No limite, com um somatório de infinitos termos, essas séries se igualam à função original, pelo menos em algum intervalo. As séries de Maclaurin para o cosseno e o seno são as seguintes:
@@ -369,7 +369,7 @@ void DFT(float *x, float *X_real, float *X_imag, int N)
 \end{minipage}
 \vspace{-10pt}
 \end{center}
-que, dado o endereço do vetor $x[n]$ de floats (em \cod{a0}) de tamanho $N$ na memória, os endereços dos espaços reservados para o vetor complexo $X[k]$ (parte real e parte imaginária) (em \cod{a1} e \cod{a2}) e o número de pontos $N$ (em \cod{a3}), calcule a DFT de $N$ pontos de $x[n]$ e coloque o resultado no espaço alocado para $X_{real}[k]$ e $X_{imag}[k]$.
+que, dado o endereço do vetor $x[n]$ de floats (em \cod{a0}) de tamanho $N$ na memória, os endereços dos espaços reservados para o vetor complexo $X[k]$ (parte real e parte imaginária) (em \cod{a1} e \cod{a2}) e o número de pontos $N$ (em \cod{a3}), calcule a DFT de $N$ pontos de $x[n]$ e coloque o resultado no espaço alocado para $X_{\mathrm{real}}[k]$ e $X_{\mathrm{imag}}[k]$.
 \end{tcolorbox}
 
 Tendo em mãos o procedimento da última tarefa, a implementação da DFT torna-se conceitualmente simples. O procedimento consiste em criar um loop que invoca a função \cod{SINCOS} - que retorna as componentes real e imaginária de $e^{-i\frac{2\pi}{N}kn}$ nos registradores \cod{fa0} e \cod{fa1}, respectivamente - multiplicar esses valores por $x[n]$ e armazenar os resultados nas posições de memória correspondentes. A complexidade reside apenas no gerenciamento operacional dos registradores, pois, como temos procedimentos aninhados, é necessário utilizar a \textit{stack}.
@@ -507,24 +507,24 @@ Para os sinais $x[n]$ abaixo
     \item $N=40$,\ $x[n]=\{1.0,\ 1.0,\ 1.0,\ 0.0,\ 0.0,\ 0.0,\ 0.0 ,\ \dots,\ 0.0\}$ 
     \item $N=44$,\ $x[n]=\{1.0,\ 1.0,\ 1.0,\ 0.0,\ 0.0,\ 0.0,\ 0.0 ,\ \dots,\ 0.0\}$
 \end{enumerate}
-onde $\dots$ são todos valores 0.0. Para cada item, meça o tempo de execução do procedimento DFT e calcule a frequência do processador RISC-V Uniciclo simulado pelo RARS. Finalmente, faça um gráfico $t_{exec} \times N$ em escala. Quais conclusões podemos tirar dessa análise?
+onde $\dots$ são todos valores 0.0. Para cada item, meça o tempo de execução do procedimento DFT e calcule a frequência do processador RISC-V Uniciclo simulado pelo RARS. Finalmente, faça um gráfico $t_{\mathrm{exec}} \times N$ em escala. Quais conclusões podemos tirar dessa análise?
 \end{tcolorbox}
-Utilizando os registradores de status e controle do RARS, medimos o tempo de execução ($t_{exec}$) e a quantidade de instruções ($I$) do programa para cada caso. A frequência foi calculada pela fórmula
+Utilizando os registradores de status e controle do RARS, medimos o tempo de execução ($t_{\mathrm{exec}}$) e a quantidade de instruções ($\mathrm{I}$) do programa para cada caso. A frequência foi calculada pela fórmula
 \[
-f_{clock} = \frac{I \cdot CPI}{t_{exec}} \overset{CPI=1}{=} \frac{I}{t_{exec}}
+f_{\mathrm{clock}} = \frac{\mathrm{I} \times \mathrm{CPI}}{t_{\mathrm{exec}}} \overset{\mathrm{CPI}=1}{=} \frac{\mathrm{I}}{t_{\mathrm{exec}}}
 \]
 A seguir, os resultados:
 \begin{enumerate}[label=\alph*), itemsep=0pt]
-    \item $N=8 \to t_{exec} = 48 ms$, $I = 15\ 606$, $f = 325 kHz$
-    \item $N=12 \to t_{exec} = 84 ms$, $I = 34\ 999$, $f = 416 kHz$
-    \item $N=16 \to t_{exec} = 144 ms$, $I = 62\ 137$, $f = 431 kHz$
-    \item $N=20 \to t_{exec} = 235 ms$, $I = 96\ 981$, $f = 412 kHz$
-    \item $N=24 \to t_{exec} = 343 ms$, $I = 139\ 615$, $f = 407 kHz$
-    \item $N=28 \to t_{exec} = 483 ms$, $I = 189\ 955$, $f = 393 kHz$
-    \item $N=32 \to t_{exec} = 595 ms$, $I = 248\ 028$, $f = 416 kHz$
-    \item $N=36 \to t_{exec} = 769 ms$, $I = 313\ 777$, $f = 408 kHz$
-    \item $N=40 \to t_{exec} = 949 ms$, $I = 387\ 373$, $f = 408 kHz$
-    \item $N=44 \to t_{exec} = 1153 ms$, $I = 468\ 639$, $f = 406 kHz$
+    \item $N=8 \to t_{\mathrm{exec}} = 48 ms$, $I = 15\ 606$, $f = 325 kHz$
+    \item $N=12 \to t_{\mathrm{exec}} = 84 ms$, $I = 34\ 999$, $f = 416 kHz$
+    \item $N=16 \to t_{\mathrm{exec}} = 144 ms$, $I = 62\ 137$, $f = 431 kHz$
+    \item $N=20 \to t_{\mathrm{exec}} = 235 ms$, $I = 96\ 981$, $f = 412 kHz$
+    \item $N=24 \to t_{\mathrm{exec}} = 343 ms$, $I = 139\ 615$, $f = 407 kHz$
+    \item $N=28 \to t_{\mathrm{exec}} = 483 ms$, $I = 189\ 955$, $f = 393 kHz$
+    \item $N=32 \to t_{\mathrm{exec}} = 595 ms$, $I = 248\ 028$, $f = 416 kHz$
+    \item $N=36 \to t_{\mathrm{exec}} = 769 ms$, $I = 313\ 777$, $f = 408 kHz$
+    \item $N=40 \to t_{\mathrm{exec}} = 949 ms$, $I = 387\ 373$, $f = 408 kHz$
+    \item $N=44 \to t_{\mathrm{exec}} = 1153 ms$, $I = 468\ 639$, $f = 406 kHz$
 \end{enumerate}
 
 Com esses dados, podemos fazer o gráfico solicitado. Novamente, utilizamos o gnuplot e plotamos o seguinte gráfico:
@@ -543,5 +543,5 @@ Nesse laboratório, tivemos intenso contato com o RARS e suas ferramentas, desen
 
 A experiência obtida neste laboratório, bem como os resultados alcançados e a pesquisa realizada, conduzem à reflexão sobre aspectos cruciais da programação, tais como: a necessidade de compiladores eficientes para que a abstração proporcionada por linguagens de alto nível não seja demasiado cara; o custo associado ao uso de números de ponto flutuante — que exigem mais instruções para operações aparentemente simples; e a importância de conhecer o \textit{hardware} utilizado para compreender adequadamente o tempo de execução e o desempenho de programas.
 
-Todos os códigos desenvolvidos ou gerados (via compilação cruzada) para a realização desse laboratório foram enviados compactados em um arquivo \cod{.zip}. Para acessar o vídeo solicitado, \href{https://www.youtube.com/watch?v=0igjcjJHzPU}{clique aqui}.
+Todos os códigos desenvolvidos ou gerados (via compilação cruzada) para a realização desse laboratório foram enviados compactados em um arquivo \cod{.zip}. Para acessar o vídeo solicitado, \href{https://www.youtube.com/watch?v=0igjcjJHzPU}{\textcolor{azul_link}{clique aqui}}.
 \end{document}

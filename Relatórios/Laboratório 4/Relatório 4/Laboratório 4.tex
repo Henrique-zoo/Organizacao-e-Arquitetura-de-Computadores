@@ -62,7 +62,8 @@
 \definecolor{LightSeaGreen}{rgb}{0.1255, 0.6980, 0.6667}
 \definecolor{whitesmoke}{rgb}{0.96, 0.96, 0.96}
 \definecolor{cinza}{RGB}{160, 160, 160}
-\definecolor{cinza_claro}{RGB}{240, 240, 240} % Cinza claro
+\definecolor{cinza_claro}{RGB}{240, 240, 240}
+\definecolor{azul_link}{HTML}{1a73e8}
 
 \newtcolorbox{codebox}[1]{
     title=#1,
@@ -134,9 +135,7 @@
                 \begin{tabular}{l r}
                     Henrique Morcelles Salum & 232003008 \\
                     Athos Calixto Muniz & 211068261 \\
-                    Gabriela Fernanda Rodrigues Costa & 180120859 \\
-                    Cauê Araújo Euzebio & 211028195 \\
-                    Lucas Silva Nóbrega & 180035096
+                    Cauê Araújo Euzebio & 211028195
                 \end{tabular}
                 \label{tab:placeholder}
             \end{table}
@@ -215,9 +214,7 @@ Acrescentamos os registradores de pipeline definindo-os separademente como entid
 
 \newpage
 
-\paragraph{(b)} Compilando o projeto no Quartus, os requisitos físicos encontrados foram: 3.625 elementos lógicos; 1.349 registradores; 108 pinos; e memória total de 65.536 bits.
-
-Ademais, a partir da análise temporal, encontramos os seguintes requisitos temporais: \textit{slack} de setup de 1,587 ns; \textit{slack} de \textit{hold} de 2,784 ns.
+\paragraph{(b)} Compilando o projeto no Quartus, os requisitos físicos encontrados foram: 2.918 elementos lógicos; 1.317 registradores; 108 pinos; e memória total de 65.536 bits. Além disso, a partir do \textit{Timing Analyzer}, ferramenta do  \textit{software} da Altera, encontramos os seguintes requisitos temporais: \textit{slack} de \textit{setup} de 1,587 ns; \textit{slack} de \textit{hold} de 2,784 ns.
 
 \paragraph{(c)} As simulações em forma de onda com o programa \cod{de1.s}, funcional e temporal, respectivamente, com frequência de 25 MHz são as das imagens a seguir:
 
@@ -264,29 +261,29 @@ Para realizar uma comparação mais precisa dos requerimentos físicos e tempora
     & Hold (ns) 
     & Frequência \\
 \hline
-Uniciclo 
-    & \num{2642} 
-    & \num{1025} 
+Uniciclo
+    & \num{2.784} 
+    & \num{1.025} 
     & \num{108} 
-    & \num{65536} 
+    & \num{65.536} 
     & \num{5.982}
     & \num{4.293}
     & 71,34 MHz \\
 \hline
-Multiciclo 
-    & \num{3291} 
-    & \num{1253} 
+Multiciclo
+    & \num{3.241} 
+    & \num{1.221} 
     & \num{108} 
-    & \num{65536} 
+    & \num{65.536} 
     & \num{6.690}
     & \num{2.715}
     & 302,11 MHz \\
 \hline
-Pipeline 
-    & \num{2661} 
-    & \num{1285} 
+Pipeline
+    & \num{3.918} 
+    & \num{1.317} 
     & \num{108} 
-    & \num{65536} 
+    & \num{65.536} 
     & \num{1.587}
     & \num{2.784}
     & 293,01 MHz \\
@@ -312,7 +309,7 @@ Por último, também é extremamente importante tecer comentários sobre a frequ
 
 A fim de calcular o melhor tempo que cada processador utiliza para executar o programa \cod{de1.s}, é de praxe lembrar a equação característica que define o tempo de execução de cada programa, em que $\mathrm{I}$ se refere a quantidade de instruções, CPI se refere à quantidade média de ciclos para a execução de uma instrução e $\mathrm{T}_{\mathrm{clock}}$ é o período (nesse caso o máximo possível) para a execução do processador:
 \begin{equation*}
-    \mathrm{t}_{\mathrm{exec}} = \mathrm{I} \times \mathrm{CPI} \times \mathrm{T}_{\mathrm{clock}}
+    t_{\mathrm{exec}} = \mathrm{I} \times \mathrm{CPI} \times \mathrm{T}_{\mathrm{clock}}
 \end{equation*}
 
 No caso do uniciclo, considerando que o programa, de acordo com o contador de instruções do próprio \textit{Rars}, executa 17 instruções, que o CPI dele é sempre 1 e que o período, de acordo com a frequência max (71,34 MHz), é de cerca de 14,017 ns. Obtendo, assim, 238,289 ns de tempo de execução.
@@ -322,12 +319,13 @@ Já para o caso do multiciclo a quantidade de instruções permanece e a frequê
 \begin{table}[H]
     \centering
 \begin{tabular}{c|c|c|c}
+    \hline
 Tipo de Instruções & Quantidade de Instruções & \% relativa & Ciclos necessários \\ \hline
 Tipo R             & 6                        & 35          & 4                  \\
 Tipo I             & 7                        & 41          & 5                  \\
 Tipo S             & 1                        & 5           & 4                  \\
 Tipo B             & 1                        & 5           & 3                  \\
-Tipo J             & 2                        & 11          & 3                  
+Tipo J             & 2                        & 11          & 3 
 \end{tabular}
 \end{table}
 
@@ -336,5 +334,7 @@ Dessa forma, obtêm-se um CPI de 4,13 instruções/clock. Sendo assim, o resulta
 Por fim, no caso do pipeline, pela inserção de \cod{nop} como forma de evitar os hazards, a quantidade de instruções N foi alterada, obtendo 33 instruções ao todo, o CPI utilizado também é 1 e a frequência utilizada é a máxima (293,01 MHz,ou 3,41 ns de período). Assim, obtendo 112,53 ns de execução.
 
 
-Todos os códigos desenvolvidos para a realização desse laboratório foram enviados compactados em um arquivo \cod{.zip}. Para acessar o vídeo solicitado, \href{https://www.youtube.com/watch?v=x1JfjiayK7M}{clique aqui}.
+\section{Conclusão}
+
+Todos os códigos desenvolvidos para a realização desse laboratório foram enviados compactados em um arquivo \cod{.zip}. Para acessar o vídeo solicitado, \href{https://www.youtube.com/watch?v=oISrELfP-Hw}{\textcolor{azul_link}{\underline{clique aqui}}}.
 \end{document}

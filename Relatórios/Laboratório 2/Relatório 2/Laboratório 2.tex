@@ -52,7 +52,8 @@
 \definecolor{LightSeaGreen}{rgb}{0.1255, 0.6980, 0.6667}
 \definecolor{whitesmoke}{rgb}{0.96, 0.96, 0.96}
 \definecolor{cinza}{RGB}{160, 160, 160}
-\definecolor{cinza_claro}{RGB}{240, 240, 240} % Cinza claro
+\definecolor{cinza_claro}{RGB}{240, 240, 240}
+\definecolor{azul_link}{HTML}{1a73e8}
 
 \newtcolorbox{codebox}[1]{
     title=#1,
@@ -263,9 +264,9 @@ A ULA (Unidade Lógica e Aritmética) é um componente fundamental responsável 
 
 Na implementação desse módulo, seguimos um estilo híbrido entre estrutural e comportamental: ao mesmo tempo que instanciamos um somador para realizar somas e subtrações, utilizamos abstrações de alto nível, nesse caso, as estruturas \cod{case} e \cod{when ... else}, para implementar o \cod{slt}, \cod{or}, \cod{and} e calcular a saída \cod{zero}.
 
-A ULA implementada recebe como entrada os valores dos dois operandos e um sinal de 4 bits \cod{ALUCtrl}, que indica qual das operações previamente citadas deve ser realizada. Dessa forma, a implementação é dada a partir de um `case' no qual, para cada código recebido pelo sinal ``ALUCtrl'', é realizada uma operação lógica ou aritmética.
+A ULA implementada recebe como entrada os valores dos dois operandos e um sinal de 4 bits \cod{ALUCtrl}, que indica qual das operações previamente explicadas deve ser realizada. Dessa forma, a implementação é dada a partir de um `case' no qual, para cada valor do sinal \cod{ALUCtrl}, é realizada uma operação lógica ou aritmética.
 
-Por último, a ULA tem dois sinais de saída: um para o resultado da operação realizada e outro para o sinal \cod{zero}, que é ligado caso o resultado da operação seja `0' - ele é usado especificamente no caso do \cod{branch}, se a subtração dos operandos for `0', o `zero' é ligado o posterior AND desse com sinal com o sinal de controle `branch' faz com que o endereço do salto seja escrito no PC.
+Por último, a ULA tem dois sinais de saída: um para o resultado da operação realizada e outro para o sinal \cod{zero}, que é ligado caso o resultado da operação seja `0' - ele é usado especificamente no caso do \cod{branch}, se a subtração dos operandos for `0', o `zero' é ligado e o AND desse com sinal com o sinal de controle \cod{branch} faz com que o endereço do salto seja escrito no PC.
 
 
 \subsubsection{Tarefa VI}
@@ -289,11 +290,11 @@ Além disso, o Bloco de Controle, envia, como saída, os sinais que coordenam os
     \item \cod{regWrite} - 1 bit - Determina se a escrita no banco de registradores deve estar habilitada. Caso `0': desabilita. Caso `1': habilita.
 \end{itemize}
 
-Uma observação importante é que o sinal \cod{jump} não existe no esquemático fornecido no roteiro e tampouco era estritamente necessário para o projeto. Poderíamos ter implementado instruções de salto incondicional forçando os sinais \cod{branch} e \cod{zero} iguais a `1'. Nesse caso, seria necessário criar um \cod{ALUOp} para \cod{jal} e \cod{jalr} que fizesse \cod{zero <= 1}. Essa solução, apesar de economizar um sinal, foi considerada \textit{ad-hoc} e prejudicial ao significado dos sinais de controle.
+Uma observação importante é que o sinal \cod{jump} não existe no esquemático fornecido no roteiro e tampouco era estritamente necessário para o projeto. Poderíamos ter implementado instruções de salto incondicional, forçando os sinais \cod{branch} e \cod{zero} iguais a `1'. Nesse caso, seria necessário criar um \cod{ALUOp} para \cod{jal} e \cod{jalr} que fizesse \cod{zero <= 1}. Essa solução, apesar de economizar um sinal, foi considerada \textit{ad-hoc} e prejudicial ao significado dos sinais de controle.
 
 A implementação do Bloco de Controle relaciona sua entrada com suas saídas de acordo com a tabela a seguir:
 
-\begin{table}[H]
+\begin{table}[!h]
     \centering
     \footnotesize
     \renewcommand{\arraystretch}{1.3}
@@ -314,37 +315,86 @@ A implementação do Bloco de Controle relaciona sua entrada com suas saídas de
         \textcolor{white}{\textbf{regWrite}} \\ \hline
 
         % ==== Linhas da tabela ====
-        \cod{OPC\_RTYPE} & 0 & 0 & 0 & 0 & \cod{10} & 0 & 0 & 1 \\ \hline
+        \cod{OPC\_RTYPE} & 0 & 0 & 0 & 0 & 10 & 0 & 0 & 1 \\ \hline
         \rowcolor{gray!20}
-        \cod{OPC\_OPIMM} & 0 & 0 & 0 & 0 & \cod{10} & 0 & 1 & 1 \\ \hline
-        \cod{OPC\_STORE} & X & 0 & 0 & 0 & \cod{00} & 1 & 1 & 0 \\ \hline
+        \cod{OPC\_OPIMM} & 0 & 0 & 0 & 0 & 10 & 0 & 1 & 1 \\ \hline
+        \cod{OPC\_STORE} & X & 0 & 0 & 0 & 00 & 1 & 1 & 0 \\ \hline
         \rowcolor{gray!20}
-        \cod{OPC\_LOAD} & 1 & 1 & 0 & 0 & \cod{00} & 0 & 1 & 1 \\ \hline
-        \cod{OPC\_BRANCH} & X & 0 & 1 & 0 & \cod{01} & 0 & 0 & 0 \\ \hline
+        \cod{OPC\_LOAD} & 1 & 1 & 0 & 0 & 00 & 0 & 1 & 1 \\ \hline
+        \cod{OPC\_BRANCH} & X & 0 & 1 & 0 & 01 & 0 & 0 & 0 \\ \hline
         \rowcolor{gray!20}
         \cod{OPC\_JAL} & X & 0 & 0 & 1 & XX & 0 & X & 1 \\ \hline
-        \cod{OPC\_JALR} & 0 & 0 & 0 & 1 & \cod{00} & 0 & 1 & 1 \\ \hline
+        \cod{OPC\_JALR} & 0 & 0 & 0 & 1 & 00 & 0 & 1 & 1 \\ \hline
         \rowcolor{gray!20}
-        \cod{OPC\_LUI} & 0 & 0 & 0 & 0 & \cod{00} & 0 & 1 & 1 \\ \hline
+        \cod{OPC\_LUI} & 0 & 0 & 0 & 0 & 00 & 0 & 1 & 1 \\ \hline
     \end{tabular}
     }
     \caption{Sinais de controle gerados para cada opcode}
     \label{tab:opcode_controle}
 \end{table}
 
-Perceba que, até agora, o módulo de controle, chamado no projeto de \cod{general_control}, só recebeu o \cod{opcode}. Então para que servem \cod{funct7} e \cod{funct3}? Na verdade, o módulo de controle não está completo; falta o controle da ULA. Este é responsável por definir qual operação a ULA realizará - note que o ALUOp não é suficiente para isso, dado, por exemplo, que ele é o mesmo para todas as operações Tipo-R, como \cod{add} e \cod{and}, que claramente não realizam a mesma operação na ULA; ele recebe o \cod{ALUOp}, o \cod{funct7} e o \cod{funct3} (na nossa implementação, o \cod{funct10}). Essa separação se deve ao modelo hierárquico do módulo de controle seguido na nosssa implementação.
+Perceba que, até agora, o módulo de controle, só recebeu o \cod{opcode}. Então para que servem \cod{funct7} e \cod{funct3}? Na verdade, o módulo de controle não está completo; falta o controle da ULA. Este é responsável por definir qual operação a ULA realizará - note que o \cod{ALUOp} não é suficiente para isso, dado, por exemplo, que ele é o mesmo para todas as operações Tipo-R, como \cod{add} e \cod{and}, que claramente não realizam a mesma operação na ULA. Essa separação se deve ao modelo hierárquico do módulo de controle, seguido na nossa implementação.
 
-Em resumo, o controlador da ULA (chamado de \cod{alu_control} no projeto), determina, através do seu sinal de saída \cod{ALUCtrl}, exatamente qual operação lógico-aritmética deve ser executada.
-
-
-Acesso à memória (lw, sw) - “00” - [add]
-Desvio (branch) - “01” - [sub]
-Lógico-aritméticas - “10” - [add, sub, and, or, slt]
-	Então, caso o sinal `ALUOp' seja “00”, o Controlador da ULA determina para a ULA que a operação realizada deverá ser uma soma, da mesma forma que, caso o sinal `ALUOp' seja “01”, será determinada uma subtração e, por último, caso seja “10”, a partir dos sinais `funct7' e `funct3', será determinada a operação a ser realizada.
+Em resumo, o controlador da ULA (chamado de \cod{alu\_control} no projeto), recebe o \cod{ALUOp}, o \cod{funct7} e o \cod{funct3} (na nossa implementação, o \cod{funct10}) e determina, através do seu sinal de saída \cod{ALUCtrl}, exatamente qual operação lógico-aritmética deve ser executada. Na prática, se \cod{ALUOp} for ``00'', a instrução é \cod{lw} ou \cod{sw} e a operação é de soma; se for ``01'', a operação é \cod{beq} e a operação é subtração; se for ``10'', podem ser muitas instruções e a operação vai depender do \cod{funt10}.
 
 
+\subsection{Tarefa VII}
+\begin{tcolorbox}[title=Enunciado, colback=blue!5!white, colframe=blue!75!black]
+Implemente o Processador Uniciclo completo.
+\begin{enumerate}[label=(\alph*)]
+    \item Visualize o netlist RTL view.
+    \item Levante os requisitos físicos e temporais do seu processador completo.
+    \item Faça as simulações por forma de onda funcional e temporal.
+    \item Verifique experimentalmente, por meio de uma simulação temporal, a máxima frequência de operação do processador.
+\end{enumerate}
+\end{tcolorbox}
 
+\paragraph{(a)} A \cod{netlist RTL view}, que descreve o esquemático da estrutura interna do design projetado, foi obtida por meio da função já embutida no software \textit{Quartus}. Nesta visualização, é importante destacar, inicialmente, o maior nível hierárquico do sistema, que consiste em uma entrada CLOCK que, com o auxílio de um flip-flop tipo D, pode ser dividida para valores diferentes para a memória e o processador. Além das entradas \cod{reset} e \cod{regin}, que descrevem, respectivamente, a entrada para reiniciar os registradores do sistema e a entrada que descreve os valores utilizados em \cod{t0}.
+
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=0.75\linewidth]{Recursos/Imagens/RTLgeral.png}
+    \vspace{-5pt}
+    \caption{Netlist RTL view do maior nível}
+    \vspace{-5pt}
+\end{figure}
+
+Já o netlist RTL view do processador uniciclo apresenta os diferentes módulos previamente descritos já instanciados e agrupados: tais como bando de registradores, gerador de imediatos, \textit{ULA}, controlador da \textit{ULA}, entre outros.
+
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=1\linewidth]{Recursos/Imagens/RTLuniciclo.png}
+    \vspace{-15pt}
+    \caption{Netlist RTL view do processador uniciclo}
+    \vspace{-5pt}
+\end{figure}
+
+\paragraph{(b)} Ao fazer a análise temporal do processador completo, analisando os requisitos temporais, foi avaliado que os slacks de \textit{setup} e \textit{hold} são cumpridos, respectivamente, possuindo 5,982 ns e 4,293 ns. Já a frequência máxima de operação obtida, utilizando a forma que obtêm essa resposta de maneira mais robusta, foi referente à 71,34 MHz.
+
+Já para os requisitos físicos, é possível destacar que foram utilizados 2642 elementos lógicos, 1025 registradores, 108 pinos, além de  65536 bits de memória. Destacando que, como não foi necessário utilizar multiplexadores mais complexos, estas são as características físicas principais do sistema.
+
+\paragraph{(c)} As simulações, utilizando o \textit{ModelSim}, sob a frequência de \textit{clock} de 50 MHz (20 ns de período):
+
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=1\linewidth]{Recursos/Imagens/simulacao50MHZfuncional.png}
+    \caption{Simulação funcional do processador uniciclo}
+\end{figure}
+
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=1\linewidth]{Recursos/Imagens/simulacao50MHZreal.png}
+    \caption{Simulação temporal do processador uniciclo}
+\end{figure}
+
+\paragraph{(d)} Assim como foi obtido anteriormente, a frequência máxima de operação do processador é de 71,34 MHz, verificando-se:
+
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=1\linewidth]{Recursos/Imagens/simulacao70MHZreal.png}
+    \caption{Simulação temporal do processador uniciclo sob a frequência máxima}
+\end{figure}
 
 \section{Conclusão}
-
+Todo o código desenvolvido para a realização desse laboratório foi enviado em anexo a esse relatório em um arquivo compactado \cod{.zip}. Para acessar o vídeo solicitado, \href{https://youtu.be/wLA9roPXRPE}{\textcolor{azul_link}{clique aqui}}.
 \end{document}
