@@ -28,18 +28,18 @@ begin
     end process;
     ClockDIV <= ClockDIV_i;
     
-    --Instantiation of Uniciclo (explicit entity instantiation)
-    --UNI1: entity work.uniciclo
-    --    port map (
-    --        clockCPU => ClockDIV_i,
-    --        clockMem => CLOCK,
-    --        reset    => reset,
-    --        regin    => regin,
-    --        PC       => PC,
-    --        instr    => instr,
-    --        regout   => regout
-    --    );
-    
+    -- Instantiation of Uniciclo (explicit entity instantiation)
+    UNI1: entity work.uniciclo
+        port map (
+            clockCPU => ClockDIV_i,
+            clockMem => CLOCK,
+            reset    => reset,
+            regin    => regin,
+            PC       => PC,
+            instr    => instr,
+            regout   => regout
+        );
+
     -- Instantiation of Multiciclo (explicit entity instantiation)
     --MULT1: entity work.Multiciclo
     --    port map (
@@ -53,16 +53,16 @@ begin
     --        state		=> state
     --    );
 		  
-		 
-		PIP1: entity work.Pipeline
-		    port map (
-                clockCPU => ClockDIV_i,
-                clockMem => CLOCK,
-                reset    => reset,
-                PC       => PC,
-                instr    => instr,
-                regin    => regin,
-                regout   => regout
-            );
+    -- Instantiation of Pipeline (explicit entity instantiation)
+	--PIP1: entity work.Pipeline
+	--    port map (
+    --        clockCPU => ClockDIV_i,
+    --        clockMem => CLOCK,
+    --        reset    => reset,
+    --        PC       => PC,
+    --        instr    => instr,
+    --        regin    => regin,
+    --        regout   => regout
+    --    );
 	 
 end behavioral;
